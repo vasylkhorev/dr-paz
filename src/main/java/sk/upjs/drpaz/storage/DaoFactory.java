@@ -19,8 +19,6 @@ public enum DaoFactory {
 		this.testing = true;
 	}
 
-	// TODO add to all methods mysql
-
 	private JdbcTemplate getJdbcTemplate() {
 		if (jdbcTemplate == null) {
 			MysqlDataSource dataSource = new MysqlDataSource();
