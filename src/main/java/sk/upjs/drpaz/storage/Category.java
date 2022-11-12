@@ -1,7 +1,7 @@
 package sk.upjs.drpaz.storage;
 
 public class Category {
-	
+
 	private Long id;
 	private String name;
 
@@ -20,5 +20,6 @@ public class Category {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 }
