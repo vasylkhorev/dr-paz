@@ -55,7 +55,10 @@ public class MysqlProductDao implements ProductDao {
 			sjdbcInsert.withTableName("product");
 			sjdbcInsert.usingGeneratedKeyColumns("id");
 			sjdbcInsert.usingColumns("name");
-			sjdbcInsert.usingColumns("");
+			sjdbcInsert.usingColumns("price");
+			sjdbcInsert.usingColumns("quantity");
+			sjdbcInsert.usingColumns("alert_quantity");
+			sjdbcInsert.usingColumns("description");
 
 			Map<String, Object> values = new HashMap<>();
 
@@ -75,7 +78,7 @@ public class MysqlProductDao implements ProductDao {
 					product.getAlertQuantity(), product.getDescription());
 			if (changed == 1)
 				return product;
-			throw new NoSuchElementException("subject with id " + product.getId() + " not in DB");
+			throw new NoSuchElementException("product with id " + product.getId() + " not in DB");
 		}
 
 	}

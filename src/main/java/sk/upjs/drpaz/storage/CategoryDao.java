@@ -1,8 +1,9 @@
 package sk.upjs.drpaz.storage;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public interface CategoryDao {
 
-	Category getByProduct(Product product) throws NullPointerException, NoSuchElementException;
+	List<Category> getByProduct(Product product) throws NullPointerException, NoSuchElementException;
 }
