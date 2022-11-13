@@ -12,7 +12,7 @@
       <Cursor fx:constant="DEFAULT" />
    </cursor>
    <children>
-      <TextField fx:id="passwordTextField" focusTraversable="false" layoutX="49.0" layoutY="243.0" onAction="#ActionTextField" prefHeight="35.0" prefWidth="354.0" promptText="Password" style="-fx-border-radius: 3;">
+      <TextField fx:id="passwordTextField" focusTraversable="false" layoutX="49.0" layoutY="243.0" onAction="#ActionTextField" onKeyPressed="#onKeyPressed" prefHeight="35.0" prefWidth="354.0" promptText="Password" style="-fx-border-radius: 3;">
          <font>
             <Font name="Corbel" size="17.0" />
          </font>
@@ -27,7 +27,7 @@
             <Font name="Corbel" size="15.0" />
          </font>
       </Label>
-      <TextField fx:id="loginTextField" focusTraversable="false" layoutX="49.0" layoutY="191.0" onAction="#ActionTextField" prefHeight="35.0" prefWidth="354.0" promptText="Username" style="-fx-border-radius: 3;">
+      <TextField fx:id="loginTextField" focusTraversable="false" layoutX="49.0" layoutY="191.0" onAction="#ActionTextField" onKeyPressed="#onKeyPressed" prefHeight="35.0" prefWidth="354.0" promptText="Username" style="-fx-border-radius: 3;">
          <font>
             <Font name="Corbel" size="17.0" />
          </font>

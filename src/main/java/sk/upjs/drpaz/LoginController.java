@@ -4,12 +4,17 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import sk.upjs.drpaz.storage.DaoFactory;
 import sk.upjs.drpaz.storage.Employee;
 
 public class LoginController {
+	private Stage stage;
 
 	@FXML
 	private TextField loginTextField;
@@ -19,6 +24,23 @@ public class LoginController {
 
 	@FXML
 	private Label wrongCredentialsLabel;
+
+	public LoginController(Stage stage) {
+		this.stage = stage;
+	}
+
+	@FXML
+	void onKeyPressed(KeyEvent event) {
+		if (event.getCode().equals(KeyCode.ENTER)) {
+			loginButtonClick(null);
+		}
+		if (event.getCode().equals(KeyCode.TAB)) {
+			if (stage.getScene().getFocusOwner() == loginTextField)
+				passwordTextField.requestFocus();
+			else
+				loginTextField.requestFocus();
+		}
+	}
 
 	@FXML
 	void ActionTextField(ActionEvent event) {
