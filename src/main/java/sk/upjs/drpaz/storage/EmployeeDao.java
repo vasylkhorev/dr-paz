@@ -10,4 +10,6 @@ public interface EmployeeDao {
 
 	boolean delete(long id);
 
+	Employee getByLoginAndPassword(String login, String password) throws NoSuchElementException, NullPointerException;
+
 }

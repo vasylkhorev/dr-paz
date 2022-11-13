@@ -19,13 +19,13 @@ public enum DaoFactory {
 		this.testing = true;
 	}
 
-	private JdbcTemplate getJdbcTemplate() {
+	public JdbcTemplate getJdbcTemplate() {
 		if (jdbcTemplate == null) {
 			MysqlDataSource dataSource = new MysqlDataSource();
 			if (testing) {
-				dataSource.setDatabaseName("drpaztest");
+				dataSource.setDatabaseName("mydbtest");
 			} else {
-				dataSource.setDatabaseName("drpaz");
+				dataSource.setDatabaseName("mydb");
 			}
 			dataSource.setUser("drpaz");
 			dataSource.setPassword("drpaz");
@@ -42,19 +42,19 @@ public enum DaoFactory {
 
 	public PurchaseDao getPurchaseDao() {
 		if (purchaseDao == null)
-			purchaseDao = new MysqlPurchaseDao(jdbcTemplate);
+			purchaseDao = new MysqlPurchaseDao(getJdbcTemplate());
 		return purchaseDao;
 	}
 
 	public EmployeeDao getEmployeeDao() {
 		if (employeeDao == null)
-			employeeDao = new MysqlEmployeeDao(jdbcTemplate);
+			employeeDao = new MysqlEmployeeDao(getJdbcTemplate());
 		return employeeDao;
 	}
 
 	public CategoryDao getCategoryDao() {
 		if (categoryDao == null)
-			categoryDao = new MysqlCategoryDao(jdbcTemplate);
+			categoryDao = new MysqlCategoryDao(getJdbcTemplate());
 		return categoryDao;
 	}
 

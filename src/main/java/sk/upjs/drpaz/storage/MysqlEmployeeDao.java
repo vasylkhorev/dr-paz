@@ -2,10 +2,13 @@ package sk.upjs.drpaz.storage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -36,7 +39,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 
 	@Override
 	public Employee getById(long id) throws NoSuchElementException {
-		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee";
+		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE id =" + id;
 		return jdbcTemplate.queryForObject(sql, new EmployeeRowMapper());
 	}
 
@@ -86,6 +89,16 @@ public class MysqlEmployeeDao implements EmployeeDao {
 	public boolean delete(long id) {
 		int changed = jdbcTemplate.update("DELETE FROM employee WHERE id = " + id);
 		return changed == 1;
+	}
+
+	@Override
+	public Employee getByLoginAndPassword(String login, String password) {
+		try {
+			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE login=? AND password=?";
+			return jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), login, password);
+		} catch (DataAccessException e) {
+			return null;
+		}
 	}
 
 }
