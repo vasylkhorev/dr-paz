@@ -2,11 +2,15 @@ package sk.upjs.drpaz.storage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
@@ -64,6 +68,30 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			}
 		}
 
+	}
+
+	@Override
+	public List<Product> getProductsByPurchaseId(long id) throws NullPointerException, NoSuchElementException {
+		String sql = "SELECT product.id, name, purchase_item.price, purchase_item.quantity, alert_quantity, description FROM purchase_item LEFT JOIN product ON product_id=product.id WHERE purchase_id="
+				+ id + " ORDER BY product.id";
+		return jdbcTemplate.query(sql, new ResultSetExtractor<List<Product>>() {
+
+			@Override
+			public List<Product> extractData(ResultSet rs) throws SQLException, DataAccessException {
+				List<Product> products = new ArrayList<>();
+				while(rs.next()) {
+					Product product = new Product();
+					product.setId(rs.getLong("id"));
+					product.setName(rs.getString("name"));
+					product.setPrice(rs.getDouble("price"));
+					product.setQuantity(rs.getInt("quantity"));
+					product.setAlertQuantity(rs.getInt("alert_quantity"));
+					product.setDescription(rs.getString("description"));
+					products.add(product);
+				}
+				return products;
+			}
+		});		
 	}
 
 }

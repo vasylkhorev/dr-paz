@@ -69,4 +69,8 @@ public class Product {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		return this.getName() + " "+  this.getPrice() +" " +  this.getQuantity();
+	}
 }

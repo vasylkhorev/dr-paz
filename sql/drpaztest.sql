@@ -35,6 +35,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES (1,'Imunita'),(2,'Vyzivove doplnky'),(3,'Nadcha'),(4,'Proti bolesti');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +65,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (9,'Filip','Dvorsky','+42199999999','cold@hotmail.com','admin1','nbusr123','Admin'),(10,'Vasyl','Khorev','38099999999','random@random.org','admin2','StrongPassword','Admin');
+INSERT INTO `employee` VALUES (1,'Evzen','Kralik',NULL,'mrkva.enjoyer@gmail.com','kralik','bobek','Predaj'),(2,'Anna','Holubkova','0940 999 999','mail@gmail.com','holubkova','nbusr123','Predaj'),(3,'Robert','Janosik',NULL,NULL,'janosik','hak','Predaj'),(4,'Alzbeta','Kralovicova',NULL,'neutron@protonmail.com','Kralovicova','queen','Predaj'),(9,'Filip','Dvorsky','+42199999999','cold@hotmail.com','admin1','nbusr123','Admin'),(10,'Vasyl','Khorev','38099999999','random@random.org','admin2','StrongPassword','Admin');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,6 +93,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,'Aspirin',3.39,45,5,'Liek znižuje tvorbu...'),(2,'Muconasal',4.89,26,10,'Liek, ktorý znižuje opuch sliznice nosa...'),(3,'Celaskon',4.19,8,NULL,'Liek s obsahom vitamínu C...'),(4,'Panadol Extra Rapide',3.79,18,NULL,'Liek s analgetickým a anti...'),(5,'Dr.PAZ Omega 3 Premium',12.99,86,20,'Kapsuly obsahujú rybí olej s mimoriadne vysokým...'),(6,'Dr.PAZ Collagen Drink',31.99,42,3,'Výživový doplnok obsahuje kolagén, hyaluronát sodný...');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,6 +121,7 @@ CREATE TABLE `product_has_category` (
 
 LOCK TABLES `product_has_category` WRITE;
 /*!40000 ALTER TABLE `product_has_category` DISABLE KEYS */;
+INSERT INTO `product_has_category` VALUES (1,1),(3,1),(2,2),(4,4);
 /*!40000 ALTER TABLE `product_has_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,6 +148,7 @@ CREATE TABLE `purchase` (
 
 LOCK TABLES `purchase` WRITE;
 /*!40000 ALTER TABLE `purchase` DISABLE KEYS */;
+INSERT INTO `purchase` VALUES (1,4,'2022-11-15 16:23:51'),(2,1,'2022-11-15 16:23:52'),(3,3,'2022-11-15 16:23:52');
 /*!40000 ALTER TABLE `purchase` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,6 +177,7 @@ CREATE TABLE `purchase_item` (
 
 LOCK TABLES `purchase_item` WRITE;
 /*!40000 ALTER TABLE `purchase_item` DISABLE KEYS */;
+INSERT INTO `purchase_item` VALUES (1,1,2,3.19),(2,1,1,3.10),(2,2,1,10.00),(3,1,2,4.55),(3,1,1,1.00),(3,4,3,10.00);
 /*!40000 ALTER TABLE `purchase_item` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -185,4 +190,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-13 16:20:03
+-- Dump completed on 2022-11-15 16:24:12

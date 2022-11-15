@@ -1,6 +1,7 @@
 package sk.upjs.drpaz.storage;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Purchase {
 
@@ -8,7 +9,15 @@ public class Purchase {
 	private Employee employee;
 	private LocalDateTime createdAt;
 	// TODO order_item logic
-//	private List<>
+	private List<Product> productsInPurchase;
+
+	public List<Product> getProductsInPurchase() {
+		return productsInPurchase;
+	}
+
+	public void setProductsInPurchase(List<Product> productsInPurchase) {
+		this.productsInPurchase = productsInPurchase;
+	}
 
 	public Purchase(Long id, Employee employee, LocalDateTime createdAt) {
 		this.id = id;
@@ -42,5 +51,4 @@ public class Purchase {
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
-
 }
