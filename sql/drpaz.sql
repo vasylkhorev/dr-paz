@@ -53,7 +53,7 @@ CREATE TABLE `employee` (
   `phone` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `login` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `password` varchar(100) NOT NULL,
   `role` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
@@ -65,7 +65,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'Evzen','Kralik',NULL,'mrkva.enjoyer@gmail.com','kralik','bobek','Predaj'),(2,'Anna','Holubkova','0940 999 999','mail@gmail.com','holubkova','nbusr123','Predaj'),(3,'Robert','Janosik',NULL,NULL,'janosik','hak','Predaj'),(4,'Alzbeta','Kralovicova',NULL,'neutron@protonmail.com','Kralovicova','queen','Predaj'),(9,'Filip','Dvorsky','+42199999999','cold@hotmail.com','admin1','nbusr123','Admin'),(10,'Vasyl','Khorev','38099999999','random@random.org','admin2','StrongPassword','Admin');
+INSERT INTO `employee` VALUES (1,'Evzen','Kralik',NULL,'mrkva.enjoyer@gmail.com','kralik','bobek','Predaj'),(2,'Anna','Holubkova','0940 999 999','mail@gmail.com','holubkova','nbusr123','Predaj'),(3,'Robert','Janosik',NULL,NULL,'janosik','hak','Predaj'),(4,'Alzbeta','Kralovicova',NULL,'neutron@protonmail.com','Kralovicova','queen','Predaj'),(9,'Filip','Dvorsky','+42199999999','cold@hotmail.com','admin1','nbusr123','Admin');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,7 +139,7 @@ CREATE TABLE `purchase` (
   PRIMARY KEY (`id`),
   KEY `fk_order_user1_idx` (`employee_id`),
   CONSTRAINT `fk_order_user1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +148,7 @@ CREATE TABLE `purchase` (
 
 LOCK TABLES `purchase` WRITE;
 /*!40000 ALTER TABLE `purchase` DISABLE KEYS */;
-INSERT INTO `purchase` VALUES (1,4,'2022-11-15 16:09:48'),(2,1,'2022-11-15 16:09:48'),(3,3,'2022-11-15 16:09:48');
+INSERT INTO `purchase` VALUES (1,4,'2022-11-15 16:09:48'),(2,1,'2022-11-15 16:09:48'),(3,3,'2022-11-15 16:09:48'),(4,4,'2022-11-15 16:12:59'),(5,1,'2022-11-15 16:12:59'),(6,3,'2022-11-15 16:12:59');
 /*!40000 ALTER TABLE `purchase` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,4 +190,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-15 16:11:14
+-- Dump completed on 2022-11-16 13:02:58

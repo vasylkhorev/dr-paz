@@ -4,7 +4,6 @@ public class Employee {
 
 	public Employee(Long id, String name, String surname, String phone, String email, String login, String password,
 			String role) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
@@ -16,6 +15,17 @@ public class Employee {
 	}
 
 	public Employee() {
+	}
+
+	public Employee( String name, String surname, String phone, String email, String login, String password,
+			String role) {
+		this.name = name;
+		this.surname = surname;
+		this.phone = phone;
+		this.email = email;
+		this.login = login;
+		this.password = password;
+		this.role = role;
 	}
 
 	private Long id;
@@ -93,6 +103,6 @@ public class Employee {
 
 	@Override
 	public String toString() {
-		return this.name + " " + this.surname;
+		return this.getId()  + " "+ this.name + " " + this.surname;
 	}
 }

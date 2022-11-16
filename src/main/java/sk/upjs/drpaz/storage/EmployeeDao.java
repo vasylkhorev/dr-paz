@@ -13,6 +13,8 @@ public interface EmployeeDao {
 
 	boolean delete(long id);
 
-	Employee getByLoginAndPassword(String login, String password) throws NoSuchElementException, NullPointerException;
+	Employee getByLogin(String login) throws NoSuchElementException, NullPointerException;
+	
+	boolean changePassword(String oldLogin, String oldPassword, String newLogin, String newPassword) throws NoSuchElementException, NullPointerException;
 
 }

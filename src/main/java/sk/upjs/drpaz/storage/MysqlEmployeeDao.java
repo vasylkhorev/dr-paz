@@ -12,6 +12,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 public class MysqlEmployeeDao implements EmployeeDao {
 
@@ -45,6 +46,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 
 	@Override
 	public Employee save(Employee employee) throws NullPointerException, NoSuchElementException {
+
 		if (employee == null) {
 			throw new NullPointerException("Cannot save null Employee");
 		}
@@ -64,18 +66,21 @@ public class MysqlEmployeeDao implements EmployeeDao {
 			values.put("phone", employee.getPhone());
 			values.put("email", employee.getEmail());
 			values.put("login", employee.getLogin());
-			values.put("password", employee.getPassword());
+
+			// hashing password with salt
+			String salt = BCrypt.gensalt();
+			values.put("password", BCrypt.hashpw(employee.getPassword(), salt));
 			values.put("role", employee.getRole());
 
 			long id = sInsert.executeAndReturnKey(values).longValue();
 			return new Employee(id, employee.getName(), employee.getSurname(), employee.getPhone(), employee.getEmail(),
 					employee.getLogin(), employee.getPassword(), employee.getRole());
 
-		} else { // UPDATE
-			String sql = "UPDATE employee SET name=?,surname=?,phone=?, email=?, login=?,password=?,role=? "
+		} else { // UPDATE WITHOUT CHANGING PASSWORD
+			String sql = "UPDATE employee SET name=?,surname=?,phone=?, email=?, login=?,role=? "
 					+ "WHERE id=?";
 			int updated = jdbcTemplate.update(sql, employee.getName(), employee.getSurname(), employee.getPhone(),
-					employee.getEmail(), employee.getLogin(), employee.getPassword(), employee.getRole());
+					employee.getEmail(), employee.getLogin(), employee.getRole());
 			if (updated == 1) {
 				return employee;
 			} else {
@@ -92,10 +97,10 @@ public class MysqlEmployeeDao implements EmployeeDao {
 	}
 
 	@Override
-	public Employee getByLoginAndPassword(String login, String password) {
+	public Employee getByLogin(String login) {
 		try {
-			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE login=? AND password=?";
-			return jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), login, password);
+			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE login=?";
+			return jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), login);
 		} catch (DataAccessException e) {
 			return null;
 		}
@@ -105,6 +110,25 @@ public class MysqlEmployeeDao implements EmployeeDao {
 	public List<Employee> getAll() {
 		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM employee";
 		return jdbcTemplate.query(sql, new EmployeeRowMapper());
+	}
+
+	@Override
+	public boolean changePassword(String oldLogin, String oldPassword, String newLogin, String newPassword)
+			throws NoSuchElementException, NullPointerException {
+		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE login=?";
+		Employee employee = jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), oldLogin);
+		
+		sql = "UPDATE employee SET login=?,password=? WHERE login=?";
+		if (BCrypt.checkpw(oldPassword, employee.getPassword())) {
+			int updated = jdbcTemplate.update(sql, newLogin, BCrypt.hashpw(newPassword, BCrypt.gensalt()), oldLogin);
+			if (updated == 1) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+
 	}
 
 }

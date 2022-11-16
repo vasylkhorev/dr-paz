@@ -1,5 +1,7 @@
 package sk.upjs.drpaz;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -17,6 +19,7 @@ import sk.upjs.drpaz.storage.DaoFactory;
 import sk.upjs.drpaz.storage.Employee;
 
 public class LoginController {
+	private Employee currentUser;
 	@FXML
 	private TextField loginTextField;
 	@FXML
@@ -30,9 +33,8 @@ public class LoginController {
 	@FXML
 	void onLoginButtonClick(ActionEvent event) {
 		// TODO ??????
-		Employee currentUser = DaoFactory.INSTANCE.getEmployeeDao().getByLoginAndPassword(loginTextField.getText(),
-				passwordField.getText());
-		if (currentUser == null) {
+		currentUser = DaoFactory.INSTANCE.getEmployeeDao().getByLogin(loginTextField.getText());
+		if (currentUser == null || !BCrypt.checkpw(passwordField.getText(), currentUser.getPassword())) {
 			passwordField.setStyle("-fx-border-color: red");
 			wrongCredentialsLabel.setVisible(true);
 
