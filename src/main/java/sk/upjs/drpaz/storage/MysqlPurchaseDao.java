@@ -72,6 +72,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 
 	@Override
 	public List<Product> getProductsByPurchaseId(long id) throws NullPointerException, NoSuchElementException {
+
 		String sql = "SELECT product.id, name, purchase_item.price, purchase_item.quantity, alert_quantity, description FROM purchase_item LEFT JOIN product ON product_id=product.id WHERE purchase_id="
 				+ id + " ORDER BY product.id";
 		return jdbcTemplate.query(sql, new ResultSetExtractor<List<Product>>() {

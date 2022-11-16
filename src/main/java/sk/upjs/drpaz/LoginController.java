@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -16,33 +17,28 @@ import sk.upjs.drpaz.storage.DaoFactory;
 import sk.upjs.drpaz.storage.Employee;
 
 public class LoginController {
-	private Stage stage;
-
 	@FXML
 	private TextField loginTextField;
 	@FXML
 	private PasswordField passwordField;
-
 	@FXML
 	private Label wrongCredentialsLabel;
+	@FXML
+	private Button loginButton;
 
-	public LoginController(Stage stage) {
-		this.stage = stage;
-		
-	}
 
 	@FXML
 	void onLoginButtonClick(ActionEvent event) {
 		// TODO ??????
-				Employee currentUser = DaoFactory.INSTANCE.getEmployeeDao().getByLoginAndPassword(loginTextField.getText(),
-						passwordField.getText());
-				if (currentUser == null) {
-					passwordField.setStyle("-fx-border-color: red");
-					wrongCredentialsLabel.setVisible(true);
+		Employee currentUser = DaoFactory.INSTANCE.getEmployeeDao().getByLoginAndPassword(loginTextField.getText(),
+				passwordField.getText());
+		if (currentUser == null) {
+			passwordField.setStyle("-fx-border-color: red");
+			wrongCredentialsLabel.setVisible(true);
 
-				} else {
-					System.out.println("GOOD");
-				}
+		} else {
+			System.out.println("GOOD");
+		}
 	}
 
 	@FXML
@@ -50,14 +46,6 @@ public class LoginController {
 		if (event.getCode().equals(KeyCode.ENTER)) {
 			onLoginButtonClick(null);
 		}
-		if (event.getCode().equals(KeyCode.TAB)) {
-			if (stage.getScene().getFocusOwner() == loginTextField)
-				passwordField.requestFocus();
-
-			else
-				loginTextField.requestFocus();
-		}
-		
 	}
 
 	@FXML
@@ -67,6 +55,7 @@ public class LoginController {
 	}
 
 	void inputChangedTextField(TextField textField) {
+	
 		textField.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -79,7 +68,8 @@ public class LoginController {
 
 	@FXML
 	void initialize() {
-		passwordField.setFocusTraversable(false);
+		
+		
 		inputChangedTextField(passwordField);
 		inputChangedTextField(loginTextField);
 	}

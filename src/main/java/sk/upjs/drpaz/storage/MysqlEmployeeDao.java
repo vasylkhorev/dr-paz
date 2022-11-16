@@ -101,4 +101,10 @@ public class MysqlEmployeeDao implements EmployeeDao {
 		}
 	}
 
+	@Override
+	public List<Employee> getAll() {
+		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM employee";
+		return jdbcTemplate.query(sql, new EmployeeRowMapper());
+	}
+
 }

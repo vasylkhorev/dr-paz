@@ -91,4 +91,8 @@ public class Employee {
 		this.role = role;
 	}
 
+	@Override
+	public String toString() {
+		return this.name + " " + this.surname;
+	}
 }
