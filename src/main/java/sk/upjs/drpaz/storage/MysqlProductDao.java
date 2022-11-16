@@ -86,7 +86,12 @@ public class MysqlProductDao implements ProductDao {
 	public boolean delete(long id) {
 		int changed = jdbcTemplate.update("DELETE FROM product WHERE id = " + id);
 		return changed == 1;
+	}
 
+	@Override
+	public List<Product> getByName(String name) throws NoSuchElementException {
+		String sql = "SELECT id, name, price, quantity, alert_quantity, description FROM product WHERE name LIKE ?";
+		return jdbcTemplate.query(sql, new ProductRowMapper(), "%" + name + "%");
 	}
 
 }

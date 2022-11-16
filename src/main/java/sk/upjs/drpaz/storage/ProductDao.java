@@ -17,6 +17,8 @@ public interface ProductDao {
 	 */
 	List<Product> getAll();
 
+	List<Product> getByName(String name) throws NoSuchElementException;
+
 	/**
 	 * @param product
 	 * @return saved product

@@ -77,8 +77,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 					employee.getLogin(), employee.getPassword(), employee.getRole());
 
 		} else { // UPDATE WITHOUT CHANGING PASSWORD
-			String sql = "UPDATE employee SET name=?,surname=?,phone=?, email=?, login=?,role=? "
-					+ "WHERE id=?";
+			String sql = "UPDATE employee SET name=?,surname=?,phone=?, email=?, login=?,role=? " + "WHERE id=?";
 			int updated = jdbcTemplate.update(sql, employee.getName(), employee.getSurname(), employee.getPhone(),
 					employee.getEmail(), employee.getLogin(), employee.getRole());
 			if (updated == 1) {
@@ -117,18 +116,14 @@ public class MysqlEmployeeDao implements EmployeeDao {
 			throws NoSuchElementException, NullPointerException {
 		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE login=?";
 		Employee employee = jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), oldLogin);
-		
+
 		sql = "UPDATE employee SET login=?,password=? WHERE login=?";
 		if (BCrypt.checkpw(oldPassword, employee.getPassword())) {
 			int updated = jdbcTemplate.update(sql, newLogin, BCrypt.hashpw(newPassword, BCrypt.gensalt()), oldLogin);
 			if (updated == 1) {
 				return true;
-			} else {
-				return false;
 			}
 		}
 		return false;
-
 	}
-
 }
