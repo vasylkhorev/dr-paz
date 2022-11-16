@@ -2,6 +2,8 @@ package sk.upjs.drpaz.storage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +24,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 	}
 
 	public Purchase getById(long id) throws NoSuchElementException {
-		String sql = "SELECT id, employee_id, created_at FROM Purchase";
+		String sql = "SELECT id, employee_id, created_at FROM Purchase WHERE id=" + id;
 		return jdbcTemplate.queryForObject(sql, new RowMapper<Purchase>() {
 
 			@Override
@@ -80,7 +82,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			@Override
 			public List<Product> extractData(ResultSet rs) throws SQLException, DataAccessException {
 				List<Product> products = new ArrayList<>();
-				while(rs.next()) {
+				while (rs.next()) {
 					Product product = new Product();
 					product.setId(rs.getLong("id"));
 					product.setName(rs.getString("name"));
@@ -92,7 +94,36 @@ public class MysqlPurchaseDao implements PurchaseDao {
 				}
 				return products;
 			}
-		});		
+		});
+	}
+
+	@Override
+	public double getTotalPriceById(long id) throws NullPointerException, NoSuchElementException {
+		String sql = "SELECT SUM(quantity*price) FROM purchase_item WHERE purchase_id =" + id;
+		return jdbcTemplate.query(sql, new ResultSetExtractor<Double>() {
+
+			@Override
+			public Double extractData(ResultSet rs) throws SQLException, DataAccessException {
+				if (rs.next())
+					return rs.getDouble(1);
+				return 0.0;
+			}
+
+		});
+	}
+
+	@Override
+	public List<Purchase> getByDate(LocalDateTime datetimeStart, LocalDateTime datetimeEnd) throws NullPointerException, NoSuchElementException {
+		String sql = "SELECT id, employee_id, created_at FROM purchase WHERE created_at BETWEEN ? AND ?";
+		return jdbcTemplate.query(sql, new RowMapper<Purchase>() {
+
+			@Override
+			public Purchase mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new Purchase(rs.getLong("id"), DaoFactory.INSTANCE.getEmployeeDao().getById(rs.getInt("employee_id")), rs.getTimestamp("created_at").toLocalDateTime());
+				
+			}
+			
+		},datetimeStart,datetimeEnd);
 	}
 
 }

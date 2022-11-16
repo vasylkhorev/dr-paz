@@ -51,4 +51,9 @@ public class Purchase {
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
+	
+	@Override
+	public String toString() {
+		return getId() + "";
+	}
 }
