@@ -126,4 +126,34 @@ public class MysqlEmployeeDao implements EmployeeDao {
 		}
 		return false;
 	}
+
+	@Override
+	public Employee getByName(String name) throws NoSuchElementException {
+		try {
+			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE name LIKE ?";
+			return jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), "%" + name + "%");
+		} catch (DataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Employee getBySurname(String surname) throws NoSuchElementException {
+		try {
+			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE surname LIKE ?";
+			return jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), "%" + surname + "%");
+		} catch (DataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Employee getByNameAndSurname(String name, String surname) throws NoSuchElementException {
+		try {
+			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE name LIKE ? AND surname LIKE ?";
+			return jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), "%" + name + "%", "%" + surname + "%");
+		} catch (DataAccessException e) {
+			return null;
+		}
+	}
 }
