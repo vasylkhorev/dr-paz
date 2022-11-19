@@ -54,20 +54,16 @@ public class MysqlProductDao implements ProductDao {
 			SimpleJdbcInsert sjdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 			sjdbcInsert.withTableName("product");
 			sjdbcInsert.usingGeneratedKeyColumns("id");
-			sjdbcInsert.usingColumns("name");
-			sjdbcInsert.usingColumns("price");
-			sjdbcInsert.usingColumns("quantity");
-			sjdbcInsert.usingColumns("alert_quantity");
-			sjdbcInsert.usingColumns("description");
+			sjdbcInsert.usingColumns("name", "price", "quantity","alert_quantity", "description" );
 
 			Map<String, Object> values = new HashMap<>();
+			System.out.println(product.getName());
 
 			values.put("name", product.getName());
 			values.put("price", product.getPrice());
 			values.put("quantity", product.getQuantity());
 			values.put("alert_quantity", product.getAlertQuantity());
 			values.put("description", product.getDescription());
-
 			long id = sjdbcInsert.executeAndReturnKey(values).longValue();
 			return new Product(id, product.getName(), product.getPrice(), product.getQuantity(),
 					product.getAlertQuantity(), product.getDescription());

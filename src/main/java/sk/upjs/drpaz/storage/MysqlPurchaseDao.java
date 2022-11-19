@@ -62,8 +62,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 			simpleJdbcInsert.withTableName("Purchase");
 			simpleJdbcInsert.usingGeneratedKeyColumns("id");
-			simpleJdbcInsert.usingColumns("employee_id");
-			simpleJdbcInsert.usingColumns("created_at");
+			simpleJdbcInsert.usingColumns("employee_id" , "created_at");
 
 			Map<String, Object> values = new HashMap<>();
 
