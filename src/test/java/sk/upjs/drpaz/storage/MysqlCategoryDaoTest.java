@@ -44,6 +44,17 @@ class MysqlCategoryDaoTest {
 	}
 	
 	@Test
+	void getByIdTest() {
+		Category fromDb = categoryDao.getById(savedCategory.getId());
+		assertEquals(savedCategory.getId(), fromDb.getId());
+		assertEquals(savedCategory.getName(), fromDb.getName());
+		//TODO Lambda is available only at 1.8+
+		//assertThrows(NoSuchElementException.class,()->categoryDao.getById(-1L));
+
+
+	}
+	
+	@Test
 	void insertTest() {
 		//TODO Lambda is available only at 1.8+
 		//assertThrows(NullPointerException.class, () -> categoryDao.save(null), "Cannot save null");

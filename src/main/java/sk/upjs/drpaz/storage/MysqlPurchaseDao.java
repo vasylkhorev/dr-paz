@@ -22,6 +22,22 @@ public class MysqlPurchaseDao implements PurchaseDao {
 	public MysqlPurchaseDao(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
+	
+	public List<Purchase> getAll() {
+		String sql = "SELECT id, employee, createdAt FROM purchase;";
+		List<Purchase> purchases = jdbcTemplate.query(sql, new RowMapper<Purchase>() {
+			
+			@Override
+			public Purchase mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Purchase purchase = new Purchase();
+				purchase.setId(rs.getLong("id"));
+				purchase.setEmployee(DaoFactory.INSTANCE.getEmployeeDao().getById(rs.getLong("employee_id")));
+				purchase.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+				return purchase;
+			}
+		});
+		return purchases;
+	}
 
 	public Purchase getById(long id) throws NoSuchElementException {
 		String sql = "SELECT id, employee_id, created_at FROM Purchase WHERE id=" + id;
@@ -124,6 +140,12 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			}
 			
 		},datetimeStart,datetimeEnd);
+	}
+
+	@Override
+	public boolean delete(long id) {
+		int changed = jdbcTemplate.update("DELETE FROM purchase WHERE id = " + id);
+		return changed == 1;
 	}
 
 }
