@@ -100,6 +100,6 @@ class MysqlEmployeeDaoTest {
 	
 	@Test
 	void changePasswordTest() {
-		//TODO check if same after update (password is hashedand added to database)
+		//TODO check if same after update (password is hashed and added to database)
 	}
 }
