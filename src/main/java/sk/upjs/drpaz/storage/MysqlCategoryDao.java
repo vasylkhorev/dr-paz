@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -21,9 +22,14 @@ public class MysqlCategoryDao implements CategoryDao {
 	}
 	
 	@Override
-	public Category getById(Long id) {
+	public Category getById(long id) {
 		String sql = "SELECT id, name FROM category WHERE id = " + id;
-		return jdbcTemplate.queryForObject(sql, new CategoryRowMapper());
+		try {
+			return jdbcTemplate.queryForObject(sql, new CategoryRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			throw new NoSuchElementException("category with id " + id + " not in DB");
+		}
+
 	}
 	
 	@Override
@@ -60,7 +66,7 @@ public class MysqlCategoryDao implements CategoryDao {
 			int changed = jdbcTemplate.update(sql, category.getName());
 			if (changed == 1)
 				return category;
-			throw new NoSuchElementException("product with id " + category.getId() + " not in DB");
+			throw new NoSuchElementException("category with id " + category.getId() + " not in DB");
 		}
 	}
 	

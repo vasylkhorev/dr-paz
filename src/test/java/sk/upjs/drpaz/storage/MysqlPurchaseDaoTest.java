@@ -15,31 +15,33 @@ class MysqlPurchaseDaoTest {
 	
 	private Purchase savedPurchase;
 	private PurchaseDao purchaseDao;
+	private EmployeeDao employeeDao;
+	private Employee savedEmployee;
+	private Employee savedEmployeeTest;
 
 	public MysqlPurchaseDaoTest() {
 		DaoFactory.INSTANCE.setTesting();
 		purchaseDao = DaoFactory.INSTANCE.getPurchaseDao();
+		employeeDao = DaoFactory.INSTANCE.getEmployeeDao();
 	}
 	
 	@BeforeEach
 	void setUp() throws Exception {
 		Purchase purchase = new Purchase();
 		Employee employee1 = new Employee("TestPurchaseEmployeeName","TestPurchaseEmployeeSurname","7357","test@email.com","testlogin","test","admin");
-		
-		purchase.setEmployee(employee1);
-		purchase.setCreatedAt(new Timestamp(0).toLocalDateTime());
+		savedEmployee = employeeDao.save(employee1);
+		purchase.setEmployee(savedEmployee);
+		purchase.setCreatedAt(new Timestamp(( Instant.now().toEpochMilli() + 500) / 1000 * 1000).toLocalDateTime()); // rounded to second
 		savedPurchase = purchaseDao.save(purchase);
 	}
 
 	@AfterEach
 	void tearDown() throws Exception {
 		purchaseDao.delete(savedPurchase.getId());
+		employeeDao.delete(savedEmployee.getId());
+		if(savedEmployeeTest != null)
+			employeeDao.delete(savedEmployeeTest.getId());
 	}
-	
-	//TODO Not working, still trying to fix setUp, 
-	//org.springframework.dao.DataIntegrityViolationException: PreparedStatementCallback; Field 'employee_id' doesn't have a default value; nested exception is java.sql.SQLException: Field 'employee_id' doesn't have a default value
-	//on adding new purchase
-	//save in MysqlPurchaseDao when executeAndReturnKey it returns null and Purchase object is also null
 
 	@Test
 	void getAllTest() {
@@ -53,19 +55,19 @@ class MysqlPurchaseDaoTest {
 	void getByIdTest() {
 		Purchase fromDb = purchaseDao.getById(savedPurchase.getId());
 		assertEquals(savedPurchase.getId(), fromDb.getId());
-		//assertEquals(savedPurchase.getEmployee(), fromDb.getEmployee());
+		assertEquals(savedPurchase.getEmployee().getId(), fromDb.getEmployee().getId());
 		assertEquals(savedPurchase.getCreatedAt(), fromDb.getCreatedAt());
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NoSuchElementException.class,()->subjectDao.getById(-1));
+		assertThrows(NoSuchElementException.class,()->purchaseDao.getById(-1));
 
 	}
 	
 	@Test
 	void insertTest() {
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NullPointerException.class, () -> categoryDao.save(null), "Cannot save null");
+		Employee employeeTest = new Employee("TestPurchaseEmployeeName","TestPurchaseEmployeeSurname","7357","test@email.com","testlogin","test","admin");
+		savedEmployeeTest = employeeDao.save(employeeTest);
+		assertThrows(NullPointerException.class, () -> purchaseDao.save(null), "Cannot save null");
 		Purchase purchase = new Purchase();
-		purchase.setEmployee(new Employee("TestPurchaseEmployeeName","TestPurchaseEmployeeSurname","7357","test@email.com","testlogin","test","admin"));
+		purchase.setEmployee(savedEmployeeTest);
 		purchase.setCreatedAt(new Timestamp(0).toLocalDateTime());
 		int size = purchaseDao.getAll().size();
 		Purchase saved = purchaseDao.save(purchase);
@@ -74,16 +76,16 @@ class MysqlPurchaseDaoTest {
 		assertEquals(purchase.getEmployee(), saved.getEmployee());
 		assertEquals(purchase.getCreatedAt(), saved.getCreatedAt());
 		purchaseDao.delete(saved.getId());
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NullPointerException.class, 
-		//		     () -> purchaseDao.save(new Category(null, null)),"Purchase name cannot be null");
+		assertThrows(NullPointerException.class, () -> purchaseDao.save(new Purchase(null, null, null)),"Purchase name cannot be null");
 	}
 	
 	@Test
 	void updateTest() {
+		Employee employeeTest = new Employee("TestPurchaseEmployeeNameChanged","TestPurchaseEmployeeSurnameChanged","7357111","testchanged@email.com","testloginChanged","testChanged","admin");
+		Employee savedEmployeeTest = employeeDao.save(employeeTest); 
 		Purchase updated = new Purchase(
 				savedPurchase.getId(),
-				new Employee("TestPurchaseEmployeeNameChanged","TestPurchaseEmployeeSurnameChanged","7357111","testchanged@email.com","testloginChanged","testChanged","admin"),
+				savedEmployeeTest,
 				new Timestamp(0).toLocalDateTime());
 		int size = purchaseDao.getAll().size();
 		purchaseDao.save(updated);
@@ -92,29 +94,37 @@ class MysqlPurchaseDaoTest {
 		Purchase fromDb = purchaseDao.getById(updated.getId());
 		
 		assertEquals(updated.getId(), fromDb.getId());
-		assertEquals(updated.getEmployee(), fromDb.getEmployee());
+		assertEquals(updated.getEmployee().getId(), fromDb.getEmployee().getId());
 		assertEquals(updated.getCreatedAt(), fromDb.getCreatedAt());
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NoSuchElementException.class, 
-		//		()->purchaseDao.save(new Purchase(-1L, 
-		//				new Employee("TestPurchaseEmployeeNameChanged","TestPurchaseEmployeeSurnameChanged","7357111","testchanged@email.com","testloginChanged","testChanged","admin"),
-		//				new Timestamp(0).toLocalDateTime()));
-
+		assertThrows(NoSuchElementException.class, 
+				()->purchaseDao.save(new Purchase(-1L, 
+						new Employee("TestPurchaseEmployeeNameChanged","TestPurchaseEmployeeSurnameChanged","7357111","testchanged@email.com","testloginChanged","testChanged","admin"),
+						new Timestamp(0).toLocalDateTime())));
 	}
 
 	@Test
 	void getProductsByPurchaseTest() {
-		//TODO
+		//TODO 
+		// I will finish it later cause i need to add a way to save 
+		//connection between purchase and product -> save to purchase_item
 	}
 	
 	@Test
 	void getTotalPriceById() {
 		//TODO
+		// I will finish it later cause i need to add a way to save 
+		//connection between purchase and product -> save to purchase_item
 	}
 	
 	@Test
 	void getByDateTest() {
-		//TODO
+		LocalDateTime dateStart = new Timestamp(( Instant.now().toEpochMilli() -35000) / 1000 * 1000).toLocalDateTime();
+		LocalDateTime dateEnd = new Timestamp(( Instant.now().toEpochMilli() + 35000) / 1000 * 1000).toLocalDateTime();
+		
+		purchaseDao.getByDate( dateStart , dateEnd );
+		assertTrue(dateStart.isBefore(savedPurchase.getCreatedAt()));
+		assertTrue(dateEnd.isAfter(savedPurchase.getCreatedAt()));
+		assertThrows(NullPointerException.class, ()->purchaseDao.getByDate(null, null));
 	}
 	
 }

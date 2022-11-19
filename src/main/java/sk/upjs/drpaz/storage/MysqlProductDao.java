@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -32,10 +34,13 @@ public class MysqlProductDao implements ProductDao {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	// TODO TRY-CATCH BLOCK
 	public Product getById(long id) throws NoSuchElementException {
 		String sql = "SELECT id, name, price, quantity, alert_quantity, description FROM product WHERE id = " + id;
-		return jdbcTemplate.queryForObject(sql, new ProductRowMapper());
+		try {
+			return jdbcTemplate.queryForObject(sql, new ProductRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			throw new NoSuchElementException("product with id " + id + " not in DB");
+		}
 	}
 
 	public List<Product> getAll() {
@@ -57,7 +62,6 @@ public class MysqlProductDao implements ProductDao {
 			sjdbcInsert.usingColumns("name", "price", "quantity","alert_quantity", "description" );
 
 			Map<String, Object> values = new HashMap<>();
-			System.out.println(product.getName());
 
 			values.put("name", product.getName());
 			values.put("price", product.getPrice());
@@ -86,8 +90,15 @@ public class MysqlProductDao implements ProductDao {
 
 	@Override
 	public List<Product> getByName(String name) throws NoSuchElementException {
+		if (name == null) {
+			throw new NoSuchElementException("product cannot have null as name");
+		}
 		String sql = "SELECT id, name, price, quantity, alert_quantity, description FROM product WHERE name LIKE ?";
-		return jdbcTemplate.query(sql, new ProductRowMapper(), "%" + name + "%");
+		try {
+			return jdbcTemplate.query(sql, new ProductRowMapper(), "%" + name + "%");
+		} catch (DataAccessException e) {
+			throw new NoSuchElementException("product with name " + name + " not in DB");
+		}
 	}
 
 }

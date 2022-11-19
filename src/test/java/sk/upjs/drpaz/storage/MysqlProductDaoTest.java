@@ -36,11 +36,6 @@ class MysqlProductDaoTest {
 		productDao.delete(savedProduct.getId());
 	}
 	
-	//TODO Not working, still trying to fix setUp, 
-	//org.springframework.dao.DataIntegrityViolationException: PreparedStatementCallback; Field 'name' doesn't have a default value; nested exception is java.sql.SQLException: Field 'name' doesn't have a default value
-	//on adding to database same problem as with MysqlPurchaseDaoTest
-	//save in MysqlProductDao when executeAndReturnKey it returns null and Product object is also null
-
 	@Test
 	void getByIdTest() {
 		Product fromDb = productDao.getById(savedProduct.getId());
@@ -50,8 +45,7 @@ class MysqlProductDaoTest {
 		assertEquals(savedProduct.getQuantity(), fromDb.getQuantity());
 		assertEquals(savedProduct.getDescription(), fromDb.getDescription());
 		assertEquals(savedProduct.getAlertQuantity(), fromDb.getAlertQuantity());
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NoSuchElementException.class, ()->productDao.getById(-1));
+		assertThrows(NoSuchElementException.class, ()-> productDao.getById(-1));
 	}
 	
 	@Test
@@ -68,14 +62,12 @@ class MysqlProductDaoTest {
 		for (Product productGetByNameTest: fromDb) {
 			assertEquals(savedProduct.getName(), productGetByNameTest.getName());
 		}
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NoSuchElementException.class, ()->productDao.getByName(null));
+		assertThrows(NoSuchElementException.class, ()->productDao.getByName(null));
 	}
 	
 	@Test
 	void insertTest() {
-		//TODO Lambda is available only at 1.8+
-		//assertThows(NullPointerException.class, ()-> productDao.save(null), "Cannot save null");
+		assertThrows(NullPointerException.class, ()-> productDao.save(null), "Cannot save null");
 		Product product = new Product();
 		product.setName("New Test Product");
 		int size = productDao.getAll().size();
@@ -88,10 +80,8 @@ class MysqlProductDaoTest {
 		assertEquals(product.getAlertQuantity(), saved.getAlertQuantity());
 		assertEquals(product.getDescription(), saved.getDescription());
 		productDao.delete(saved.getId());
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NullPointerException.class,  ()-> productDao.save(new Product(null, null, 5, 5, 5, "TestProductDescription")), "Product name cannot be null");
-		//assertThrows(NullPointerException.class,  ()-> productDao.save(new Product(null, "TestProductName", null, 5, 5, "TestProductDescription")), "Product price cannot be null");
-		//assertThrows(NullPointerException.class,  ()-> productDao.save(new Product(null, "TestProductName", 5, null, 5, "TestProductDescription")), "Product quantity cannot be null");
+		assertThrows(NullPointerException.class,  ()-> productDao.save(new Product(null, null, 5, 5, 5, "TestProductDescription")), "Product name cannot be null");
+
 	}
 	
 	@Test
@@ -105,9 +95,8 @@ class MysqlProductDaoTest {
 		
 		assertEquals(updated.getId(), fromDb.getId());
 		assertEquals(updated.getName(), fromDb.getName());
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NoSuchElementException.class,
-		//		()->productDao.save(new Product(-1L, "Test Product ChangedChanged", 7, 7, 7, "Test Product Description ChangedChanged")));
+		assertThrows(NoSuchElementException.class,
+				()->productDao.save(new Product(-1L, "Test Product ChangedChanged", 7, 7, 7, "Test Product Description ChangedChanged")));
 		
 	}
 }

@@ -37,6 +37,6 @@ public interface CategoryDao {
 	 * @param id
 	 * @return
 	 */
-	Category getById(Long id);
+	Category getById(long id);
 	
 }

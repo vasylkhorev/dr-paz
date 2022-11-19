@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -40,7 +40,11 @@ public class MysqlEmployeeDao implements EmployeeDao {
 	@Override
 	public Employee getById(long id) throws NoSuchElementException {
 		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE id =" + id;
-		return jdbcTemplate.queryForObject(sql, new EmployeeRowMapper());
+		try {
+			return jdbcTemplate.queryForObject(sql, new EmployeeRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			throw new NoSuchElementException("employee with id " + id + " not in DB");
+		}
 	}
 
 	@Override
@@ -96,10 +100,12 @@ public class MysqlEmployeeDao implements EmployeeDao {
 
 	@Override
 	public Employee getByLogin(String login) {
+		if (login == null)
+			throw new NoSuchElementException("Employee cannot have null as login");
 		try {
 			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE login=?";
 			return jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), login);
-		} catch (DataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
 	}
@@ -113,45 +119,59 @@ public class MysqlEmployeeDao implements EmployeeDao {
 	@Override
 	public boolean changePassword(String oldLogin, String oldPassword, String newLogin, String newPassword)
 			throws NoSuchElementException, NullPointerException {
-		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE login=?";
-		Employee employee = jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), oldLogin);
-
-		sql = "UPDATE employee SET login=?,password=? WHERE login=?";
-		if (BCrypt.checkpw(oldPassword, employee.getPassword())) {
-			int updated = jdbcTemplate.update(sql, newLogin, BCrypt.hashpw(newPassword, BCrypt.gensalt()), oldLogin);
-			if (updated == 1) {
-				return true;
-			}
+		if (oldLogin == null || oldPassword == null || newLogin == null || newPassword == null) {
+			throw new NullPointerException("logins or passwords cannot be null");
 		}
+		Employee employee;
+		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE login=?";
+		try {
+			employee = jdbcTemplate.queryForObject(sql, new EmployeeRowMapper(), oldLogin);
+		} catch (EmptyResultDataAccessException e) {
+			return false;
+		}
+			sql = "UPDATE employee SET login=?,password=? WHERE login=?";
+			if (BCrypt.checkpw(oldPassword, employee.getPassword())) {
+				int updated = jdbcTemplate.update(sql, newLogin, BCrypt.hashpw(newPassword, BCrypt.gensalt()),
+						oldLogin);
+				if (updated == 1) {
+					return true;
+				}
+			}
 		return false;
 	}
 
 	@Override
 	public List<Employee> getByName(String name) throws NoSuchElementException {
+		if (name == null)
+			throw new NoSuchElementException("employee cannot have null as Name");
 		try {
 			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE name LIKE ?";
 			return jdbcTemplate.query(sql, new EmployeeRowMapper(), "%" + name + "%");
-		} catch (DataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
 	}
 
 	@Override
 	public List<Employee> getBySurname(String surname) throws NoSuchElementException {
+		if (surname == null)
+			throw new NoSuchElementException("employee cannot have null as surname");
 		try {
 			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE surname LIKE ?";
 			return jdbcTemplate.query(sql, new EmployeeRowMapper(), "%" + surname + "%");
-		} catch (DataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
 	}
 
 	@Override
 	public List<Employee> getByNameAndSurname(String name, String surname) throws NoSuchElementException {
+		if (surname == null || name == null)
+			throw new NoSuchElementException("employee cannot have null as surname or name");
 		try {
 			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE name LIKE ? AND surname LIKE ?";
 			return jdbcTemplate.query(sql, new EmployeeRowMapper(), "%" + name + "%", "%" + surname + "%");
-		} catch (DataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
 	}

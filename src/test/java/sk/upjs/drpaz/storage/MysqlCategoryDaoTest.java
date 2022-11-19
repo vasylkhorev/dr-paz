@@ -3,6 +3,7 @@ package sk.upjs.drpaz.storage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,8 @@ class MysqlCategoryDaoTest {
 	@Test
 	void getByProductTest() {
 		//TODO do unit test but there is a join in getByProduct, not sure if it changes anything;
+		// I will finish it later cause i need to add a way to save 
+		//connection between product and category -> save to product_has_category
 	}
 	
 	@Test
@@ -48,16 +51,14 @@ class MysqlCategoryDaoTest {
 		Category fromDb = categoryDao.getById(savedCategory.getId());
 		assertEquals(savedCategory.getId(), fromDb.getId());
 		assertEquals(savedCategory.getName(), fromDb.getName());
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NoSuchElementException.class,()->categoryDao.getById(-1L));
+		assertThrows(NoSuchElementException.class,()->categoryDao.getById(-1l));
 
 
 	}
 	
 	@Test
 	void insertTest() {
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NullPointerException.class, () -> categoryDao.save(null), "Cannot save null");
+		assertThrows(NullPointerException.class, () -> categoryDao.save(null), "Cannot save null");
 		Category category = new Category();
 		category.setName("New category");
 		int size = categoryDao.getAll().size();
@@ -66,9 +67,8 @@ class MysqlCategoryDaoTest {
 		assertNotNull(saved.getId());
 		assertEquals(category.getName(), saved.getName());
 		categoryDao.delete(saved.getId());
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NullPointerException.class, 
-		//		     () -> categoryDao.save(new Category(null, null)),"Subject name cannot be null");
+		assertThrows(NullPointerException.class, 
+				     () -> categoryDao.save(new Category(null, null)),"Subject name cannot be null");
 	}
 	
 	@Test
@@ -82,9 +82,8 @@ class MysqlCategoryDaoTest {
 
 		assertEquals(updated.getId(), fromDb.getId());
 		assertEquals(updated.getName(), fromDb.getName());
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NoSuchElementException.class, 
-		//		     ()->categoryDao.save(new Category(-1L, "Changed")));	
+		assertThrows(NoSuchElementException.class, 
+				     ()->categoryDao.save(new Category(-1l, "Changed")));	
 	}
 
 

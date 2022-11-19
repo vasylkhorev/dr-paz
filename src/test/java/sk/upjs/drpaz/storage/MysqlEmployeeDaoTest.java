@@ -49,8 +49,7 @@ class MysqlEmployeeDaoTest {
 		assertEquals(savedEmployee.getLogin(), fromDb.getLogin());
 		assertTrue(BCrypt.checkpw(savedEmployee.getPassword(), fromDb.getPassword()));
 		assertEquals(savedEmployee.getRole(), fromDb.getRole());
-		//TODO Lambda is available only at 1.8+
-		//assertThrows(NoSuchElementException.class,  ()->employeeDao.getById(-1L));
+		assertThrows(NoSuchElementException.class,  ()-> employeeDao.getById(-1L));
 	}
 	
 	@Test
@@ -73,33 +72,45 @@ class MysqlEmployeeDaoTest {
 		assertEquals(savedEmployee.getLogin(), fromDb.getLogin());
 		assertTrue(BCrypt.checkpw(savedEmployee.getPassword(), fromDb.getPassword()));
 		assertEquals(savedEmployee.getRole(), fromDb.getRole());
-		//TODO Lambda is available only at 1.8+
-//		assertThrows(NoSuchElementException.class,  ()->employeeDao.getById(-1L));
+		assertThrows(NoSuchElementException.class,  ()-> employeeDao.getById(-1));
 		
 		
 	}
 	
 	@Test
 	void getByNameTest() {
-		//TODO getByName returns 1 employee object, 
-			// however multiple employees can have the same Name!!!! 
+		List<Employee> fromDb = employeeDao.getByName(savedEmployee.getName());
+		for (Employee employeeGetByNameTest: fromDb) 
+			assertEquals(savedEmployee.getName(), employeeGetByNameTest.getName());
 	}	
 	
 	@Test 
 	void getBySurnameTest() {
-		//TODO getBySurname returns 1 employee object, 
-			// however multiple employees can have the same Surname!!!! 
+		List<Employee> fromDb = employeeDao.getBySurname(savedEmployee.getSurname());
+		for (Employee employeeGetBySurnameTest: fromDb) 
+			assertEquals(savedEmployee.getSurname(), employeeGetBySurnameTest.getSurname());
 	}
 	
 	@Test
 	void getByNameAndSurname() {
-		//TODO getByName returns 1 employee object, 
-			// however multiple employees can have the same Name and Surname!!!! 
+		List<Employee> fromDb = employeeDao.getByNameAndSurname(savedEmployee.getName(),savedEmployee.getSurname());
+		for (Employee employeeGetByNameAndSurnameTest: fromDb) {
+			assertEquals(savedEmployee.getName(), employeeGetByNameAndSurnameTest.getName());
+			assertEquals(savedEmployee.getSurname(), employeeGetByNameAndSurnameTest.getSurname());
+		}
 	}
 	
 	
 	@Test
 	void changePasswordTest() {
-		//TODO check if same after update (password is hashed and added to database)
+		String newLogin = "testLoginForChange";
+		String newPassword = "testHesla";
+		
+		employeeDao.changePassword(savedEmployee.getLogin(), savedEmployee.getPassword(), newLogin, newPassword);
+		Employee fromDb = employeeDao.getById(savedEmployee.getId());
+		assertEquals(newLogin, fromDb.getLogin());
+		assertTrue(BCrypt.checkpw(newPassword, fromDb.getPassword()));
+		assertThrows(NullPointerException.class,  ()-> employeeDao.changePassword(null, null, null, null));
+		assertFalse(employeeDao.changePassword("notInDb", "notInDb", "notInDb", "notInDb"));
 	}
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,37 +23,30 @@ public class MysqlPurchaseDao implements PurchaseDao {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
+	private class PurchaseRowMapper implements RowMapper<Purchase> {
+		@Override
+		public Purchase mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Purchase purchase = new Purchase();
+			purchase.setId(rs.getLong("id"));
+			purchase.setEmployee(DaoFactory.INSTANCE.getEmployeeDao().getById(rs.getLong("employee_id")));
+			purchase.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+			return purchase;
+		}
+	}
+
 	public List<Purchase> getAll() {
-		String sql = "SELECT id, employee, createdAt FROM purchase;";
-		List<Purchase> purchases = jdbcTemplate.query(sql, new RowMapper<Purchase>() {
-			
-			@Override
-			public Purchase mapRow(ResultSet rs, int rowNum) throws SQLException {
-				Purchase purchase = new Purchase();
-				purchase.setId(rs.getLong("id"));
-				purchase.setEmployee(DaoFactory.INSTANCE.getEmployeeDao().getById(rs.getLong("employee_id")));
-				purchase.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-				return purchase;
-			}
-		});
+		String sql = "SELECT id, employee_id, created_at FROM purchase;";
+		List<Purchase> purchases = jdbcTemplate.query(sql, new PurchaseRowMapper());
 		return purchases;
 	}
 
 	public Purchase getById(long id) throws NoSuchElementException {
 		String sql = "SELECT id, employee_id, created_at FROM Purchase WHERE id=" + id;
-		return jdbcTemplate.queryForObject(sql, new RowMapper<Purchase>() {
-
-			@Override
-			public Purchase mapRow(ResultSet rs, int rowNum) throws SQLException {
-				Purchase purchase = new Purchase();
-				purchase.setId(rs.getLong("id"));
-				purchase.setEmployee(DaoFactory.INSTANCE.getEmployeeDao().getById(rs.getLong("employee_id")));
-				purchase.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-
-				return purchase;
-			}
-
-		});
+		try {
+			return jdbcTemplate.queryForObject(sql, new PurchaseRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			throw new NoSuchElementException("Purchase with id " + id + " not in DB");
+		}
 	}
 
 	public Purchase save(Purchase purchase) throws NullPointerException, NoSuchElementException {
@@ -62,7 +56,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 			simpleJdbcInsert.withTableName("Purchase");
 			simpleJdbcInsert.usingGeneratedKeyColumns("id");
-			simpleJdbcInsert.usingColumns("employee_id" , "created_at");
+			simpleJdbcInsert.usingColumns("employee_id", "created_at");
 
 			Map<String, Object> values = new HashMap<>();
 
@@ -75,7 +69,8 @@ public class MysqlPurchaseDao implements PurchaseDao {
 
 		} else { // UPDATE
 			String sql = "UPDATE purchase SET employee_id=?, created_at=? " + "WHERE id = ?";
-			int changed = jdbcTemplate.update(sql, purchase.getEmployee().getId(), purchase.getCreatedAt());
+			int changed = jdbcTemplate.update(sql, purchase.getEmployee().getId(), purchase.getCreatedAt(),
+					purchase.getId());
 			if (changed == 1) {
 				return purchase;
 			} else {
@@ -122,22 +117,21 @@ public class MysqlPurchaseDao implements PurchaseDao {
 					return rs.getDouble(1);
 				return 0.0;
 			}
-
 		});
 	}
 
 	@Override
-	public List<Purchase> getByDate(LocalDateTime datetimeStart, LocalDateTime datetimeEnd) throws NullPointerException, NoSuchElementException {
+	public List<Purchase> getByDate(LocalDateTime datetimeStart, LocalDateTime datetimeEnd)
+			throws NullPointerException, NoSuchElementException {
+		if (datetimeStart == null || datetimeEnd == null)
+			throw new NullPointerException("dates cannot be null");
 		String sql = "SELECT id, employee_id, created_at FROM purchase WHERE created_at BETWEEN ? AND ?";
-		return jdbcTemplate.query(sql, new RowMapper<Purchase>() {
-
-			@Override
-			public Purchase mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new Purchase(rs.getLong("id"), DaoFactory.INSTANCE.getEmployeeDao().getById(rs.getInt("employee_id")), rs.getTimestamp("created_at").toLocalDateTime());
-				
-			}
-			
-		},datetimeStart,datetimeEnd);
+		try {
+			return jdbcTemplate.query(sql, new PurchaseRowMapper(), datetimeStart, datetimeEnd);
+		} catch (DataAccessException e) {
+			throw new NoSuchElementException(
+					"No Purchase between " + datetimeStart.toString() + " and " + datetimeEnd.toString());
+		}
 	}
 
 	@Override
