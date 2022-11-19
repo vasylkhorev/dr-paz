@@ -2,7 +2,6 @@ package sk.upjs.drpaz.storage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,7 +71,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			values.put("created_at", purchase.getCreatedAt());
 
 			long id = simpleJdbcInsert.executeAndReturnKey(values).longValue();
-			Purchase purchase2 = new Purchase(purchase.getId(), purchase.getEmployee(), purchase.getCreatedAt());
+			Purchase purchase2 = new Purchase(id, purchase.getEmployee(), purchase.getCreatedAt());
 			return purchase2;
 
 		} else { // UPDATE

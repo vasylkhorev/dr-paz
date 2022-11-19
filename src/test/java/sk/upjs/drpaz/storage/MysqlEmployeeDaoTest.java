@@ -74,7 +74,7 @@ class MysqlEmployeeDaoTest {
 		assertTrue(BCrypt.checkpw(savedEmployee.getPassword(), fromDb.getPassword()));
 		assertEquals(savedEmployee.getRole(), fromDb.getRole());
 		//TODO Lambda is available only at 1.8+
-		//assertThrows(NoSuchElementException.class,  ()->employeeDao.getById(-1L));
+//		assertThrows(NoSuchElementException.class,  ()->employeeDao.getById(-1L));
 		
 		
 	}
