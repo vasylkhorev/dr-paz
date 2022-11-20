@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="823.0" prefWidth="1072.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.33331298828125" minWidth="0.0" prefWidth="0.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="701.0" minWidth="10.0" prefWidth="701.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="551.3333625793457" minWidth="10.0" prefWidth="221.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="258.66665140787757" minHeight="10.0" prefHeight="26.666666666666686" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="694.000005086263" minHeight="10.0" prefHeight="693.3333333333333" valignment="CENTER" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="169.00001525878906" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Button mnemonicParsing="false" onAction="#sellClickButton" prefHeight="34.0" prefWidth="125.0" text="SELL" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+         <children>
+            <Label layoutY="2.666656494140625" text="Total:">
+               <font>
+                  <Font name="Corbel" size="17.0" />
+               </font>
+            </Label>
+            <Label fx:id="totalPrice" layoutX="45.333343505859375" text="10.52">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+         </children>
+         <GridPane.margin>
+            <Insets bottom="20.0" />
+         </GridPane.margin>
+      </AnchorPane>
+      <Separator orientation="VERTICAL" prefHeight="364.0" prefWidth="0.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="2" />
+      <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Label text="Purchase" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+         <font>
+            <Font name="Corbel Bold" size="25.0" />
+         </font>
+      </Label>
+      <TextField fx:id="productNameTextField" promptText="Type product name" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets left="20.0" right="20.0" />
+         </GridPane.margin>
+      </TextField>
+      <TableView fx:id="allProductsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <columns>
+          <TableColumn fx:id="nameAllColumn" prefWidth="177.33331048488617" text="Name" />
+          <TableColumn fx:id="priceAllColumn" minWidth="0.0" prefWidth="76.0" text="Price" />
+            <TableColumn fx:id="quantityAllColumn" prefWidth="70.0" text="Quantity" />
+            <TableColumn fx:id="alertQuantiyAllColumn" prefWidth="87.33331298828125" text="Alert quantity" />
+            <TableColumn fx:id="descriptionAllColumn" prefWidth="252.00006103515625" text="Description" />
+        </columns>
+         <GridPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </GridPane.margin>
+      </TableView>
+      <TableView fx:id="productsInPurchaseTableView" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <columns>
+          <TableColumn fx:id="namePurchaseColumn" prefWidth="131.33324682712555" text="Name" />
+          <TableColumn fx:id="pricePurchaseColumn" prefWidth="54.0" text="Price" />
+            <TableColumn fx:id="quantityPurchaseColumn" prefWidth="70.00002543131512" text="Quantity" />
+        </columns>
+         <GridPane.margin>
+            <Insets bottom="50.0" left="20.0" right="20.0" top="20.0" />
+         </GridPane.margin>
+      </TableView>
+   </children>
+</GridPane>

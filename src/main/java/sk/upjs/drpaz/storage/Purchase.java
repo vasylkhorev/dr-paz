@@ -18,10 +18,13 @@ public class Purchase {
 		this.productsInPurchase = productsInPurchase;
 	}
 
-	public Purchase(Long id, Employee employee, LocalDateTime createdAt) {
+	
+
+	public Purchase(Long id, Employee employee, LocalDateTime createdAt, List<Product> productsInPurchase) {
 		this.id = id;
 		this.employee = employee;
 		this.createdAt = createdAt;
+		this.productsInPurchase = productsInPurchase;
 	}
 
 	public Purchase() {

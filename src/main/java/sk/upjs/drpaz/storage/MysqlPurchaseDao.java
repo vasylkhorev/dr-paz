@@ -57,14 +57,24 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			simpleJdbcInsert.withTableName("Purchase");
 			simpleJdbcInsert.usingGeneratedKeyColumns("id");
 			simpleJdbcInsert.usingColumns("employee_id", "created_at");
-
 			Map<String, Object> values = new HashMap<>();
-
 			values.put("employee_id", purchase.getEmployee().getId());
 			values.put("created_at", purchase.getCreatedAt());
-
 			long id = simpleJdbcInsert.executeAndReturnKey(values).longValue();
-			Purchase purchase2 = new Purchase(id, purchase.getEmployee(), purchase.getCreatedAt());
+			Purchase purchase2 = new Purchase(id, purchase.getEmployee(), purchase.getCreatedAt(),purchase.getProductsInPurchase());
+			
+			simpleJdbcInsert.withTableName("purchase_item");
+			simpleJdbcInsert.usingColumns("purchase_id", "product_id", "quantity", "price");
+			
+			for (Product product : purchase2.getProductsInPurchase()) {
+				Map<String, Object> values1 = new HashMap<>();
+				values1.put("purchase_id", purchase.getId());
+				values1.put("product_id", product.getId());
+				values1.put("quantity", 1);
+				values1.put("price", product.getPrice());
+				simpleJdbcInsert.execute(values1);
+				
+			}
 			
 			for (Product product : purchase2.getProductsInPurchase()) {
 				jdbcTemplate.update("UPDATE product SET quantity = quantity - ? WHERE id = ?",product.getQuantity(), product.getId());
@@ -147,40 +157,6 @@ public class MysqlPurchaseDao implements PurchaseDao {
 		return changed == 1;
 	}
 
-	public boolean addProductToPurchase(Product product, Purchase purchase) {
-		// TODO check if it is correct?
-		int changed = jdbcTemplate.update(
-				"UPDATE purchase_item SET quantity = quantity +1  WHERE product_id = ? AND purchase_id = ?",
-				product.getId(), purchase.getId());
-		if (changed > 0) {
-			return true;
-		}
-		if (purchase == null || product == null || product.getName() == null) {
-			throw new NullPointerException("cannot save null or have null as category or product");
-		}
-		if (purchase.getId() == null && product.getId() == null) { // purchase and product are not saved in db -- INSERT
-			purchase = save(purchase);
-			product = DaoFactory.INSTANCE.getProductDao().save(product);
-		}
-		if (purchase.getId() == null && product.getId() != null) {
-			purchase = save(purchase);
-		}
-		if (purchase.getId() != null && product.getId() == null) {
-			product = DaoFactory.INSTANCE.getProductDao().save(product);
-		}
-		SimpleJdbcInsert sjdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-		sjdbcInsert.withTableName("purchase_item");
-		sjdbcInsert.usingColumns("purchase_id", "product_id", "quantity", "price");
-		Map<String, Object> values = new HashMap<>();
-		values.put("purchase_id", purchase.getId());
-		values.put("product_id", product.getId());
-		values.put("quantity", 1);
-		values.put("price", product.getPrice());
-		changed = sjdbcInsert.execute(values);
-		if (changed == 1) {
-			return true;
-		}
-		return false;
-	}
+
 
 }

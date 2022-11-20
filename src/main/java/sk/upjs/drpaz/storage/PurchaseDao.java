@@ -19,6 +19,4 @@ public interface PurchaseDao {
 	List<Purchase> getByDate(LocalDateTime datetimeStart, LocalDateTime datetimeEnd) throws NullPointerException, NoSuchElementException;
 	
 	boolean delete(long id);
-
-	boolean addProductToPurchase(Product product, Purchase purchase);
 }
