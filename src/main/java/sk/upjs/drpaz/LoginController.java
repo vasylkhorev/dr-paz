@@ -30,7 +30,6 @@ public class LoginController {
 
 	@FXML
 	void onLoginButtonClick(ActionEvent event) {
-		// TODO ??????
 		currentUser = DaoFactory.INSTANCE.getEmployeeDao().getByLogin(loginTextField.getText());
 		if (currentUser == null || !BCrypt.checkpw(passwordField.getText(), currentUser.getPassword())) {
 			passwordField.setStyle("-fx-border-color: red");

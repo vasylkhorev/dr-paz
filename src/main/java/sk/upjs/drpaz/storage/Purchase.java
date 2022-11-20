@@ -8,7 +8,6 @@ public class Purchase {
 	private Long id;
 	private Employee employee;
 	private LocalDateTime createdAt;
-	// TODO order_item logic
 	private List<Product> productsInPurchase;
 
 	public List<Product> getProductsInPurchase() {

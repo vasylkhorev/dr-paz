@@ -12,15 +12,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
-
-
 public class MysqlCategoryDao implements CategoryDao {
 	private JdbcTemplate jdbcTemplate;
 
 	public MysqlCategoryDao(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
-	
+
 	@Override
 	public Category getById(long id) {
 		String sql = "SELECT id, name FROM category WHERE id = " + id;
@@ -31,11 +29,11 @@ public class MysqlCategoryDao implements CategoryDao {
 		}
 
 	}
-	
+
 	@Override
 	public List<Category> getAll() {
 		String sql = "SELECT id, name FROM category";
-		List<Category> categories = jdbcTemplate.query(sql, new CategoryRowMapper() );
+		List<Category> categories = jdbcTemplate.query(sql, new CategoryRowMapper());
 		return categories;
 	}
 
@@ -69,15 +67,44 @@ public class MysqlCategoryDao implements CategoryDao {
 			throw new NoSuchElementException("category with id " + category.getId() + " not in DB");
 		}
 	}
-	
+
 	@Override
 	public boolean delete(long id) {
+		jdbcTemplate.update("DELETE FROM product_has_category WHERE category_id = " + id);
 		int changed = jdbcTemplate.update("DELETE FROM category WHERE id = " + id);
 		return changed == 1;
 	}
-	
+
+	@Override
+	public boolean addCategoryToProduct(Category category, Product product) {
+		if (category == null || product == null || category.getName() == null || product.getName() == null) {
+			throw new NullPointerException("cannot save null or have null as category or product");
+		}
+		if (category.getId() == null && product.getId() == null) { // category and product are not saved in db -- INSERT
+			category = save(category);
+			product = DaoFactory.INSTANCE.getProductDao().save(product);
+		}
+		if (category.getId() == null && product.getId() != null) {
+			category = save(category);
+		}
+		if (category.getId() != null && product.getId() == null) {
+			product = DaoFactory.INSTANCE.getProductDao().save(product);
+		}
+		SimpleJdbcInsert sjdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+		sjdbcInsert.withTableName("product_has_category");
+		sjdbcInsert.usingColumns("product_id", "category_id");
+		Map<String, Object> values = new HashMap<>();
+		values.put("product_id", product.getId());
+		values.put("category_id", category.getId());
+		int changed = sjdbcInsert.execute(values);
+		if (changed == 1) {
+			return true;
+		}
+		return false;
+	}
+
 	private class CategoryRowMapper implements RowMapper<Category> {
-		
+
 		@Override
 		public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Category category = new Category();

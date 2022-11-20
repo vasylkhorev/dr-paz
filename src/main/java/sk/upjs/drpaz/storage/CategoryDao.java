@@ -32,11 +32,15 @@ public interface CategoryDao {
 	 * @return
 	 */
 	boolean delete(long id);
+	
+	boolean addCategoryToProduct(Category category, Product product);
 
 	/**
 	 * @param id
 	 * @return
 	 */
 	Category getById(long id);
+	
+	
 	
 }

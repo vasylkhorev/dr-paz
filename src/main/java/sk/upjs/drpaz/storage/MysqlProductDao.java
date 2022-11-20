@@ -51,7 +51,6 @@ public class MysqlProductDao implements ProductDao {
 	}
 
 	public Product save(Product product) throws NullPointerException, NoSuchElementException {
-		// TODO SOMETHING ELSE???
 		if (product == null || product.getName() == null)
 			throw new NullPointerException("cannot save null or have null as product");
 
@@ -84,6 +83,7 @@ public class MysqlProductDao implements ProductDao {
 	}
 
 	public boolean delete(long id) {
+		// TODO delete not only from product, but also from table product_has_category and purchase_item
 		int changed = jdbcTemplate.update("DELETE FROM product WHERE id = " + id);
 		return changed == 1;
 	}
