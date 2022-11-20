@@ -94,6 +94,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 
 	@Override
 	public boolean delete(long id) {
+		jdbcTemplate.update("DELETE FROM purchase WHERE employee_id = " + id);
 		int changed = jdbcTemplate.update("DELETE FROM employee WHERE id = " + id);
 		return changed == 1;
 	}

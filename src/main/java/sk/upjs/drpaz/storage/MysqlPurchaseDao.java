@@ -22,7 +22,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 	public MysqlPurchaseDao(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
-	
+
 	private class PurchaseRowMapper implements RowMapper<Purchase> {
 		@Override
 		public Purchase mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -65,9 +65,15 @@ public class MysqlPurchaseDao implements PurchaseDao {
 
 			long id = simpleJdbcInsert.executeAndReturnKey(values).longValue();
 			Purchase purchase2 = new Purchase(id, purchase.getEmployee(), purchase.getCreatedAt());
+			
+			for (Product product : purchase2.getProductsInPurchase()) {
+				jdbcTemplate.update("UPDATE product SET quantity = quantity - ? WHERE id = ?",product.getQuantity(), product.getId());
+			}
 			return purchase2;
 
 		} else { // UPDATE
+			// TODO update purchase_item
+			// ja si vobec tazko predstavujemm, ze by sme dakde potrebovali update purchase??			
 			String sql = "UPDATE purchase SET employee_id=?, created_at=? " + "WHERE id = ?";
 			int changed = jdbcTemplate.update(sql, purchase.getEmployee().getId(), purchase.getCreatedAt(),
 					purchase.getId());
@@ -136,14 +142,17 @@ public class MysqlPurchaseDao implements PurchaseDao {
 
 	@Override
 	public boolean delete(long id) {
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + id);
 		int changed = jdbcTemplate.update("DELETE FROM purchase WHERE id = " + id);
 		return changed == 1;
 	}
-	
+
 	public boolean addProductToPurchase(Product product, Purchase purchase) {
-		// TODO check if is correct?
-		int changed = jdbcTemplate.update("UPDATE purchase_item SET quantity = quantity +1  WHERE product_id = ? AND purchase_id = ?",product.getId(), purchase.getId());
-		if(changed > 0) {
+		// TODO check if it is correct?
+		int changed = jdbcTemplate.update(
+				"UPDATE purchase_item SET quantity = quantity +1  WHERE product_id = ? AND purchase_id = ?",
+				product.getId(), purchase.getId());
+		if (changed > 0) {
 			return true;
 		}
 		if (purchase == null || product == null || product.getName() == null) {
@@ -161,7 +170,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 		}
 		SimpleJdbcInsert sjdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 		sjdbcInsert.withTableName("purchase_item");
-		sjdbcInsert.usingColumns("purchase_id", "product_id","quantity", "price");
+		sjdbcInsert.usingColumns("purchase_id", "product_id", "quantity", "price");
 		Map<String, Object> values = new HashMap<>();
 		values.put("purchase_id", purchase.getId());
 		values.put("product_id", product.getId());
@@ -172,7 +181,6 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			return true;
 		}
 		return false;
-
 	}
 
 }

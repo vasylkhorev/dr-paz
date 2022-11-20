@@ -58,7 +58,7 @@ public class MysqlProductDao implements ProductDao {
 			SimpleJdbcInsert sjdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 			sjdbcInsert.withTableName("product");
 			sjdbcInsert.usingGeneratedKeyColumns("id");
-			sjdbcInsert.usingColumns("name", "price", "quantity","alert_quantity", "description" );
+			sjdbcInsert.usingColumns("name", "price", "quantity", "alert_quantity", "description");
 
 			Map<String, Object> values = new HashMap<>();
 
@@ -83,7 +83,8 @@ public class MysqlProductDao implements ProductDao {
 	}
 
 	public boolean delete(long id) {
-		// TODO delete not only from product, but also from table product_has_category and purchase_item
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE product_id =" + id);
+		jdbcTemplate.update("DELETE FROM product_has_category WHERE product_id = " + id);
 		int changed = jdbcTemplate.update("DELETE FROM product WHERE id = " + id);
 		return changed == 1;
 	}
