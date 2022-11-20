@@ -139,5 +139,40 @@ public class MysqlPurchaseDao implements PurchaseDao {
 		int changed = jdbcTemplate.update("DELETE FROM purchase WHERE id = " + id);
 		return changed == 1;
 	}
+	
+	public boolean addProductToPurchase(Product product, Purchase purchase) {
+		// TODO check if is correct?
+		int changed = jdbcTemplate.update("UPDATE purchase_item SET quantity = quantity +1  WHERE product_id = ? AND purchase_id = ?",product.getId(), purchase.getId());
+		if(changed > 0) {
+			return true;
+		}
+		if (purchase == null || product == null || product.getName() == null) {
+			throw new NullPointerException("cannot save null or have null as category or product");
+		}
+		if (purchase.getId() == null && product.getId() == null) { // purchase and product are not saved in db -- INSERT
+			purchase = save(purchase);
+			product = DaoFactory.INSTANCE.getProductDao().save(product);
+		}
+		if (purchase.getId() == null && product.getId() != null) {
+			purchase = save(purchase);
+		}
+		if (purchase.getId() != null && product.getId() == null) {
+			product = DaoFactory.INSTANCE.getProductDao().save(product);
+		}
+		SimpleJdbcInsert sjdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+		sjdbcInsert.withTableName("purchase_item");
+		sjdbcInsert.usingColumns("purchase_id", "product_id","quantity", "price");
+		Map<String, Object> values = new HashMap<>();
+		values.put("purchase_id", purchase.getId());
+		values.put("product_id", product.getId());
+		values.put("quantity", 1);
+		values.put("price", product.getPrice());
+		changed = sjdbcInsert.execute(values);
+		if (changed == 1) {
+			return true;
+		}
+		return false;
+
+	}
 
 }
