@@ -36,6 +36,7 @@ class MysqlCategoryDaoTest {
 		//TODO do unit test but there is a join in getByProduct, not sure if it changes anything;
 		// I will finish it later cause i need to add a way to save 
 		//connection between product and category -> save to product_has_category
+		assertTrue(false);
 	}
 	
 	@Test
@@ -85,7 +86,13 @@ class MysqlCategoryDaoTest {
 		assertThrows(NoSuchElementException.class, 
 				     ()->categoryDao.save(new Category(-1l, "Changed")));	
 	}
-
+	
+	@Test
+	void addCategoryToProductTest() {
+		//TODO
+		assertTrue(false);
+	}
+	
 
 
 }

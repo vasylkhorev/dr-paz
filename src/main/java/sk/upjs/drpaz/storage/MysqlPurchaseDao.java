@@ -4,10 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -52,6 +55,8 @@ public class MysqlPurchaseDao implements PurchaseDao {
 	public Purchase save(Purchase purchase) throws NullPointerException, NoSuchElementException {
 		if (purchase == null)
 			throw new NullPointerException("Cannot save null purchase");
+		if ( purchase.getProductsInPurchase() == null)
+			throw new NullPointerException("Purchase cannot have null products");
 		if (purchase.getId() == null) {
 			SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 			simpleJdbcInsert.withTableName("Purchase");
@@ -61,23 +66,30 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			values.put("employee_id", purchase.getEmployee().getId());
 			values.put("created_at", purchase.getCreatedAt());
 			long id = simpleJdbcInsert.executeAndReturnKey(values).longValue();
+			
 			Purchase purchase2 = new Purchase(id, purchase.getEmployee(), purchase.getCreatedAt(),purchase.getProductsInPurchase());
 			
-			simpleJdbcInsert.withTableName("purchase_item");
-			simpleJdbcInsert.usingColumns("purchase_id", "product_id", "quantity", "price");
+			//new simpleJdbcInsert is there, because when creating..........tldr:otherwise error
+			SimpleJdbcInsert simpleJdbcInsertPurchaseItem = new SimpleJdbcInsert(jdbcTemplate);
+			simpleJdbcInsertPurchaseItem.withTableName("purchase_item");
+			simpleJdbcInsertPurchaseItem.usingColumns("purchase_id", "product_id", "quantity", "price");
 			
-			for (Product product : purchase2.getProductsInPurchase()) {
+			//List of products without duplicates
+			List<Product> productsInPurchaseNoDup = purchase2.getProductsInPurchase().stream().distinct().collect(Collectors.toList());
+			
+			for (Product product : productsInPurchaseNoDup) {
 				Map<String, Object> values1 = new HashMap<>();
-				values1.put("purchase_id", purchase.getId());
+				values1.put("purchase_id", id);
 				values1.put("product_id", product.getId());
-				values1.put("quantity", 1);
+				//Using .frequency to find how many same products are in list
+				values1.put("quantity", Collections.frequency(purchase2.getProductsInPurchase(), product));
 				values1.put("price", product.getPrice());
-				simpleJdbcInsert.execute(values1);
+				simpleJdbcInsertPurchaseItem.execute(values1);
 				
 			}
-			
-			for (Product product : purchase2.getProductsInPurchase()) {
-				jdbcTemplate.update("UPDATE product SET quantity = quantity - ? WHERE id = ?",product.getQuantity(), product.getId());
+			//updating correct quantities.
+			for (Product product : productsInPurchaseNoDup) {
+				jdbcTemplate.update("UPDATE product SET quantity = quantity - ? WHERE id = ?",Collections.frequency(purchase2.getProductsInPurchase(), product), product.getId());
 			}
 			return purchase2;
 

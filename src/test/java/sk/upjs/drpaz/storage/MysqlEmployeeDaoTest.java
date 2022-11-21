@@ -61,7 +61,7 @@ class MysqlEmployeeDaoTest {
 	}
 	
 	@Test
-	void getByLogin() {
+	void getByLoginTest() {
 		// this is for unique login, database is not set for unique login!!!!!!!!
 		Employee fromDb = employeeDao.getByLogin(savedEmployee.getLogin());
 		assertEquals(savedEmployee.getId(), fromDb.getId());
@@ -92,7 +92,7 @@ class MysqlEmployeeDaoTest {
 	}
 	
 	@Test
-	void getByNameAndSurname() {
+	void getByNameAndSurnameTest() {
 		List<Employee> fromDb = employeeDao.getByNameAndSurname(savedEmployee.getName(),savedEmployee.getSurname());
 		for (Employee employeeGetByNameAndSurnameTest: fromDb) {
 			assertEquals(savedEmployee.getName(), employeeGetByNameAndSurnameTest.getName());
