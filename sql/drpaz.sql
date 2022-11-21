@@ -26,7 +26,7 @@ CREATE TABLE `category` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -55,8 +55,9 @@ CREATE TABLE `employee` (
   `login` varchar(45) NOT NULL,
   `password` varchar(100) NOT NULL,
   `role` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `login` (`login`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,7 +66,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'Evzen','Kralik',NULL,'mrkva.enjoyer@gmail.com','kralik','bobek','Predaj'),(2,'Anna','Holubkova','0940 999 999','mail@gmail.com','holubkova','nbusr123','Predaj'),(3,'Robert','Janosik',NULL,NULL,'janosik','hak','Predaj'),(4,'Alzbeta','Kralovicova',NULL,'neutron@protonmail.com','Kralovicova','queen','Predaj'),(9,'Filip','Dvorsky','+42199999999','cold@hotmail.com','admin1','nbusr123','Admin');
+INSERT INTO `employee` VALUES (1,'Evzen','Kralik',NULL,'mrkva.enjoyer@gmail.com','kralik','bobek','Predaj'),(2,'Anna','Holubkova','0940 999 999','mail@gmail.com','holubkova','nbusr123','Predaj'),(3,'Robert','Janosik',NULL,NULL,'janosik','hak','Predaj'),(4,'Alzbeta','Kralovicova',NULL,'neutron@protonmail.com','Kralovicova','queen','Predaj'),(12,'Vasyl','Khorev','+38099999999','khorev.41@gmail.com','admin2','$2a$10$BrEKhHqqFkZKeyytWHdMpeOreeCLb9hyK0iPHM/nXnIXrHgTADcHW','Admin'),(14,'Filip','Dvorsky','+42199999999','cold@hotmail.com','admin1','$2a$10$BBjeG8GiBc9XCO86iLnWH.tPjf8IAbSkW2K0VDGOQ4K4TQFkR2/gO','Admin');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +85,7 @@ CREATE TABLE `product` (
   `alert_quantity` int DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +94,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Aspirin',3.39,45,5,'Liek znižuje tvorbu...'),(2,'Muconasal',4.89,26,10,'Liek, ktorý znižuje opuch sliznice nosa...'),(3,'Celaskon',4.19,8,NULL,'Liek s obsahom vitamínu C...'),(4,'Panadol Extra Rapide',3.79,18,NULL,'Liek s analgetickým a anti...'),(5,'Dr.PAZ Omega 3 Premium',12.99,86,20,'Kapsuly obsahujú rybí olej s mimoriadne vysokým...'),(6,'Dr.PAZ Collagen Drink',31.99,42,3,'Výživový doplnok obsahuje kolagén, hyaluronát sodný...');
+INSERT INTO `product` VALUES (1,'Aspirin',3.39,45,5,'Liek znižuje tvorbu...'),(2,'Muconasal',4.89,26,10,'Liek, ktorý znižuje opuch sliznice nosa...'),(3,'Celaskon',4.19,8,NULL,'Liek s obsahom vitamínu C...'),(4,'Panadol Extra Rapide',3.79,18,NULL,'Liek s analgetickým a anti...'),(5,'Dr.PAZ Omega 3 Premium',12.99,86,20,'Kapsuly obsahujú rybí olej s mimoriadne vysokým...'),(6,'Dr.PAZ Collagen Drink',31.99,42,3,'Výživový doplnok obsahuje kolagén, hyaluronát sodný...'),(8,'Pharmaton GERIAVIT Vitality 50+',21.16,25,10,'Výživový doplnok obsahujúci vitamíny, minerály a štandardizovaný výťažok ženšena.'),(9,'test',0.00,0,NULL,NULL);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,7 +140,7 @@ CREATE TABLE `purchase` (
   PRIMARY KEY (`id`),
   KEY `fk_order_user1_idx` (`employee_id`),
   CONSTRAINT `fk_order_user1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +149,7 @@ CREATE TABLE `purchase` (
 
 LOCK TABLES `purchase` WRITE;
 /*!40000 ALTER TABLE `purchase` DISABLE KEYS */;
-INSERT INTO `purchase` VALUES (1,4,'2022-11-15 16:09:48'),(2,1,'2022-11-15 16:09:48'),(3,3,'2022-11-15 16:09:48'),(4,4,'2022-11-15 16:12:59'),(5,1,'2022-11-15 16:12:59'),(6,3,'2022-11-15 16:12:59');
+INSERT INTO `purchase` VALUES (1,4,'2022-11-15 16:09:48'),(2,1,'2022-11-15 16:09:48'),(3,3,'2022-11-15 16:09:48'),(4,4,'2022-11-15 16:12:59'),(5,1,'2022-11-15 16:12:59'),(6,3,'2022-11-15 16:12:59'),(7,1,'0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `purchase` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -177,7 +178,7 @@ CREATE TABLE `purchase_item` (
 
 LOCK TABLES `purchase_item` WRITE;
 /*!40000 ALTER TABLE `purchase_item` DISABLE KEYS */;
-INSERT INTO `purchase_item` VALUES (1,1,2,3.19),(2,1,1,3.10),(2,2,1,10.00),(3,1,2,4.55),(3,1,1,1.00),(3,4,3,10.00);
+INSERT INTO `purchase_item` VALUES (1,1,3,3.19),(2,1,1,3.10),(2,2,1,10.00),(3,1,2,4.55),(3,1,1,1.00),(3,4,3,10.00),(1,2,2,4.89);
 /*!40000 ALTER TABLE `purchase_item` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -190,4 +191,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-16 13:02:58
+-- Dump completed on 2022-11-21 11:20:09

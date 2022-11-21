@@ -2,6 +2,7 @@ package sk.upjs.drpaz.storage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 	}
 
 	@Override
-	public Employee save(Employee employee) throws NullPointerException, NoSuchElementException {
+	public Employee save(Employee employee) throws NullPointerException, NoSuchElementException, SQLIntegrityConstraintViolationException {
 
 		if (employee == null) {
 			throw new NullPointerException("Cannot save null Employee");
@@ -75,7 +76,8 @@ public class MysqlEmployeeDao implements EmployeeDao {
 			values.put("password", BCrypt.hashpw(employee.getPassword(), salt));
 			values.put("role", employee.getRole());
 
-			long id = sInsert.executeAndReturnKey(values).longValue();
+			long id;
+			id = sInsert.executeAndReturnKey(values).longValue();
 			return new Employee(id, employee.getName(), employee.getSurname(), employee.getPhone(), employee.getEmail(),
 					employee.getLogin(), employee.getPassword(), employee.getRole());
 
@@ -86,7 +88,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 			if (updated == 1) {
 				return employee;
 			} else {
-				throw new NoSuchElementException("No employe with id " + employee.getId() + " in DB");
+				throw new NoSuchElementException("No employee with id " + employee.getId() + " in DB");
 			}
 		}
 

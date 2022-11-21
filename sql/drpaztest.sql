@@ -55,7 +55,8 @@ CREATE TABLE `employee` (
   `login` varchar(45) NOT NULL,
   `password` varchar(100) NOT NULL,
   `role` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `login` (`login`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -84,7 +85,7 @@ CREATE TABLE `product` (
   `alert_quantity` int DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +94,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Aspirin',3.39,45,5,'Liek znižuje tvorbu...'),(2,'Muconasal',4.89,26,10,'Liek, ktorý znižuje opuch sliznice nosa...'),(3,'Celaskon',4.19,8,NULL,'Liek s obsahom vitamínu C...'),(4,'Panadol Extra Rapide',3.79,18,NULL,'Liek s analgetickým a anti...'),(5,'Dr.PAZ Omega 3 Premium',12.99,86,20,'Kapsuly obsahujú rybí olej s mimoriadne vysokým...'),(6,'Dr.PAZ Collagen Drink',31.99,42,3,'Výživový doplnok obsahuje kolagén, hyaluronát sodný...');
+INSERT INTO `product` VALUES (1,'Aspirin',3.39,45,5,'Liek znižuje tvorbu...'),(2,'Muconasal',4.89,26,10,'Liek, ktorý znižuje opuch sliznice nosa...'),(3,'Celaskon',4.19,8,NULL,'Liek s obsahom vitamínu C...'),(4,'Panadol Extra Rapide',3.79,18,NULL,'Liek s analgetickým a anti...'),(5,'Dr.PAZ Omega 3 Premium',12.99,86,20,'Kapsuly obsahujú rybí olej s mimoriadne vysokým...'),(6,'Dr.PAZ Collagen Drink',31.99,42,3,'Výživový doplnok obsahuje kolagén, hyaluronát sodný...'),(7,'Pharmaton GERIAVIT Vitality 50+',21.16,25,10,'Výživový doplnok obsahujúci vitamíny, minerály a štandardizovaný výťažok ženšena.'),(8,'Pharmaton GERIAVIT Vitality 50+',21.16,25,10,'Výživový doplnok obsahujúci vitamíny, minerály a štandardizovaný výťažok ženšena.'),(9,'Pharmaton GERIAVIT Vitality 50+',21.16,25,10,'Výživový doplnok obsahujúci vitamíny, minerály a štandardizovaný výťažok ženšena.');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,4 +191,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-16 13:03:06
+-- Dump completed on 2022-11-21 11:20:19

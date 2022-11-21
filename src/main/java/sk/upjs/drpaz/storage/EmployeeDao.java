@@ -1,5 +1,6 @@
 package sk.upjs.drpaz.storage;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -9,7 +10,7 @@ public interface EmployeeDao {
 	
 	List<Employee> getAll();
 
-	Employee save(Employee employee) throws NullPointerException, NoSuchElementException;
+	Employee save(Employee employee) throws NullPointerException, NoSuchElementException, SQLIntegrityConstraintViolationException;
 
 	boolean delete(long id);
 
