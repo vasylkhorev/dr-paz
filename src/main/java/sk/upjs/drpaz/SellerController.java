@@ -1,17 +1,22 @@
 package sk.upjs.drpaz;
 
+import com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Key;
+
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.util.converter.IntegerStringConverter;
 import sk.upjs.drpaz.storage.Product;
 
@@ -37,7 +42,7 @@ public class SellerController {
 	private TextField productNameTextField;
 
 	@FXML
-	private Label totalPrice;
+	private Label totalLabel;
 
 	@FXML
 	private TableView<Product> productsInPurchaseTableView;
@@ -61,7 +66,7 @@ public class SellerController {
 	}
 
 	@FXML
-	void sellClickButton(ActionEvent event) {
+	void sellButtonClick(ActionEvent event) {
 
 	}
 
@@ -71,33 +76,50 @@ public class SellerController {
 		setAllColumns();
 		allProductsTableView.setItems(model.getAllProductsModel());
 		productsInPurchaseTableView.setItems(model.getProductsInPurchaseModel());
+		allProductsAddListener();
 
-		// set listener on allProductsTable
-		allProductsTableView.setOnMouseClicked((MouseEvent event) -> {
+		productNameTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue,
+				newValue) -> allProductsTableView.setItems(model.getAllProductsModelByName(newValue)));
+	}
+
+	private void allProductsAddListener() {
+		allProductsTableView.setOnMouseClicked((event) -> {
 			if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-				Product product = allProductsTableView.getSelectionModel().getSelectedItem();
-				product.setQuantity(1);
-				boolean flag = false;
-				for (Product p : model.getProductsInPurchase()) {
-					if (p.getId() == product.getId()) {
-						int index = model.getProductsInPurchaseModel().indexOf(p);
-						Product temp = new Product(p.getId(), p.getName(), p.getPrice(), p.getQuantity() + 1,
-								p.getAlertQuantity(), p.getDescription());
-						model.getProductsInPurchaseModel().set(index, null);
-						model.getProductsInPurchaseModel().set(index, temp);
-						flag = true;
-						;
-					}
-				}
-				if (!flag)
-					model.getProductsInPurchaseModel().add(product);
-				double total = 0;
-				for (Product p : model.getProductsInPurchase())
-					total += p.getPrice() * p.getQuantity();
-				totalPrice.setText(total + "");
+				addProductToPurchase();
+			}
+			if (event.getButton().equals(MouseButton.SECONDARY)) {
+				MenuItem addItem = new MenuItem("Add");
+				ContextMenu contextMenu = new ContextMenu(addItem);
+				contextMenu.setX(event.getScreenX());
+				contextMenu.setY(event.getScreenY());
+				contextMenu.show(allProductsTableView.getScene().getWindow());
+				addItem.setOnAction(e -> addProductToPurchase());
 			}
 		});
+		allProductsTableView.setOnKeyPressed(event -> {
+			if (event.getCode().equals(KeyCode.ENTER))
+				addProductToPurchase();
+		});
 
+	}
+
+	private void addProductToPurchase() {
+		Product product = allProductsTableView.getSelectionModel().getSelectedItem();
+		product.setQuantity(1);
+		boolean flag = false;
+		for (Product p : model.getProductsInPurchase()) {
+			if (p.getId() == product.getId()) {
+				int index = model.getProductsInPurchaseModel().indexOf(p);
+				Product temp = new Product(p.getId(), p.getName(), p.getPrice(), p.getQuantity() + 1,
+						p.getAlertQuantity(), p.getDescription());
+				model.getProductsInPurchaseModel().set(index, null);
+				model.getProductsInPurchaseModel().set(index, temp);
+				flag = true;
+			}
+		}
+		if (!flag)
+			model.getProductsInPurchaseModel().add(product);
+		setTotal();
 	}
 
 	void setAllColumns() {
@@ -114,26 +136,28 @@ public class SellerController {
 		quantityPurchaseColumn
 				.setCellFactory(TextFieldTableCell.<Product, Integer>forTableColumn(new IntegerStringConverter()));
 
-		
-		quantityPurchaseColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Product,Integer>>() {
-			
-			@Override
-			public void handle(CellEditEvent<Product, Integer> e) {
-				Product p = e.getTableView().getItems().get(e.getTablePosition().getRow());
-				int index = model.getProductsInPurchaseModel().indexOf(p);
-				model.getProductsInPurchaseModel().set(index, null);
-				Product temp = new Product(p.getId(), p.getName(), p.getPrice(), e.getNewValue(), p.getAlertQuantity(),
-						p.getDescription());
-				model.getProductsInPurchaseModel().set(index, temp);
-				
-				double total = 0;
-				for (Product product : model.getProductsInPurchase())
-					total += product.getPrice() * product.getQuantity();
-				totalPrice.setText(total + "");
-				
+		quantityPurchaseColumn.setOnEditCommit(e -> {
+			Product p = e.getTableView().getItems().get(e.getTablePosition().getRow());
+			int index = model.getProductsInPurchaseModel().indexOf(p);
+			if (e.getNewValue() == 0) {
+				model.getProductsInPurchaseModel().remove(p);
+				return;
 			}
+			model.getProductsInPurchaseModel().set(index, null);
+
+			Product temp = new Product(p.getId(), p.getName(), p.getPrice(), e.getNewValue(), p.getAlertQuantity(),
+					p.getDescription());
+			model.getProductsInPurchaseModel().set(index, temp);
+			setTotal();
 		});
 
+	}
+
+	private void setTotal() {
+		double total = 0;
+		for (Product product : model.getProductsInPurchase())
+			total += product.getPrice() * product.getQuantity();
+		totalLabel.setText("Total: " + String.format("%.02f", total));
 	}
 
 }

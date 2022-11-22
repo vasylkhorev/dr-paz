@@ -96,7 +96,7 @@ public class MysqlProductDao implements ProductDao {
 		}
 		String sql = "SELECT id, name, price, quantity, alert_quantity, description FROM product WHERE name LIKE ?";
 		try {
-			return jdbcTemplate.query(sql, new ProductRowMapper(), "%" + name + "%");
+			return jdbcTemplate.query(sql, new ProductRowMapper(),name + "%");
 		} catch (DataAccessException e) {
 			throw new NoSuchElementException("product with name " + name + " not in DB");
 		}

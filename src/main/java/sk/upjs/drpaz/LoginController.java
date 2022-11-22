@@ -43,7 +43,7 @@ public class LoginController {
 		} else {
 			if (currentUser.getRole().equals("Admin")) {
 				passwordField.getScene().getWindow().hide();
-				showEditSubject(new SellerController());
+				showEditSubject("Seller1.fxml");
 			}
 		}
 	}
@@ -80,16 +80,16 @@ public class LoginController {
 		inputChangedTextField(loginTextField);
 	}
 	
-	void showEditSubject(SellerController controller) {
+	void showEditSubject(String filepath) {
 		try {
 			FXMLLoader fxmlLoader = 
-					new FXMLLoader(getClass().getResource("Seller.fxml"));
-			fxmlLoader.setController(controller);
+					new FXMLLoader(getClass().getResource(filepath));
+			SellerController sellerController = new SellerController();
+			fxmlLoader.setController(sellerController);
 			Parent parent = fxmlLoader.load();
 			Scene scene = new Scene(parent);
-			Stage stage = new Stage();
+			stage = new Stage();
 			stage.setScene(scene);
-			stage.setTitle("Seller");
 			stage.show();
 
 			

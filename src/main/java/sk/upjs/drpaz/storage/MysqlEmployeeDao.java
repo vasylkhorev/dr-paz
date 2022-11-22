@@ -76,8 +76,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 			values.put("password", BCrypt.hashpw(employee.getPassword(), salt));
 			values.put("role", employee.getRole());
 
-			long id;
-			id = sInsert.executeAndReturnKey(values).longValue();
+			long id = sInsert.executeAndReturnKey(values).longValue();
 			return new Employee(id, employee.getName(), employee.getSurname(), employee.getPhone(), employee.getEmail(),
 					employee.getLogin(), employee.getPassword(), employee.getRole());
 
