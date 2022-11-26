@@ -38,7 +38,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 	}
 
 	public List<Purchase> getAll() {
-		String sql = "SELECT id, employee_id, created_at FROM purchase;";
+		String sql = "SELECT id, employee_id, created_at FROM purchase ORDER BY id;";
 		List<Purchase> purchases = jdbcTemplate.query(sql, new PurchaseRowMapper());
 		return purchases;
 	}

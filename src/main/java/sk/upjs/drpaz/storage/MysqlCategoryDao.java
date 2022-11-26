@@ -32,7 +32,7 @@ public class MysqlCategoryDao implements CategoryDao {
 
 	@Override
 	public List<Category> getAll() {
-		String sql = "SELECT id, name FROM category";
+		String sql = "SELECT id, name FROM category ORDER BY id";
 		List<Category> categories = jdbcTemplate.query(sql, new CategoryRowMapper());
 		return categories;
 	}

@@ -44,7 +44,7 @@ public class MysqlProductDao implements ProductDao {
 	}
 
 	public List<Product> getAll() {
-		String sql = "SELECT id, name, price, quantity, alert_quantity, description FROM product";
+		String sql = "SELECT id, name, price, quantity, alert_quantity, description FROM product ORDER BY id";
 		List<Product> products = jdbcTemplate.query(sql, new ProductRowMapper());
 		return products;
 
@@ -83,7 +83,7 @@ public class MysqlProductDao implements ProductDao {
 	}
 
 	public boolean delete(long id) {
-		jdbcTemplate.update("DELETE FROM purchase_item WHERE product_id =" + id);
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE product_id = " + id);
 		jdbcTemplate.update("DELETE FROM product_has_category WHERE product_id = " + id);
 		int changed = jdbcTemplate.update("DELETE FROM product WHERE id = " + id);
 		return changed == 1;

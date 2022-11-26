@@ -62,7 +62,6 @@ class MysqlEmployeeDaoTest {
 	
 	@Test
 	void getByLoginTest() {
-		// this is for unique login, database is not set for unique login!!!!!!!!
 		Employee fromDb = employeeDao.getByLogin(savedEmployee.getLogin());
 		assertEquals(savedEmployee.getId(), fromDb.getId());
 		assertEquals(savedEmployee.getName(), fromDb.getName());
@@ -73,8 +72,6 @@ class MysqlEmployeeDaoTest {
 		assertTrue(BCrypt.checkpw(savedEmployee.getPassword(), fromDb.getPassword()));
 		assertEquals(savedEmployee.getRole(), fromDb.getRole());
 		assertThrows(NoSuchElementException.class,  ()-> employeeDao.getById(-1));
-		
-		
 	}
 	
 	@Test
@@ -82,6 +79,7 @@ class MysqlEmployeeDaoTest {
 		List<Employee> fromDb = employeeDao.getByName(savedEmployee.getName());
 		for (Employee employeeGetByNameTest: fromDb) 
 			assertEquals(savedEmployee.getName(), employeeGetByNameTest.getName());
+		assertThrows(NoSuchElementException.class,  ()-> employeeDao.getByName(null));
 	}	
 	
 	@Test 
@@ -89,6 +87,7 @@ class MysqlEmployeeDaoTest {
 		List<Employee> fromDb = employeeDao.getBySurname(savedEmployee.getSurname());
 		for (Employee employeeGetBySurnameTest: fromDb) 
 			assertEquals(savedEmployee.getSurname(), employeeGetBySurnameTest.getSurname());
+		assertThrows(NoSuchElementException.class,  ()-> employeeDao.getBySurname(null));
 	}
 	
 	@Test
@@ -98,6 +97,9 @@ class MysqlEmployeeDaoTest {
 			assertEquals(savedEmployee.getName(), employeeGetByNameAndSurnameTest.getName());
 			assertEquals(savedEmployee.getSurname(), employeeGetByNameAndSurnameTest.getSurname());
 		}
+		assertThrows(NoSuchElementException.class,  ()-> employeeDao.getByNameAndSurname(null, "TestSurnameGetNameSurnameTest"));
+		assertThrows(NoSuchElementException.class,  ()-> employeeDao.getByNameAndSurname("TestNameGetNameSurnameTest", null));
+		assertThrows(NoSuchElementException.class,  ()-> employeeDao.getByNameAndSurname(null, null));
 	}
 	
 	
@@ -112,5 +114,67 @@ class MysqlEmployeeDaoTest {
 		assertTrue(BCrypt.checkpw(newPassword, fromDb.getPassword()));
 		assertThrows(NullPointerException.class,  ()-> employeeDao.changePassword(null, null, null, null));
 		assertFalse(employeeDao.changePassword("notInDb", "notInDb", "notInDb", "notInDb"));
+	}
+	
+	@Test
+	void insertTest() {
+		assertThrows(NullPointerException.class, ()-> employeeDao.save(new Employee()));
+		
+		Employee employee = new Employee("TestNameInsertTest", "TestSurnameInsertTest","123456789","email@email.com","TestLoginInsertTest", "heslo", "admin");
+		int size = employeeDao.getAll().size();
+		Employee saved = employeeDao.save(employee);
+		Employee fromDb = employeeDao.getById(saved.getId());
+		
+		assertEquals(size + 1, employeeDao.getAll().size());
+		assertNotNull(saved.getId());
+		assertEquals(employee.getName(), fromDb.getName());
+		assertEquals(employee.getSurname(), fromDb.getSurname());
+		assertEquals(employee.getPhone(), fromDb.getPhone());
+		assertEquals(employee.getEmail(), fromDb.getEmail());
+		assertEquals(employee.getLogin(), fromDb.getLogin());
+		assertTrue(BCrypt.checkpw(employee.getPassword(), fromDb.getPassword()));
+		assertEquals(employee.getRole(), fromDb.getRole());
+
+		employeeDao.delete(saved.getId());
+		
+		assertThrows(NullPointerException.class,  ()-> employeeDao.save(new Employee(null,"TestSurnameInsertTest",null,null,"TestLoginInsertTest", "TestPasswordInsertTest","Admin")), "Employee Name cannot be null");
+		assertThrows(NullPointerException.class,  ()-> employeeDao.save(new Employee("TestNameInsertTest",null,null,null,"TestLogin", "TestPassword","Admin")), "Employee Surname cannot be null");
+		assertThrows(NullPointerException.class,  ()-> employeeDao.save(new Employee("TestNameInsertTest","TestSurnameInsertTest",null,null, null, "TestPassword","Admin")), "Employee Login cannot be null");
+		assertThrows(NullPointerException.class,  ()-> employeeDao.save(new Employee("TestNameInsertTest","TestSurnameInsertTest",null,null,"TestLoginInsertTest", null,"Admin")), "Employee Password cannot be null");
+		assertThrows(NullPointerException.class,  ()-> employeeDao.save(new Employee("TestNameInsertTest","TestSurnameInsertTest",null,null,"TestLoginInsertTest", "TestPasswordInsertTest",null)), "Employee Role cannot be null");
+	}
+	
+	@Test
+	void updateTest() {
+		Employee updated = new Employee();
+
+		updated.setId(savedEmployee.getId());
+		updated.setName("TestNameUpdateTest");
+		updated.setSurname("TestSurnameUpdateTest");
+		updated.setPhone("7357");
+		updated.setEmail("testUpdateTest@email.com");
+		updated.setLogin("testLoginUpdateTest");
+		updated.setPassword("TestPasswordUpdateTest");
+		updated.setRole("Admin");
+		int size = employeeDao.getAll().size();
+		updated = employeeDao.save(updated);
+		assertEquals(size, employeeDao.getAll().size());
+		
+		Employee fromDb = employeeDao.getById(updated.getId());
+		assertEquals(updated.getId(), fromDb.getId());
+		assertEquals(updated.getName(), fromDb.getName());
+		assertEquals(updated.getSurname(), fromDb.getSurname());
+		assertEquals(updated.getPhone(), fromDb.getPhone());
+		assertEquals(updated.getEmail(), fromDb.getEmail());
+		assertEquals(updated.getRole(), fromDb.getRole());
+		assertThrows(NoSuchElementException.class, 
+				()-> employeeDao.save(new Employee(-1L,
+										"TestNameUpdateTest",
+										"TestSurnameUpdateTest",
+										"7357",
+										"testUpdateTest@email.com",
+										"testLoginUpdateTest",
+										"TestPasswordUpdateTest",
+										"Admin")));
 	}
 }

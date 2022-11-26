@@ -2,6 +2,8 @@ package sk.upjs.drpaz.storage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -13,10 +15,12 @@ class MysqlCategoryDaoTest {
 
 	private Category savedCategory;
 	private CategoryDao categoryDao;
+	private ProductDao productDao;
 	
 	public MysqlCategoryDaoTest() {
 		DaoFactory.INSTANCE.setTesting();
 		categoryDao = DaoFactory.INSTANCE.getCategoryDao();
+		productDao = DaoFactory.INSTANCE.getProductDao();
 	}
 	
 	@BeforeEach
@@ -33,10 +37,33 @@ class MysqlCategoryDaoTest {
 	
 	@Test
 	void getByProductTest() {
-		//TODO do unit test but there is a join in getByProduct, not sure if it changes anything;
-		// I will finish it later cause i need to add a way to save 
-		//connection between product and category -> save to product_has_category
-		assertTrue(false);
+		assertThrows(NullPointerException.class, () -> categoryDao.getByProduct(null), "Cannot save null");
+		Category category1 = new Category();
+		category1.setName("TestNameAddCategoryToProductTest");
+		Category savedCategory1 = categoryDao.save(category1);
+			
+		Product product1 = new Product("TestProductAddCategory1",2d,2,2,"TestDescriptionAddCategory1");
+		Product savedProduct1 = productDao.save(product1);
+
+		List<Category> listOfCategoriesBefore = categoryDao.getByProduct(savedProduct1);
+		int sizeOfListBefore = listOfCategoriesBefore.size();
+		
+		categoryDao.addCategoryToProduct(savedCategory, savedProduct1);
+		categoryDao.addCategoryToProduct(savedCategory1, savedProduct1);
+
+		List<Category> listOfCategoriesAfter = categoryDao.getByProduct(savedProduct1);
+		int sizeOfListAfter = listOfCategoriesAfter.size();
+		
+		assertEquals(sizeOfListBefore+2,sizeOfListAfter);
+		if (sizeOfListBefore+2 == sizeOfListAfter) {
+			assertEquals(listOfCategoriesAfter.get(0).getName(), savedCategory.getName());
+			assertEquals(listOfCategoriesAfter.get(1).getName(), savedCategory1.getName());
+		}else {
+			assertTrue(false);
+		}
+
+		categoryDao.delete(savedCategory1.getId());
+		productDao.delete(savedProduct1.getId());
 	}
 	
 	@Test
@@ -53,21 +80,23 @@ class MysqlCategoryDaoTest {
 		assertEquals(savedCategory.getId(), fromDb.getId());
 		assertEquals(savedCategory.getName(), fromDb.getName());
 		assertThrows(NoSuchElementException.class,()->categoryDao.getById(-1l));
-
-
 	}
 	
 	@Test
 	void insertTest() {
 		assertThrows(NullPointerException.class, () -> categoryDao.save(null), "Cannot save null");
+		
 		Category category = new Category();
 		category.setName("New category");
 		int size = categoryDao.getAll().size();
 		Category saved = categoryDao.save(category);
+		Category fromDb = categoryDao.getById(saved.getId());
+		
 		assertEquals(size + 1 , categoryDao.getAll().size());
-		assertNotNull(saved.getId());
-		assertEquals(category.getName(), saved.getName());
-		categoryDao.delete(saved.getId());
+		assertNotNull(fromDb.getId());
+		assertEquals(category.getName(), fromDb.getName());
+		categoryDao.delete(fromDb.getId());
+		
 		assertThrows(NullPointerException.class, 
 				     () -> categoryDao.save(new Category(null, null)),"Subject name cannot be null");
 	}
@@ -89,8 +118,65 @@ class MysqlCategoryDaoTest {
 	
 	@Test
 	void addCategoryToProductTest() {
-		//TODO
-		assertTrue(false);
+		assertThrows(NullPointerException.class, () -> categoryDao.addCategoryToProduct(savedCategory, null));
+		assertThrows(NullPointerException.class, () -> categoryDao.addCategoryToProduct(null, new Product("TestProduct",1d,1,1,"TestDescription")));
+		
+		Category category1 = new Category();
+		category1.setName("TestNameAddCategoryToProductTest");
+		Category savedCategory1 = categoryDao.save(category1);
+		
+		Category category2 = new Category();
+		category2.setName("TestNameAddCategoryToProductTest2");
+		Category savedCategory2 = categoryDao.save(category2);
+		
+		Product product1 = new Product("TestProductAddCategory1",2d,2,2,"TestDescriptionAddCategory1");
+		Product savedProduct1 = productDao.save(product1);
+		
+		Product product2 = new Product("TestProductAddCategory2",4d,4,4,"TestDescriptionAddCategory2");
+		Product savedProduct2 = productDao.save(product2);
+		
+		int size1Before = categoryDao.getByProduct(savedProduct1).size();
+		int size2Before = categoryDao.getByProduct(savedProduct2).size();
+		
+		boolean statusadd1 = categoryDao.addCategoryToProduct(savedCategory1, savedProduct1);
+		boolean statusadd2 = categoryDao.addCategoryToProduct(savedCategory2, savedProduct1);
+		boolean statusadd3 = categoryDao.addCategoryToProduct(savedCategory1, savedProduct2);
+		
+		assertTrue(statusadd1);
+		assertTrue(statusadd2);
+		assertTrue(statusadd3);
+		
+		int size1After = categoryDao.getByProduct(savedProduct1).size();
+		int size2After = categoryDao.getByProduct(savedProduct2).size();
+		
+		List<Category> listGetByProduct1 = categoryDao.getByProduct(savedProduct1);
+		List<Category> listGetByProduct2 = categoryDao.getByProduct(savedProduct2);
+		
+		
+		assertEquals(size1Before+2, size1After);
+		assertEquals(size2Before+1, size2After);
+		if(size1Before+2 == size1After) {
+			assertEquals(listGetByProduct1.get(0).getId(), savedCategory1.getId());
+			assertEquals(listGetByProduct1.get(0).getName(), savedCategory1.getName());
+			assertEquals(listGetByProduct1.get(1).getId(), savedCategory2.getId());
+			assertEquals(listGetByProduct1.get(1).getName(), savedCategory2.getName());
+		}else {
+			assertTrue(false);
+		}
+		if(size2Before+1 == size2After) {
+			assertEquals(listGetByProduct2.get(0).getId(), savedCategory1.getId());
+			assertEquals(listGetByProduct2.get(0).getName(), savedCategory1.getName());
+		}else {
+			assertTrue(false);
+		}
+		
+		assertThrows(NullPointerException.class, () -> categoryDao.addCategoryToProduct(new Category(), null));
+		assertThrows(NullPointerException.class, () -> categoryDao.addCategoryToProduct(null, new Product()));
+		
+		categoryDao.delete(savedCategory1.getId());
+		categoryDao.delete(savedCategory2.getId());
+		productDao.delete(savedProduct1.getId());
+		productDao.delete(savedProduct2.getId());
 	}
 	
 

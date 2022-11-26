@@ -2,11 +2,15 @@ package sk.upjs.drpaz.storage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -99,8 +103,10 @@ class MysqlPurchaseDaoTest {
 	
 	@Test
 	void insertTest() {
-		Employee employeeTest = new Employee("TestPurchaseEmployeeTestName","TestPurchaseEmployeeSurname","7357","test@email.com","testlogin","test","admin");
+		Employee employeeTest = new Employee("TestNamePurchaseInsertTest","TestSurnamePurchaseInsertTest","7357","TestPurchaseInsertTest@email.com","TestLoginPurchaseInsertTest","TestPasswordPurchaseInsertTest","admin");
+		
 		savedEmployeeTest = employeeDao.save(employeeTest);
+		
 		
 		assertThrows(NullPointerException.class, () -> purchaseDao.save(null), "Cannot save null");
 		Purchase purchase = new Purchase();
@@ -124,7 +130,9 @@ class MysqlPurchaseDaoTest {
 	@Test
 	void updateTest() {
 		Employee employeeTest = new Employee("TestPurchaseEmployeeTestNameChanged","TestPurchaseEmployeeSurnameChanged","7357111","testchanged@email.com","testloginChanged","testChanged","admin");
-		savedEmployeeTest = employeeDao.save(employeeTest); 
+		
+		savedEmployeeTest = employeeDao.save(employeeTest);
+		
 		Purchase updated = new Purchase(
 				savedPurchase.getId(),
 				savedEmployeeTest,
@@ -150,10 +158,55 @@ class MysqlPurchaseDaoTest {
 	
 	@Test
 	void getProductsByPurchaseIdTest() {
-		//TODO 
-		// I will finish it later cause i need to add a way to save 
-		//connection between purchase and product -> save to purchase_item
-		assertTrue(false);
+		List<Product> productsList = new ArrayList<>();
+		
+		Purchase purchase = new Purchase();
+		Employee employee1 = new Employee("TestPurchaseEmployee1NameGetProducts","TestPurchaseEmployeeSurnameGetProducts","7357","test@email.com","testloginGetProducts","test","admin");
+		Product product1 = new Product();
+		Product product2 = new Product();
+		
+		product1.setName("TestProduct1GetProducts");
+		product1.setPrice(11);
+		product1.setQuantity(15);
+		product1.setAlertQuantity(11);
+		product1.setDescription("TestProductDescriptionGetProducts");
+		
+		product2.setName("TestProduct2GetProducts");
+		product2.setPrice(10);
+		product2.setQuantity(20);
+		product2.setAlertQuantity(10);
+		product2.setDescription("TestProduct2DescriptionGetProducts");
+		
+		Product savedProduct1 = productDao.save(product1);
+		Product savedProduct2 = productDao.save(product2);
+		productsList.add(savedProduct1);
+		productsList.add(savedProduct2);
+		
+		Employee savedEmployee = employeeDao.save(employee1);
+		
+		purchase.setEmployee(savedEmployee);
+		purchase.setCreatedAt(new Timestamp(( Instant.now().toEpochMilli() + 500) / 1000 * 1000).toLocalDateTime()); // rounded to second
+		purchase.setProductsInPurchase(productsList);
+		
+		Purchase savedPurchase = purchaseDao.save(purchase);
+		
+		List<Product> listOfProducts = purchaseDao.getProductsByPurchaseId(savedPurchase.getId());
+		List<Product> listOfCorrectProducts = Stream.of(savedProduct1,savedProduct2).collect(Collectors.toList());
+
+		for (int i = 0; i < listOfCorrectProducts.size(); i++) {
+			assertEquals(listOfProducts.get(i).getId(),listOfCorrectProducts.get(i).getId());
+			assertEquals(listOfProducts.get(i).getName(),listOfCorrectProducts.get(i).getName());
+			assertEquals(listOfProducts.get(i).getPrice(),listOfCorrectProducts.get(i).getPrice());
+			//reminder getProductsByPurchaseId creates Products where quantity represent number in purchase!
+			assertEquals(listOfProducts.get(i).getQuantity(),1);
+			assertEquals(listOfProducts.get(i).getAlertQuantity(),listOfCorrectProducts.get(i).getAlertQuantity());
+			assertEquals(listOfProducts.get(i).getDescription(),listOfCorrectProducts.get(i).getDescription());
+		}
+		
+		purchaseDao.delete(savedPurchase.getId());
+		employeeDao.delete(savedEmployee.getId());
+		productDao.delete(savedProduct1.getId());
+		productDao.delete(savedProduct2.getId());
 	}
 	
 	@Test
@@ -186,7 +239,6 @@ class MysqlPurchaseDaoTest {
 		assertTrue(dateEnd.isAfter(savedPurchase.getCreatedAt()));
 		assertThrows(NullPointerException.class, ()->purchaseDao.getByDate(null, null));
 	}
-	
 }
 
 

@@ -6,22 +6,21 @@ import java.util.NoSuchElementException;
 public interface CategoryDao {
 	
 	/**
-	  * 
-	  * @return
+	  * @return List of all {@link Category} in database
 	  */
 	List<Category> getAll();
 	
 	/**
 	 * @param product
-	 * @return
+	 * @return List of {@link Category}
 	 * @throws NullPointerException
 	 * @throws NoSuchElementException
 	 */
 	List<Category> getByProduct(Product product) throws NullPointerException, NoSuchElementException;
 	
 	/**
-	 * @param category
-	 * @return saved category
+	 * @param {@link Category}
+	 * @return saved {@link Category}
 	 * @throws NullPointerException
 	 * @throws NoSuchElementException
 	 */
@@ -29,7 +28,7 @@ public interface CategoryDao {
 	
 	/**
 	 * @param id
-	 * @return
+	 * @return boolean
 	 */
 	boolean delete(long id);
 	
@@ -37,7 +36,7 @@ public interface CategoryDao {
 
 	/**
 	 * @param id
-	 * @return
+	 * @return {@link Category} that has specified id
 	 */
 	Category getById(long id);
 	

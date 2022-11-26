@@ -2,7 +2,6 @@ package sk.upjs.drpaz.storage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 	}
 
 	@Override
-	public Employee save(Employee employee) throws NullPointerException, NoSuchElementException, SQLIntegrityConstraintViolationException {
+	public Employee save(Employee employee) throws NullPointerException, NoSuchElementException, UniqueAlreadyInDatabaseException {
 
 		if (employee == null) {
 			throw new NullPointerException("Cannot save null Employee");
@@ -58,6 +57,12 @@ public class MysqlEmployeeDao implements EmployeeDao {
 				|| employee.getPassword() == null || employee.getRole() == null) {
 			throw new NullPointerException("Name, Surname, Login, Password, Role cannot be null");
 		}
+		
+		if (getByLogin(employee.getLogin()) != null) 
+			if (getByLogin(employee.getLogin()).getId() != employee.getId())
+				throw new UniqueAlreadyInDatabaseException("Employee with login " + employee.getLogin() + " is already in database, use changePassword for login change!");
+		
+		
 		if (employee.getId() == null) { // INSERT
 			SimpleJdbcInsert sInsert = new SimpleJdbcInsert(jdbcTemplate);
 			sInsert.withTableName("employee");
@@ -80,10 +85,10 @@ public class MysqlEmployeeDao implements EmployeeDao {
 			return new Employee(id, employee.getName(), employee.getSurname(), employee.getPhone(), employee.getEmail(),
 					employee.getLogin(), employee.getPassword(), employee.getRole());
 
-		} else { // UPDATE WITHOUT CHANGING PASSWORD
-			String sql = "UPDATE employee SET name=?,surname=?,phone=?, email=?, login=?,role=? " + "WHERE id=?";
+		} else { // UPDATE WITHOUT CHANGING LOGIN AND PASSWORD SEE changePassword
+			String sql = "UPDATE employee SET name=?,surname=?,phone=?, email=?, role=? " + "WHERE id=?";
 			int updated = jdbcTemplate.update(sql, employee.getName(), employee.getSurname(), employee.getPhone(),
-					employee.getEmail(), employee.getLogin(), employee.getRole());
+					employee.getEmail(), employee.getRole(), employee.getId());
 			if (updated == 1) {
 				return employee;
 			} else {
@@ -114,7 +119,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 
 	@Override
 	public List<Employee> getAll() {
-		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM employee";
+		String sql = "SELECT id, name, surname, phone, email, login, password, role FROM employee ORDER BY id";
 		return jdbcTemplate.query(sql, new EmployeeRowMapper());
 	}
 
