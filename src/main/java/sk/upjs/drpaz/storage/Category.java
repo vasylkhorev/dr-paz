@@ -1,5 +1,12 @@
 package sk.upjs.drpaz.storage;
 
+/**
+ * <pre>
+ * Category has 
+ * -{@link Long} id 
+ * -{@link String} name
+ *</pre>
+ */
 public class Category {
 
 	private Long id;

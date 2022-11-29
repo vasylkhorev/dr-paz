@@ -1,5 +1,17 @@
 package sk.upjs.drpaz.storage;
 
+/**
+ * <pre>
+ * Employee has
+ * -{@link Long} id
+ * -{@link String} name
+ * -{@link String} surname
+ * -{@link String} phone
+ * -{@link String} email
+ * -{@link String} login
+ * -{@link String} password
+ * -{@link String} role
+ */
 public class Employee {
 
 	public Employee(Long id, String name, String surname, String phone, String email, String login, String password,

@@ -15,6 +15,7 @@ import sk.upjs.drpaz.storage.DaoFactory;
 import sk.upjs.drpaz.storage.Product;
 
 public class ProductFxModel {
+	
 	private Long id;
 	private StringProperty name = new SimpleStringProperty();
 	private DoubleProperty price = new SimpleDoubleProperty();
@@ -24,8 +25,6 @@ public class ProductFxModel {
 
 	private ObservableList<Product> allProducts;
 	private ObservableList<Product> productsInPurchase;
-	
-	
 
 	public ProductFxModel() {
 		List<Product> list = DaoFactory.INSTANCE.getProductDao().getAll();

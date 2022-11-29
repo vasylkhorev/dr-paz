@@ -3,6 +3,15 @@ package sk.upjs.drpaz.storage;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * <pre>
+ * Purchase has
+ * -{@link Long} id
+ * -{@link Employee} employee
+ * -{@link LocalDateTime} createdAt
+ * -List of {@link Product} productsInPurchase
+ * </pre>
+ */
 public class Purchase {
 
 	private Long id;

@@ -1,5 +1,16 @@
 package sk.upjs.drpaz.storage;
 
+/**
+ * <pre>
+ * Product has
+ * -{@link Long} id
+ * -{@link String} name
+ * -double price
+ * -int quantity
+ * -int alertQuantity
+ * -{@link String} description
+ *	</pre>
+ */
 public class Product {
 
 	public Product() {

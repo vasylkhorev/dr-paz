@@ -19,7 +19,7 @@ public interface EmployeeDao {
 
 	/**
 	 * @param employee
-	 * @return	{@link Employee} that was saved to DB
+	 * @return {@link Employee} that was saved to DB
 	 * @throws NullPointerException
 	 * @throws NoSuchElementException
 	 * @throws UniqueAlreadyInDatabaseException
