@@ -17,6 +17,11 @@ public interface ProductDao {
 	 */
 	List<Product> getAll();
 
+	/**
+	 * @param name
+	 * @return List of {@link Product} where Product has said name
+	 * @throws NoSuchElementException
+	 */
 	List<Product> getByName(String name) throws NoSuchElementException;
 
 	/**
@@ -29,7 +34,7 @@ public interface ProductDao {
 
 	/**
 	 * @param id
-	 * @return
+	 * @return True if deleted
 	 */
 	boolean delete(long id);
 

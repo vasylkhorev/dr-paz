@@ -1,10 +1,8 @@
 package sk.upjs.drpaz;
 
-import com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Key;
 
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -15,7 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.util.converter.IntegerStringConverter;
 import sk.upjs.drpaz.storage.Product;

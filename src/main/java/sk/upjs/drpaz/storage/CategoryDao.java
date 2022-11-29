@@ -31,7 +31,11 @@ public interface CategoryDao {
 	 * @return boolean
 	 */
 	boolean delete(long id);
-	
+	 /**
+	  * @param category
+	  * @param product
+	  * @return True if {@link Category} was assigned to a {@link Product}
+	  */
 	boolean addCategoryToProduct(Category category, Product product);
 
 	/**
