@@ -1,4 +1,4 @@
-package sk.upjs.drpaz.storage;
+package sk.upjs.drpaz.storage.mysql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +11,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+
+import sk.upjs.drpaz.storage.dao.CategoryDao;
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.entities.Category;
+import sk.upjs.drpaz.storage.entities.Product;
 
 public class MysqlCategoryDao implements CategoryDao {
 	private JdbcTemplate jdbcTemplate;

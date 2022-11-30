@@ -14,6 +14,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.dao.EmployeeDao;
+import sk.upjs.drpaz.storage.dao.ProductDao;
+import sk.upjs.drpaz.storage.dao.PurchaseDao;
+import sk.upjs.drpaz.storage.entities.Employee;
+import sk.upjs.drpaz.storage.entities.Product;
+import sk.upjs.drpaz.storage.entities.Purchase;
+
 class MysqlPurchaseDaoTest {
 	
 	private Purchase savedPurchase;

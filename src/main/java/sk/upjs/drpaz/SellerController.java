@@ -1,6 +1,5 @@
 package sk.upjs.drpaz;
 
-
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +14,8 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.util.converter.IntegerStringConverter;
-import sk.upjs.drpaz.storage.Product;
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.entities.Product;
 
 public class SellerController {
 
@@ -71,16 +71,43 @@ public class SellerController {
 	void initialize() {
 		productNameTextField.textProperty().bindBidirectional(model.nameProperty());
 		setAllColumns();
+
 		allProductsTableView.setItems(model.getAllProductsModel());
 		productsInPurchaseTableView.setItems(model.getProductsInPurchaseModel());
+
 		allProductsAddListener();
+		productsInPurchaseListener();
 
 		productNameTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue,
 				newValue) -> allProductsTableView.setItems(model.getAllProductsModelByName(newValue)));
 	}
 
+	private void productsInPurchaseListener() {
+		productsInPurchaseTableView.setOnMouseClicked(event -> {
+			if (event.getButton().equals(MouseButton.SECONDARY)) {
+				MenuItem addItem = new MenuItem("Delete");
+				ContextMenu contextMenu = new ContextMenu(addItem);
+				contextMenu.setX(event.getScreenX());
+				contextMenu.setY(event.getScreenY());
+				contextMenu.show(allProductsTableView.getScene().getWindow());
+				addItem.setOnAction(e -> {
+					model.getProductsInPurchaseModel()
+							.remove(productsInPurchaseTableView.getSelectionModel().getSelectedItem());
+					setTotal();
+				});
+			}
+		});
+		productsInPurchaseTableView.setOnKeyPressed(event -> {
+			if (event.getCode().equals(KeyCode.DELETE)) {
+				model.getProductsInPurchaseModel()
+						.remove(productsInPurchaseTableView.getSelectionModel().getSelectedItem());
+				setTotal();
+			}
+		});
+	}
+
 	private void allProductsAddListener() {
-		allProductsTableView.setOnMouseClicked((event) -> {
+		allProductsTableView.setOnMouseClicked(event -> {
 			if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
 				addProductToPurchase();
 			}
@@ -90,12 +117,15 @@ public class SellerController {
 				contextMenu.setX(event.getScreenX());
 				contextMenu.setY(event.getScreenY());
 				contextMenu.show(allProductsTableView.getScene().getWindow());
-				addItem.setOnAction(e -> addProductToPurchase());
+				addItem.setOnAction(e -> {
+					addProductToPurchase();
+				});
 			}
 		});
 		allProductsTableView.setOnKeyPressed(event -> {
-			if (event.getCode().equals(KeyCode.ENTER))
+			if (event.getCode().equals(KeyCode.ENTER)) {
 				addProductToPurchase();
+			}
 		});
 
 	}

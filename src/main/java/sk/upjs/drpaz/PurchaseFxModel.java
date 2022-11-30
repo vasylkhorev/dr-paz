@@ -8,10 +8,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sk.upjs.drpaz.storage.DaoFactory;
-import sk.upjs.drpaz.storage.Employee;
-import sk.upjs.drpaz.storage.Product;
-import sk.upjs.drpaz.storage.Purchase;
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.entities.Employee;
+import sk.upjs.drpaz.storage.entities.Product;
+import sk.upjs.drpaz.storage.entities.Purchase;
 
 public class PurchaseFxModel {
 

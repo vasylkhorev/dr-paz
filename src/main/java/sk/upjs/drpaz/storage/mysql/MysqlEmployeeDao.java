@@ -1,4 +1,4 @@
-package sk.upjs.drpaz.storage;
+package sk.upjs.drpaz.storage.mysql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +12,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import sk.upjs.drpaz.storage.dao.EmployeeDao;
+import sk.upjs.drpaz.storage.entities.Employee;
+import sk.upjs.drpaz.storage.exceptions.UniqueAlreadyInDatabaseException;
 
 public class MysqlEmployeeDao implements EmployeeDao {
 

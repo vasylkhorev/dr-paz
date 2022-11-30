@@ -1,8 +1,13 @@
-package sk.upjs.drpaz.storage;
+package sk.upjs.drpaz.storage.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
+
+import sk.upjs.drpaz.storage.mysql.MysqlCategoryDao;
+import sk.upjs.drpaz.storage.mysql.MysqlEmployeeDao;
+import sk.upjs.drpaz.storage.mysql.MysqlProductDao;
+import sk.upjs.drpaz.storage.mysql.MysqlPurchaseDao;
 
 public enum DaoFactory {
 

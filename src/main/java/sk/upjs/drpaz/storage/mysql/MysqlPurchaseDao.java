@@ -1,4 +1,4 @@
-package sk.upjs.drpaz.storage;
+package sk.upjs.drpaz.storage.mysql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.dao.PurchaseDao;
+import sk.upjs.drpaz.storage.entities.Product;
+import sk.upjs.drpaz.storage.entities.Purchase;
 
 public class MysqlPurchaseDao implements PurchaseDao {
 	private JdbcTemplate jdbcTemplate;

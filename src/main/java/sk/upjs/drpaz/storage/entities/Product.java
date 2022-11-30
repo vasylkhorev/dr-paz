@@ -1,4 +1,4 @@
-package sk.upjs.drpaz.storage;
+package sk.upjs.drpaz.storage.entities;
 
 /**
  * <pre>

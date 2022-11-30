@@ -1,7 +1,10 @@
-package sk.upjs.drpaz.storage;
+package sk.upjs.drpaz.storage.dao;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import sk.upjs.drpaz.storage.entities.Employee;
+import sk.upjs.drpaz.storage.exceptions.UniqueAlreadyInDatabaseException;
 
 public interface EmployeeDao {
 

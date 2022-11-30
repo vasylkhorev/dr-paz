@@ -1,4 +1,4 @@
-package sk.upjs.drpaz.storage;
+package sk.upjs.drpaz.storage.exceptions;
 
 public class UniqueAlreadyInDatabaseException extends RuntimeException {
 

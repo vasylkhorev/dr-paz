@@ -4,6 +4,10 @@ import java.io.IOException;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXPasswordField;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.enums.FloatMode;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -18,20 +22,23 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import sk.upjs.drpaz.storage.DaoFactory;
-import sk.upjs.drpaz.storage.Employee;
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.entities.Employee;
 
 public class LoginController {
 	public static Stage stage = new Stage();
 	private Employee currentUser;
 	@FXML
-	private TextField loginTextField;
-	@FXML
-	private PasswordField passwordField;
-	@FXML
 	private Label wrongCredentialsLabel;
 	@FXML
-	private Button loginButton;
+	private MFXButton loginButton;
+
+
+	@FXML
+	private MFXTextField loginTextField;
+
+	@FXML
+	private MFXPasswordField passwordField;
 
 	@FXML
 	void onLoginButtonClick(ActionEvent event) throws Exception {
@@ -79,11 +86,10 @@ public class LoginController {
 		inputChangedTextField(passwordField);
 		inputChangedTextField(loginTextField);
 	}
-	
+
 	void showEditSubject(String filepath) {
 		try {
-			FXMLLoader fxmlLoader = 
-					new FXMLLoader(getClass().getResource(filepath));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(filepath));
 			SellerController sellerController = new SellerController();
 			fxmlLoader.setController(sellerController);
 			Parent parent = fxmlLoader.load();
@@ -92,12 +98,10 @@ public class LoginController {
 			stage.setScene(scene);
 			stage.show();
 
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-    }
-
+	}
 
 }

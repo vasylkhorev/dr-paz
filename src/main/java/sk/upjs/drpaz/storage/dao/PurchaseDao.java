@@ -1,8 +1,11 @@
-package sk.upjs.drpaz.storage;
+package sk.upjs.drpaz.storage.dao;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import sk.upjs.drpaz.storage.entities.Product;
+import sk.upjs.drpaz.storage.entities.Purchase;
 
 public interface PurchaseDao {
 

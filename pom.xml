@@ -37,6 +37,11 @@
 			<artifactId>spring-security-crypto</artifactId>
 			<version>5.7.5</version>
 		</dependency>
+		<dependency>
+			<groupId>io.github.palexdev</groupId>
+			<artifactId>materialfx</artifactId>
+			<version>11.13.5</version>
+		</dependency>
 
 	</dependencies>
 </project>

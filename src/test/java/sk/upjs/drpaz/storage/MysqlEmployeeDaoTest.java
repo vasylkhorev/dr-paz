@@ -10,6 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.dao.EmployeeDao;
+import sk.upjs.drpaz.storage.entities.Employee;
+
 class MysqlEmployeeDaoTest {
 
 	private EmployeeDao employeeDao;

@@ -9,6 +9,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.dao.ProductDao;
+import sk.upjs.drpaz.storage.entities.Product;
+
 class MysqlProductDaoTest {
 
 	private ProductDao productDao;

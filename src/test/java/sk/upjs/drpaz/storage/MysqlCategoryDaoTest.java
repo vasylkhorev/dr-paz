@@ -9,6 +9,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import sk.upjs.drpaz.storage.dao.CategoryDao;
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.dao.ProductDao;
+import sk.upjs.drpaz.storage.entities.Category;
+import sk.upjs.drpaz.storage.entities.Product;
+
 class MysqlCategoryDaoTest {
 
 	private Category savedCategory;

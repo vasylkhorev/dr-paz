@@ -7,8 +7,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sk.upjs.drpaz.storage.DaoFactory;
-import sk.upjs.drpaz.storage.Employee;
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.entities.Employee;
 
 public class EmployeeFxModel {
 
