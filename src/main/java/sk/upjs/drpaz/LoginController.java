@@ -7,7 +7,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.materialfx.enums.FloatMode;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -15,9 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -50,7 +47,7 @@ public class LoginController {
 		} else {
 			if (currentUser.getRole().equals("Admin")) {
 				passwordField.getScene().getWindow().hide();
-				showEditSubject("Seller1.fxml");
+				showEditSubject("MainTabPane.fxml");
 			}
 		}
 	}
@@ -90,8 +87,9 @@ public class LoginController {
 	void showEditSubject(String filepath) {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(filepath));
-			SellerController sellerController = new SellerController();
-			fxmlLoader.setController(sellerController);
+			//controller specified in fxml
+			//MainTabPaneController mainTabPaneController = new MainTabPaneController();
+			//fxmlLoader.setController(mainTabPaneController);
 			Parent parent = fxmlLoader.load();
 			Scene scene = new Scene(parent);
 			stage = new Stage();

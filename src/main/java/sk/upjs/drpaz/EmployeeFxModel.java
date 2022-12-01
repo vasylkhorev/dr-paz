@@ -45,6 +45,10 @@ public class EmployeeFxModel {
 
 	
 	//GETTERS AND SETTERS
+	public StringProperty nameProperty() {
+		return name;
+	}
+	
 	public String getName() {
 		return name.get();
 	}
@@ -135,5 +139,23 @@ public class EmployeeFxModel {
 	
 	public List<Employee> getAllEmployees() {
 		return new ArrayList<>(allEmployees);
+	}
+	
+	public ObservableList<Employee> getAllEmployeesModelByNameAndSurname(String name, String surname) {
+		List<Employee> list = DaoFactory.INSTANCE.getEmployeeDao().getByNameAndSurname(name, surname);
+		allEmployees = FXCollections.observableArrayList(list);
+		return allEmployees;
+	}
+	
+	public ObservableList<Employee> getAllEmployeesModelByName(String name) {
+		List<Employee> list = DaoFactory.INSTANCE.getEmployeeDao().getByName(name);
+		allEmployees = FXCollections.observableArrayList(list);
+		return allEmployees;
+	}
+	
+	public ObservableList<Employee> getAllEmployeesModelBySurname(String surname) {
+		List<Employee> list = DaoFactory.INSTANCE.getEmployeeDao().getBySurname(surname);
+		allEmployees = FXCollections.observableArrayList(list);
+		return allEmployees;
 	}
 }

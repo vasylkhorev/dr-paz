@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.EmployeeTabController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1003.0" minWidth="10.0" prefWidth="942.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="593.3333129882812" minWidth="10.0" prefWidth="259.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="251.00001525878906" minHeight="0.0" prefHeight="43.666677474975586" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="690.0000203450521" minHeight="10.0" prefHeight="665.999989191691" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="80.33331298828125" minHeight="10.0" prefHeight="41.66668701171875" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <TextField fx:id="employeeNameTextField" prefHeight="33.0" promptText="Type employee name here...">
+         <GridPane.margin>
+            <Insets left="50.0" right="550.0" />
+         </GridPane.margin>
+         <font>
+            <Font name="Corbel" size="17.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="employeeSurnameTextField" prefHeight="33.0" promptText="Type employee surname here...">
+         <GridPane.margin>
+            <Insets left="550.0" right="50.0" />
+         </GridPane.margin>
+         <font>
+            <Font name="Corbel" size="17.0" />
+         </font>
+      </TextField>
+      <TableView fx:id="allEmployeeTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+         <columns>
+            <TableColumn fx:id="nameAllColumn" prefWidth="213.0" text="Name" />
+            <TableColumn fx:id="surnameAllColumn" minWidth="0.0" prefWidth="250.0" text="Surname" />
+            <TableColumn fx:id="phoneAllColumn" prefWidth="189.0" text="Phone" />
+            <TableColumn fx:id="emailAllColumn" prefWidth="249.0" text="Email" />
+         </columns>
+         <GridPane.margin>
+            <Insets left="20.0" right="20.0" />
+         </GridPane.margin>
+      </TableView>
+      <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" />
+      <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Button alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+   </children>
+</GridPane>

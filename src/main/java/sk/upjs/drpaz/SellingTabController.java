@@ -14,10 +14,9 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.util.converter.IntegerStringConverter;
-import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.entities.Product;
 
-public class SellerController {
+public class SellingTabController {
 
 	private ProductFxModel model;
 	@FXML
@@ -54,11 +53,11 @@ public class SellerController {
 	@FXML
 	private TableColumn<Product, Integer> quantityPurchaseColumn;
 
-	public SellerController() {
+	public SellingTabController() {
 		model = new ProductFxModel();
 	}
 
-	public SellerController(Product product) {
+	public SellingTabController(Product product) {
 		model = new ProductFxModel(product);
 	}
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.MainTabPaneController">
+   <tabs>
+      <Tab fx:id="sellingTab" text="Selling">
+         <content>
+            <fx:include source="SellingTab.fxml" />
+         </content>
+      </Tab>
+      <Tab fx:id="addingTab" text="Adding">
+      	 <content>
+            <fx:include source="AddingTab.fxml" />
+         </content>
+      </Tab>
+      <Tab fx:id="employeeTab" text="Employee's">
+      	 <content>
+            <fx:include source="EmployeeTab.fxml" />
+         </content>
+      </Tab>
+   </tabs>
+</TabPane>
