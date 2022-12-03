@@ -1,4 +1,4 @@
-package sk.upjs.drpaz;
+package sk.upjs.drpaz.controllers;
 
 import java.io.IOException;
 
@@ -19,6 +19,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sk.upjs.drpaz.models.ProductFxModel;
 import sk.upjs.drpaz.storage.entities.Product;
 
 public class SellingTabController {

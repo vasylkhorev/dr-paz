@@ -1,4 +1,4 @@
-package sk.upjs.drpaz;
+package sk.upjs.drpaz.models;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

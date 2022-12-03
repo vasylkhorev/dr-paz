@@ -1,4 +1,4 @@
-package sk.upjs.drpaz;
+package sk.upjs.drpaz.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
