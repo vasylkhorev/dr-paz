@@ -58,6 +58,7 @@ public class EmployeeTabController {
 				newValue) -> allEmployeeTableView.setItems(model.getAllEmployeesModelBySurname(newValue)));
     	
     	//TODO my peanut brain need to finish this for when name or surname is empty
+    	// my tip: if(newValue.isBlank() or newValue.isEmpty())   :)
     	
     }
     

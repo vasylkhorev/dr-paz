@@ -1,57 +1,58 @@
 package sk.upjs.drpaz;
 
+import java.io.IOException;
+
+import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.util.converter.IntegerStringConverter;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import sk.upjs.drpaz.storage.entities.Product;
 
 public class SellingTabController {
 
 	private ProductFxModel model;
-	@FXML
-	private TableColumn<Product, Integer> alertQuantiyAllColumn;
 
 	@FXML
-	private TableView<Product> allProductsTableView;
+	private MFXLegacyTableView<Product> allProductsTableView = new MFXLegacyTableView<>();;
 
 	@FXML
-	private TableColumn<Product, String> descriptionAllColumn;
-
-	@FXML
-	private TableColumn<Product, String> nameAllColumn;
-
-	@FXML
-	private TableColumn<Product, Double> priceAllColumn;
+	private MFXLegacyTableView<Product> productsInPurchaseTableView = new MFXLegacyTableView<>();
 
 	@FXML
 	private TextField productNameTextField;
 
 	@FXML
+	private TableColumn<Product, String> nameColumn;
+	@FXML
+	private TableColumn<Product, String> priceColumn;
+	@FXML
+	private TableColumn<Product, String> quantityColumn;
+	@FXML
+	private TableColumn<Product, String> alertQuantityColumn;
+	@FXML
+	private TableColumn<Product, String> descriptionColumn;
+	@FXML
+	private TableColumn<Product, String> nameColumnPurchase;
+	@FXML
+	private TableColumn<Product, String> priceColumnPurchase;
+	@FXML
+	private TableColumn<Product, Integer> quantityColumnPurchase;
+
+	@FXML
 	private Label totalLabel;
-
-	@FXML
-	private TableView<Product> productsInPurchaseTableView;
-
-	@FXML
-	private TableColumn<Product, Integer> quantityAllColumn;
-
-	@FXML
-	private TableColumn<Product, String> namePurchaseColumn;
-	@FXML
-	private TableColumn<Product, Double> pricePurchaseColumn;
-	@FXML
-	private TableColumn<Product, Integer> quantityPurchaseColumn;
 
 	public SellingTabController() {
 		model = new ProductFxModel();
@@ -68,24 +69,44 @@ public class SellingTabController {
 
 	@FXML
 	void initialize() {
-		productNameTextField.textProperty().bindBidirectional(model.nameProperty());
-		setAllColumns();
-
-		allProductsTableView.setItems(model.getAllProductsModel());
-		productsInPurchaseTableView.setItems(model.getProductsInPurchaseModel());
+		addColumnsToAllProducts();
+		addColumnsToPurchase();
 
 		allProductsAddListener();
 		productsInPurchaseListener();
+
+		productNameTextField.textProperty().bindBidirectional(model.nameProperty());
+
+		productsInPurchaseTableView.setItems(model.getProductsInPurchaseModel());
+		allProductsTableView.setItems(model.getAllProductsModel());
 
 		productNameTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue,
 				newValue) -> allProductsTableView.setItems(model.getAllProductsModelByName(newValue)));
 	}
 
+	private void addColumnsToPurchase() {
+		nameColumnPurchase.setCellValueFactory(new PropertyValueFactory<>("name"));
+		priceColumnPurchase.setCellValueFactory(new PropertyValueFactory<>("price"));
+		quantityColumnPurchase.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+	}
+
+	private void addColumnsToAllProducts() {
+		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+		priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+		alertQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("alertQuantity"));
+		descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+	}
+
 	private void productsInPurchaseListener() {
+
 		productsInPurchaseTableView.setOnMouseClicked(event -> {
+
 			if (event.getButton().equals(MouseButton.SECONDARY)) {
 				MenuItem addItem = new MenuItem("Delete");
-				ContextMenu contextMenu = new ContextMenu(addItem);
+				MenuItem quantityItem = new MenuItem("Change quantity");
+				ContextMenu contextMenu = new ContextMenu(addItem, quantityItem);
 				contextMenu.setX(event.getScreenX());
 				contextMenu.setY(event.getScreenY());
 				contextMenu.show(allProductsTableView.getScene().getWindow());
@@ -94,15 +115,38 @@ public class SellingTabController {
 							.remove(productsInPurchaseTableView.getSelectionModel().getSelectedItem());
 					setTotal();
 				});
+				quantityItem.setOnAction(event1 -> {
+					Product p = productsInPurchaseTableView.getSelectionModel().getSelectedItem();
+					int index = model.getProductsInPurchaseModel().indexOf(p);
+
+					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Dialog.fxml"));
+					DialogController dialogController = new DialogController(p);
+					fxmlLoader.setController(dialogController);
+					Parent parent = null;
+					try {
+						parent = fxmlLoader.load();
+					} catch (IOException e1) {
+					}
+					Scene scene = new Scene(parent);
+					Stage stage = new Stage();
+					stage.setScene(scene);
+					stage.initModality(Modality.APPLICATION_MODAL);
+					stage.setTitle("Edit quantity");
+					stage.showAndWait();
+
+					if (p.getQuantity() <= 0) {
+						model.getProductsInPurchaseModel().remove(p);
+					} else {
+						model.getProductsInPurchaseModel().set(index, null);
+						model.getProductsInPurchaseModel().set(index, p);
+					}System.out.println(model.getProductsInPurchaseModel());
+					System.out.println(productsInPurchaseTableView.getItems());
+					setTotal();
+				});
 			}
+
 		});
-		productsInPurchaseTableView.setOnKeyPressed(event -> {
-			if (event.getCode().equals(KeyCode.DELETE)) {
-				model.getProductsInPurchaseModel()
-						.remove(productsInPurchaseTableView.getSelectionModel().getSelectedItem());
-				setTotal();
-			}
-		});
+
 	}
 
 	private void allProductsAddListener() {
@@ -121,6 +165,7 @@ public class SellingTabController {
 				});
 			}
 		});
+
 		allProductsTableView.setOnKeyPressed(event -> {
 			if (event.getCode().equals(KeyCode.ENTER)) {
 				addProductToPurchase();
@@ -131,9 +176,8 @@ public class SellingTabController {
 
 	private void addProductToPurchase() {
 		Product product = allProductsTableView.getSelectionModel().getSelectedItem();
-		product.setQuantity(1);
 		boolean flag = false;
-		for (Product p : model.getProductsInPurchase()) {
+		for (Product p : model.getProductsInPurchaseModel()) {
 			if (p.getId() == product.getId()) {
 				int index = model.getProductsInPurchaseModel().indexOf(p);
 				Product temp = new Product(p.getId(), p.getName(), p.getPrice(), p.getQuantity() + 1,
@@ -143,40 +187,12 @@ public class SellingTabController {
 				flag = true;
 			}
 		}
-		if (!flag)
-			model.getProductsInPurchaseModel().add(product);
-		setTotal();
-	}
-
-	void setAllColumns() {
-		nameAllColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
-		priceAllColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-		quantityAllColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-		alertQuantiyAllColumn.setCellValueFactory(new PropertyValueFactory<>("alertQuantity"));
-		descriptionAllColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-
-		namePurchaseColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-		pricePurchaseColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-		quantityPurchaseColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-		quantityPurchaseColumn
-				.setCellFactory(TextFieldTableCell.<Product, Integer>forTableColumn(new IntegerStringConverter()));
-
-		quantityPurchaseColumn.setOnEditCommit(e -> {
-			Product p = e.getTableView().getItems().get(e.getTablePosition().getRow());
-			int index = model.getProductsInPurchaseModel().indexOf(p);
-			if (e.getNewValue() == 0) {
-				model.getProductsInPurchaseModel().remove(p);
-				return;
-			}
-			model.getProductsInPurchaseModel().set(index, null);
-
-			Product temp = new Product(p.getId(), p.getName(), p.getPrice(), e.getNewValue(), p.getAlertQuantity(),
-					p.getDescription());
-			model.getProductsInPurchaseModel().set(index, temp);
-			setTotal();
-		});
-
+		if (!flag) {
+			Product temp = new Product(product.getId(), product.getName(), product.getPrice(), 1,
+					product.getAlertQuantity(), product.getDescription());
+			model.getProductsInPurchaseModel().add(temp);
+		}
+		setTotal();	
 	}
 
 	private void setTotal() {

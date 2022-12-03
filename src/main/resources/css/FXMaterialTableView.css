@@ -1,0 +1,11 @@
+.table-view .column-header {
+    -fx-pref-height: 25px;
+}
+.table-view .column-header .label{
+    -fx-padding: 0.0px 0.0px 0.0px 0.0px;
+}
+.table-row-cell {
+  -fx-background-color: #FBFBFB;
+  -fx-cell-size: 100px;
+  -fx-cell-height: 100px;
+}

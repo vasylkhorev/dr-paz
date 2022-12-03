@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -32,28 +33,6 @@
             <Font name="Corbel" size="17.0" />
          </font>
       </TextField>
-      <TableView fx:id="allProductsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-         <columns>
-            <TableColumn fx:id="nameAllColumn" prefWidth="177.33331048488617" text="Name" />
-            <TableColumn fx:id="priceAllColumn" minWidth="0.0" prefWidth="76.0" text="Price" />
-            <TableColumn fx:id="quantityAllColumn" prefWidth="100.66671752929688" text="Quantity" />
-            <TableColumn fx:id="alertQuantiyAllColumn" prefWidth="101.33331298828125" text="Alert quantity" />
-            <TableColumn fx:id="descriptionAllColumn" prefWidth="350.0" text="Description" />
-         </columns>
-         <GridPane.margin>
-            <Insets left="20.0" right="20.0" />
-         </GridPane.margin>
-      </TableView>
-      <TableView fx:id="productsInPurchaseTableView" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <columns>
-            <TableColumn fx:id="namePurchaseColumn" editable="false" prefWidth="170.00011694431305" text="Name" />
-            <TableColumn fx:id="pricePurchaseColumn" editable="false" minWidth="0.0" prefWidth="69.9998779296875" text="Price" />
-            <TableColumn fx:id="quantityPurchaseColumn" prefWidth="71.33351135253906" text="Quantity" />
-         </columns>
-         <GridPane.margin>
-            <Insets bottom="50.0" left="20.0" right="20.0" />
-         </GridPane.margin>
-      </TableView>
       <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" />
       <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -81,5 +60,29 @@
             <Insets bottom="10.0" />
          </GridPane.margin>
       </Button>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+         <children>
+            <MFXLegacyTableView fx:id="allProductsTableView" layoutX="130.0" layoutY="81.0" stylesheets="@../../../css/FXMaterialTableView.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
+               <columns>
+                  <TableColumn fx:id="nameColumn" prefWidth="213.33330726623535" text="Name" />
+                  <TableColumn fx:id="priceColumn" prefWidth="84.00001525878906" text="Price" />
+                  <TableColumn fx:id="quantityColumn" prefWidth="76.0" text="Quantity" />
+                  <TableColumn fx:id="alertQuantityColumn" minWidth="0.0" prefWidth="112.0" text="Alert quantity" />
+                  <TableColumn fx:id="descriptionColumn" prefWidth="324.6665954589844" text="Description" />
+               </columns>
+            </MFXLegacyTableView>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <MFXLegacyTableView fx:id="productsInPurchaseTableView" layoutX="-8.0" layoutY="106.0" stylesheets="@../../../css/FXMaterialTableView.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
+               <columns>
+                  <TableColumn fx:id="nameColumnPurchase" prefWidth="173.33331871032715" text="Name" />
+                  <TableColumn fx:id="priceColumnPurchase" prefWidth="63.99998474121094" text="Price" />
+                  <TableColumn fx:id="quantityColumnPurchase" prefWidth="76.0" text="Quantity" />
+               </columns>
+            </MFXLegacyTableView>
+         </children>
+      </AnchorPane>
    </children>
 </GridPane>

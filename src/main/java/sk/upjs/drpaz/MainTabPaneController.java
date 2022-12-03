@@ -33,7 +33,6 @@ public class MainTabPaneController {
     
     @FXML
     void initialize(URL location, ResourceBundle resources) {
-        
     }
 
 }

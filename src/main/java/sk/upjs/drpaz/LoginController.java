@@ -49,6 +49,7 @@ public class LoginController {
 				passwordField.getScene().getWindow().hide();
 				showEditSubject("MainTabPane.fxml");
 			}
+			
 		}
 	}
 

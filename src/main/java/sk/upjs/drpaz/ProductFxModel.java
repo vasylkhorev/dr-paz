@@ -31,6 +31,7 @@ public class ProductFxModel {
 		allProducts = FXCollections.observableArrayList(list);
 		productsInPurchase = FXCollections.observableArrayList();
 	}
+	
 
 	public ProductFxModel(Product product) {
 		this.id = product.getId();

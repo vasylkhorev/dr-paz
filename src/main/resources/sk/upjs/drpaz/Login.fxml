@@ -4,6 +4,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -11,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane minHeight="200.0" minWidth="160.0" prefHeight="450.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane minHeight="200.0" minWidth="160.0" prefHeight="450.0" prefWidth="450.0" style="-fx-background-color: fff;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="160.0" prefWidth="160.0" />
   </columnConstraints>
@@ -23,7 +24,7 @@
     <RowConstraints maxHeight="183.0" minHeight="55.0" prefHeight="158.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <MFXButton fx:id="loginButton" onAction="#onLoginButtonClick" style=".mfx-text-field .floating-text-color:: red;" text="LOG IN" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+      <MFXButton fx:id="loginButton" onAction="#onLoginButtonClick" prefHeight="52.0" prefWidth="113.0" rippleColor="#7a0ed9" style="-fx-border-color: #7A0ED9; -fx-border-radius: 5;" text="LOG IN" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
          <font>
             <Font name="Corbel Bold" size="17.0" />
          </font>
@@ -67,4 +68,7 @@
          </font>
       </Label>
    </children>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
 </GridPane>

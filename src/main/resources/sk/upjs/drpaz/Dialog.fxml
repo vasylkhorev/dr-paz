@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<DialogPane prefHeight="233.0" prefWidth="362.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <header>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <MFXButton fx:id="okButton" layoutX="143.0" layoutY="146.0" onAction="#okButtonClick" prefHeight="33.0" prefWidth="75.0" rippleColor="#770fd994" style="-fx-border-color: #acacac; -fx-border-radius: 5;" text="OK" textAlignment="CENTER">
+               <font>
+                  <Font name="Corbel Bold" size="15.0" />
+               </font>
+            </MFXButton>
+            <Label fx:id="nameLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="32.0" text="text" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <font>
+                  <Font name="Corbel" size="17.0" />
+               </font>
+            </Label>
+            <MFXTextField fx:id="quantityTextField" floatMode="BORDER" floatingText="Quantity" layoutX="94.0" layoutY="82.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="173.0">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </MFXTextField>
+         </children>
+      </AnchorPane>
+   </header>
+</DialogPane>
