@@ -157,7 +157,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 			throw new NoSuchElementException("employee cannot have null as Name");
 		try {
 			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE name LIKE ?";
-			return jdbcTemplate.query(sql, new EmployeeRowMapper(), "%" + name + "%");
+			return jdbcTemplate.query(sql, new EmployeeRowMapper(), name + "%");
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -169,7 +169,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 			throw new NoSuchElementException("employee cannot have null as surname");
 		try {
 			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE surname LIKE ?";
-			return jdbcTemplate.query(sql, new EmployeeRowMapper(), "%" + surname + "%");
+			return jdbcTemplate.query(sql, new EmployeeRowMapper(), surname + "%");
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -181,7 +181,7 @@ public class MysqlEmployeeDao implements EmployeeDao {
 			throw new NoSuchElementException("employee cannot have null as surname or name");
 		try {
 			String sql = "SELECT id, name, surname, phone, email, login, password, role FROM Employee WHERE name LIKE ? AND surname LIKE ?";
-			return jdbcTemplate.query(sql, new EmployeeRowMapper(), "%" + name + "%", "%" + surname + "%");
+			return jdbcTemplate.query(sql, new EmployeeRowMapper(), name + "%", surname + "%");
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

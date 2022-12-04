@@ -53,14 +53,18 @@ public class EmployeeTabController {
     	allEmployeeTableView.setItems(model.getAllEmployeesModel());
     	
     	employeeNameTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue,
-				newValue) -> allEmployeeTableView.setItems(model.getAllEmployeesModelByName(newValue)));
+				newValue) -> allEmployeeTableView.setItems((employeeSurnameTextField.getText() == null)
+															? model.getAllEmployeesModelByName(newValue)
+															: (employeeSurnameTextField.getText().isBlank())
+																? model.getAllEmployeesModelByName(newValue)
+																: model.getAllEmployeesModelByNameAndSurname(newValue, employeeSurnameTextField.getText())));
     	
     	employeeSurnameTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue,
-				newValue) -> allEmployeeTableView.setItems(model.getAllEmployeesModelBySurname(newValue)));
-    	
-    	//TODO my peanut brain need to finish this for when name or surname is empty
-    	// my tip: if(newValue.isBlank() or newValue.isEmpty())   :)
-    	
+				newValue) -> allEmployeeTableView.setItems((employeeNameTextField.getText() == null)
+															? model.getAllEmployeesModelBySurname(newValue)
+															: (employeeNameTextField.getText().isBlank())
+																? model.getAllEmployeesModelBySurname(newValue)
+    															: model.getAllEmployeesModelByNameAndSurname(employeeNameTextField.getText(), newValue)));  	
     }
     
     void setAllColumns() {
