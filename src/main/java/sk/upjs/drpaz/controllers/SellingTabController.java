@@ -3,30 +3,30 @@ package sk.upjs.drpaz.controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import io.github.palexdev.materialfx.controls.MFXButton;
+import com.mysql.cj.conf.StringProperty;
+
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -53,7 +53,7 @@ public class SellingTabController {
 	@FXML
 	private TableColumn<Product, String> priceColumn;
 	@FXML
-	private TableColumn<Product, String> quantityColumn;
+	private TableColumn<Product, StringProperty> quantityColumn;
 	@FXML
 	private TableColumn<Product, String> alertQuantityColumn;
 	@FXML
@@ -124,9 +124,9 @@ public class SellingTabController {
 
 	private void refreshAllProducts(String newValue, Category category) {
 		List<Product> collected = new ArrayList<>();
+		allProductsTableView.getItems().clear();
 		if (category == null && (newValue == null || newValue.isEmpty() || newValue.isBlank())) {
 			collected = model.getAllProductsModel().stream().collect(Collectors.toList());
-			System.out.println(model.getAllProductsModel().size());
 		}
 		if (category == null && newValue != null && !newValue.isEmpty() && !newValue.isBlank()) {
 			collected = model.getAllProductsModel().stream()
@@ -135,7 +135,6 @@ public class SellingTabController {
 		}
 		if (category != null && (newValue == null || newValue.isEmpty() || newValue.isBlank())) {
 			List<Product> products = DaoFactory.INSTANCE.getProductDao().getByCategory(category);
-			
 			collected = model.getAllProductsModel().stream().filter(t -> products.contains(t))
 					.collect(Collectors.toList());
 		}
@@ -147,8 +146,7 @@ public class SellingTabController {
 					.collect(Collectors.toList());
 			collected.retainAll(col);
 		}
-		allProductsTableView.getItems().clear();
-		allProductsTableView.getItems().addAll(FXCollections.observableArrayList(collected));
+		allProductsTableView.setItems(FXCollections.observableArrayList(collected));
 	}
 
 	private void addColumnsToAllProducts() {
@@ -175,12 +173,14 @@ public class SellingTabController {
 							.remove(productsInPurchaseTableView.getSelectionModel().getSelectedItem());
 					setTotal();
 				});
+
 				quantityItem.setOnAction(event1 -> {
 					Product p = productsInPurchaseTableView.getSelectionModel().getSelectedItem();
 					int index = model.getProductsInPurchaseModel().indexOf(p);
 
 					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../controllers/Dialog.fxml"));
-					DialogController dialogController = new DialogController(p);
+					DialogController dialogController = new DialogController(p,
+							allProductsTableView);
 					fxmlLoader.setController(dialogController);
 					Parent parent;
 					try {
@@ -201,8 +201,6 @@ public class SellingTabController {
 						model.getProductsInPurchaseModel().set(index, null);
 						model.getProductsInPurchaseModel().set(index, p);
 					}
-					System.out.println(model.getProductsInPurchaseModel());
-					System.out.println(productsInPurchaseTableView.getItems());
 					setTotal();
 				});
 			}
@@ -218,6 +216,14 @@ public class SellingTabController {
 	}
 
 	private void allProductsAddListener() {
+		allProductsTableView.getItems().addListener(new ListChangeListener<Product>() {
+
+			@Override
+			public void onChanged(Change<? extends Product> c) {
+				allProductsTableView.refresh();
+			}
+		});
+
 		allProductsTableView.setOnMouseClicked(event -> {
 			if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
 				addProductToPurchase();
@@ -242,25 +248,35 @@ public class SellingTabController {
 
 	}
 
-	private void addProductToPurchase() {
+	public void addProductToPurchase() {
 		Product product = allProductsTableView.getSelectionModel().getSelectedItem();
-		boolean flag = false;
-		for (Product p : model.getProductsInPurchaseModel()) {
-			if (p.getId() == product.getId()) {
-				int index = model.getProductsInPurchaseModel().indexOf(p);
-				Product temp = new Product(p.getId(), p.getName(), p.getPrice(), p.getQuantity() + 1,
-						p.getAlertQuantity(), p.getDescription());
-				model.getProductsInPurchaseModel().set(index, null);
-				model.getProductsInPurchaseModel().set(index, temp);
-				flag = true;
-			}
+		if (product == null)
+			return;
+		if(product.getQuantity() <= 0) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("There is no more product in warehouse");
+			alert.show();
+			return;
 		}
-		if (!flag) {
-			Product temp = new Product(product.getId(), product.getName(), product.getPrice(), 1,
+
+		int indexOf = model.getProductsInPurchaseModel().indexOf(product);
+		if (indexOf == -1) {
+			Product p = new Product(product.getId(), product.getName(), product.getPrice(), 1,
 					product.getAlertQuantity(), product.getDescription());
-			model.getProductsInPurchaseModel().add(temp);
+			model.getProductsInPurchaseModel().add(p);
+		} else {
+			int quantity = model.getProductsInPurchaseModel().get(indexOf).getQuantity();
+			Product p = new Product(product.getId(), product.getName(), product.getPrice(), quantity + 1,
+					product.getAlertQuantity(), product.getDescription());
+			model.getProductsInPurchaseModel().set(indexOf, p);
 		}
+
+		int indexInAll = allProductsTableView.getItems().indexOf(product);
+		allProductsTableView.getItems().set(indexInAll, new Product(product.getId(), product.getName(),
+				product.getPrice(), product.getQuantity()-1, product.getAlertQuantity(), product.getDescription()));
+
 		setTotal();
+
 	}
 
 	private void setTotal() {
