@@ -19,10 +19,18 @@ public class DialogController {
 	private MFXButton okButton;
 
 	@FXML
+	private MFXButton cancelButton;
+
+	@FXML
 	private MFXTextField quantityTextField;
 
 	DialogController(Product product) {
 		this.product = product;
+	}
+
+	@FXML
+	void cancelClickButton(ActionEvent event) {
+		nameLabel.getScene().getWindow().hide();
 	}
 
 	@FXML
@@ -34,14 +42,20 @@ public class DialogController {
 
 	@FXML
 	void initialize() {
+		okButton.setDisable(true);
 		nameLabel.setText(product.getName());
 		quantityTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
-			if (newValue.isBlank()) {
+			if (newValue.isBlank() || newValue.isEmpty()) {
 				okButton.setDisable(true);
 				return;
 			}
 			try {
 				int quantity = Integer.parseInt(newValue);
+				if(quantity < 0) {
+					okButton.setDisable(false);
+					return;
+				}
+				
 			} catch (NumberFormatException nfe) {
 				okButton.setDisable(true);
 				return;

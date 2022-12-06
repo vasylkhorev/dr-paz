@@ -9,3 +9,7 @@
   -fx-cell-size: 100px;
   -fx-cell-height: 100px;
 }
+.table-row-cell:selected {
+  -fx-background-color: #D6E8FC; 
+}
+

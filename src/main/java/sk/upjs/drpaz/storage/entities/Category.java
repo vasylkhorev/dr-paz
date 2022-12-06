@@ -38,7 +38,7 @@ public class Category {
 
 	@Override
 	public String toString() {
-		return getId()  + " " + getName();
+		return getName();
 	}
 
 }

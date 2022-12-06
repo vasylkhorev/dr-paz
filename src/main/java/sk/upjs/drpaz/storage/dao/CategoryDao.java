@@ -46,7 +46,7 @@ public interface CategoryDao {
 	 * @return {@link Category} that has specified id
 	 */
 	Category getById(long id);
-	
+		
 	
 	
 }

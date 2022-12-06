@@ -1,5 +1,7 @@
 package sk.upjs.drpaz.storage.entities;
 
+import java.util.Objects;
+
 /**
  * <pre>
  * Product has
@@ -15,7 +17,7 @@ public class Product {
 
 	public Product() {
 	}
-	
+
 	public Product(String name, double price, int quantity, int alertQuantity, String description) {
 		this.name = name;
 		this.price = price;
@@ -92,4 +94,22 @@ public class Product {
 	public String toString() {
 		return getId() + " " + getName() + " " + getQuantity();
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, price);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		return Objects.equals(id, other.id) && Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price);
+	}
+
 }

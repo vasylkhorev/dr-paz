@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -7,7 +10,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -20,26 +22,21 @@
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="593.3333129882812" minWidth="10.0" prefWidth="353.99991861979174" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints maxHeight="251.00001525878906" minHeight="0.0" prefHeight="43.666677474975586" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="690.0000203450521" minHeight="10.0" prefHeight="665.999989191691" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="251.00001525878906" minHeight="0.0" prefHeight="98.66666666666666" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="690.0000203450521" minHeight="10.0" prefHeight="612.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="80.33331298828125" minHeight="10.0" prefHeight="41.66668701171875" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <TextField fx:id="productNameTextField" prefHeight="25.0" promptText="Type product name here...">
-         <GridPane.margin>
-            <Insets left="50.0" right="50.0" />
-         </GridPane.margin>
-         <font>
-            <Font name="Corbel" size="17.0" />
-         </font>
-      </TextField>
       <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" />
       <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Label text="Purchase" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+      <Label text="Purchase" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="TOP">
          <font>
             <Font name="Corbel Bold" size="25.0" />
          </font>
+         <GridPane.margin>
+            <Insets top="15.0" />
+         </GridPane.margin>
       </Label>
       <Label fx:id="totalLabel" text="Total: 0.00" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
          <GridPane.margin>
@@ -62,20 +59,20 @@
       </Button>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
          <children>
-            <MFXLegacyTableView fx:id="allProductsTableView" layoutX="130.0" layoutY="81.0" stylesheets="@../../../css/FXMaterialTableView.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
+            <MFXLegacyTableView fx:id="allProductsTableView" layoutX="130.0" layoutY="51.0" prefHeight="577.0" prefWidth="807.0" stylesheets="@../../../../css/FXMaterialTableView.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
                <columns>
                   <TableColumn fx:id="nameColumn" prefWidth="213.33330726623535" text="Name" />
                   <TableColumn fx:id="priceColumn" prefWidth="84.00001525878906" text="Price" />
                   <TableColumn fx:id="quantityColumn" prefWidth="76.0" text="Quantity" />
                   <TableColumn fx:id="alertQuantityColumn" minWidth="0.0" prefWidth="112.0" text="Alert quantity" />
-                  <TableColumn fx:id="descriptionColumn" prefWidth="324.6665954589844" text="Description" />
+                  <TableColumn fx:id="descriptionColumn" prefWidth="317.99993896484375" text="Description" />
                </columns>
             </MFXLegacyTableView>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <MFXLegacyTableView fx:id="productsInPurchaseTableView" layoutX="-8.0" layoutY="106.0" stylesheets="@../../../css/FXMaterialTableView.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
+            <MFXLegacyTableView fx:id="productsInPurchaseTableView" layoutX="-8.0" layoutY="106.0" stylesheets="@../../../../css/FXMaterialTableView.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
                <columns>
                   <TableColumn fx:id="nameColumnPurchase" prefWidth="173.33331871032715" text="Name" />
                   <TableColumn fx:id="priceColumnPurchase" prefWidth="63.99998474121094" text="Price" />
@@ -83,6 +80,24 @@
                </columns>
             </MFXLegacyTableView>
          </children>
+         <GridPane.margin>
+            <Insets top="-30.0" />
+         </GridPane.margin>
       </AnchorPane>
+      <MFXComboBox fx:id="categoryComboBox" floatMode="BORDER" floatingText="Category" floatingTextGap="0.0" graphicTextGap="0.0" maxHeight="-Infinity" measureUnitGap="0.0" minHeight="-Infinity" prefHeight="32.0" prefWidth="255.0" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets left="50.0" top="57.0" />
+         </GridPane.margin>
+      </MFXComboBox>
+      <MFXButton onAction="#cancelButtonClick" rippleColor="#9d8c8c" style="-fx-border-color: #9d8c8c; -fx-border-radius: 5;" text="Cancel" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets left="310.0" top="59.0" />
+         </GridPane.margin>
+      </MFXButton>
+      <MFXTextField fx:id="productNameTextField" floatMode="BORDER" floatingText="Product name" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="759.0" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets left="50.0" right="50.0" top="15.0" />
+         </GridPane.margin>
+      </MFXTextField>
    </children>
 </GridPane>

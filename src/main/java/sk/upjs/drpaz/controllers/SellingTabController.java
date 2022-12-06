@@ -1,9 +1,22 @@
 package sk.upjs.drpaz.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,21 +33,21 @@ import javafx.scene.input.MouseButton;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sk.upjs.drpaz.models.ProductFxModel;
+import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.entities.Category;
 import sk.upjs.drpaz.storage.entities.Product;
 
 public class SellingTabController {
 
 	private ProductFxModel model;
-
 	@FXML
 	private MFXLegacyTableView<Product> allProductsTableView = new MFXLegacyTableView<>();;
-
 	@FXML
 	private MFXLegacyTableView<Product> productsInPurchaseTableView = new MFXLegacyTableView<>();
-
 	@FXML
-	private TextField productNameTextField;
-
+	private MFXTextField productNameTextField;
+	@FXML
+	private MFXComboBox<Category> categoryComboBox;
 	@FXML
 	private TableColumn<Product, String> nameColumn;
 	@FXML
@@ -51,7 +64,6 @@ public class SellingTabController {
 	private TableColumn<Product, String> priceColumnPurchase;
 	@FXML
 	private TableColumn<Product, Integer> quantityColumnPurchase;
-
 	@FXML
 	private Label totalLabel;
 
@@ -69,20 +81,38 @@ public class SellingTabController {
 	}
 
 	@FXML
+	void cancelButtonClick(ActionEvent event) {
+		categoryComboBox.clearSelection();
+	}
+
+	@FXML
 	void initialize() {
 		addColumnsToAllProducts();
 		addColumnsToPurchase();
 
 		allProductsAddListener();
 		productsInPurchaseListener();
+		categoryComboBoxLogic();
 
 		productNameTextField.textProperty().bindBidirectional(model.nameProperty());
 
 		productsInPurchaseTableView.setItems(model.getProductsInPurchaseModel());
-		allProductsTableView.setItems(model.getAllProductsModel());
+		allProductsTableView.getItems().addAll(model.getAllProductsModel());
+		categoryComboBox.setItems(FXCollections.observableArrayList(DaoFactory.INSTANCE.getCategoryDao().getAll()));
 
 		productNameTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue,
-				newValue) -> allProductsTableView.setItems(model.getAllProductsModelByName(newValue)));
+				newValue) -> refreshAllProducts(newValue, categoryComboBox.getSelectedItem()));
+
+	}
+
+	private void categoryComboBoxLogic() {
+		categoryComboBox.selectedItemProperty().addListener(new ChangeListener<Category>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Category> observable, Category oldValue, Category newValue) {
+				refreshAllProducts(productNameTextField.getText(), newValue);
+			}
+		});
 	}
 
 	private void addColumnsToPurchase() {
@@ -90,6 +120,35 @@ public class SellingTabController {
 		priceColumnPurchase.setCellValueFactory(new PropertyValueFactory<>("price"));
 		quantityColumnPurchase.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
+	}
+
+	private void refreshAllProducts(String newValue, Category category) {
+		List<Product> collected = new ArrayList<>();
+		if (category == null && (newValue == null || newValue.isEmpty() || newValue.isBlank())) {
+			collected = model.getAllProductsModel().stream().collect(Collectors.toList());
+			System.out.println(model.getAllProductsModel().size());
+		}
+		if (category == null && newValue != null && !newValue.isEmpty() && !newValue.isBlank()) {
+			collected = model.getAllProductsModel().stream()
+					.filter(t -> t.getName().trim().toLowerCase().contains(newValue.toLowerCase().trim()))
+					.collect(Collectors.toList());
+		}
+		if (category != null && (newValue == null || newValue.isEmpty() || newValue.isBlank())) {
+			List<Product> products = DaoFactory.INSTANCE.getProductDao().getByCategory(category);
+			
+			collected = model.getAllProductsModel().stream().filter(t -> products.contains(t))
+					.collect(Collectors.toList());
+		}
+		if (category != null && newValue != null && !newValue.isEmpty() && !newValue.isBlank()) {
+			// intersection
+			Collection<Product> col = DaoFactory.INSTANCE.getProductDao().getByCategory(category);
+			collected = model.getAllProductsModel().stream()
+					.filter(t -> t.getName().trim().toLowerCase().contains(newValue.toLowerCase().trim()))
+					.collect(Collectors.toList());
+			collected.retainAll(col);
+		}
+		allProductsTableView.getItems().clear();
+		allProductsTableView.getItems().addAll(FXCollections.observableArrayList(collected));
 	}
 
 	private void addColumnsToAllProducts() {
@@ -120,32 +179,40 @@ public class SellingTabController {
 					Product p = productsInPurchaseTableView.getSelectionModel().getSelectedItem();
 					int index = model.getProductsInPurchaseModel().indexOf(p);
 
-					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Dialog.fxml"));
+					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../controllers/Dialog.fxml"));
 					DialogController dialogController = new DialogController(p);
 					fxmlLoader.setController(dialogController);
-					Parent parent = null;
+					Parent parent;
 					try {
 						parent = fxmlLoader.load();
+						Scene scene = new Scene(parent);
+						Stage stage = new Stage();
+						stage.setScene(scene);
+						stage.initModality(Modality.APPLICATION_MODAL);
+						stage.setTitle("Edit quantity");
+						stage.showAndWait();
 					} catch (IOException e1) {
+						e1.printStackTrace();
 					}
-					Scene scene = new Scene(parent);
-					Stage stage = new Stage();
-					stage.setScene(scene);
-					stage.initModality(Modality.APPLICATION_MODAL);
-					stage.setTitle("Edit quantity");
-					stage.showAndWait();
 
 					if (p.getQuantity() <= 0) {
 						model.getProductsInPurchaseModel().remove(p);
 					} else {
 						model.getProductsInPurchaseModel().set(index, null);
 						model.getProductsInPurchaseModel().set(index, p);
-					}System.out.println(model.getProductsInPurchaseModel());
+					}
+					System.out.println(model.getProductsInPurchaseModel());
 					System.out.println(productsInPurchaseTableView.getItems());
 					setTotal();
 				});
 			}
 
+		});
+		productsInPurchaseTableView.setOnKeyPressed(event -> {
+			if (event.getCode().equals(KeyCode.DELETE)) {
+				Product p = productsInPurchaseTableView.getSelectionModel().getSelectedItem();
+				model.getProductsInPurchaseModel().remove(p);
+			}
 		});
 
 	}
@@ -193,7 +260,7 @@ public class SellingTabController {
 					product.getAlertQuantity(), product.getDescription());
 			model.getProductsInPurchaseModel().add(temp);
 		}
-		setTotal();	
+		setTotal();
 	}
 
 	private void setTotal() {

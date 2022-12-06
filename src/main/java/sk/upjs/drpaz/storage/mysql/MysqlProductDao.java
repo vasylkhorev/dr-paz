@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import sk.upjs.drpaz.storage.dao.ProductDao;
+import sk.upjs.drpaz.storage.entities.Category;
 import sk.upjs.drpaz.storage.entities.Product;
 
 public class MysqlProductDao implements ProductDao {
@@ -103,6 +104,13 @@ public class MysqlProductDao implements ProductDao {
 		} catch (DataAccessException e) {
 			throw new NoSuchElementException("product with name " + name + " not in DB");
 		}
+	}
+
+	@Override
+	public List<Product> getByCategory(Category category) throws NullPointerException, NoSuchElementException {
+		//TODO test, message me if you dont want to write tests, maybe i can try ):
+		String sql = "SELECT id, name, price, quantity, alert_quantity, description FROM product p JOIN product_has_category phc ON p.id=phc.product_id WHERE category_id= " + category.getId();
+		return jdbcTemplate.query(sql, new ProductRowMapper());
 	}
 
 }

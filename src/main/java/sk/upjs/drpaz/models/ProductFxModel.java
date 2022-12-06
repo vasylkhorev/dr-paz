@@ -118,12 +118,6 @@ public class ProductFxModel {
 		return allProducts;
 	}
 	
-	public ObservableList<Product> getAllProductsModelByName(String name) {
-		List<Product> list = DaoFactory.INSTANCE.getProductDao().getByName(name);
-		allProducts = FXCollections.observableArrayList(list);
-		return allProducts;
-	}
-	
 
 	public List<Product> getAllProducts() {
 		return new ArrayList<>(allProducts);

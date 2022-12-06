@@ -3,6 +3,7 @@ package sk.upjs.drpaz.storage.dao;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import sk.upjs.drpaz.storage.entities.Category;
 import sk.upjs.drpaz.storage.entities.Product;
 
 public interface ProductDao {
@@ -39,5 +40,7 @@ public interface ProductDao {
 	 * @return True if deleted
 	 */
 	boolean delete(long id);
+	
+	List<Product> getByCategory(Category category) throws NullPointerException, NoSuchElementException;
 
 }
