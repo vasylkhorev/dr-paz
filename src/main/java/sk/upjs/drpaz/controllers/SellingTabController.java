@@ -97,6 +97,7 @@ public class SellingTabController {
 				DaoFactory.INSTANCE.getProductDao().save(product);
 		}
 		model = new ProductFxModel();
+		productsInPurchaseTableView.setItems(model.getProductsInPurchaseModel());
 		allProductsTableView.getItems().setAll(model.getAllProductsModel());
 		totalLabel.setText("Total: 0.00");
 	}

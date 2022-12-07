@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="60.0" layoutY="30.0" text="Name:">
+         <font>
+            <Font name="Corbel" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="58.0" layoutY="120.0" text="Surname:">
+         <font>
+            <Font name="Corbel" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="58.0" layoutY="210.0" text="Phone:">
+         <font>
+            <Font name="Corbel" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="58.0" layoutY="300.0" text="Email:">
+         <font>
+            <Font name="Corbel" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="62.0" layoutY="390.0" text="Role:">
+         <font>
+            <Font name="Corbel" size="17.0" />
+         </font>
+      </Label>
+      <MFXTextField fx:id="nameEmployeeTextField" layoutX="80.0" layoutY="50.0" prefHeight="49.0" prefWidth="236.0" />
+      <MFXTextField fx:id="surnameEmployeeTextField" layoutX="80.0" layoutY="140.0" prefHeight="49.0" prefWidth="236.0" />
+      <MFXTextField fx:id="phoneTextField" layoutX="80.0" layoutY="230.0" prefHeight="49.0" prefWidth="236.0" />
+      <MFXTextField fx:id="emailEmployeeTextField" layoutX="80.0" layoutY="320.0" prefHeight="49.0" prefWidth="236.0" />
+      <MFXTextField fx:id="roleEmployeeTextField" layoutX="80.0" layoutY="410.0" prefHeight="49.0" prefWidth="236.0" />
+      <MFXButton fx:id="okButton" layoutX="350.0" layoutY="430.0" onAction="#okButtonClick" prefHeight="13.0" prefWidth="75.0" rippleColor="#770fd994" style="-fx-border-color: #acacac; -fx-border-radius: 5;" text="OK" textAlignment="CENTER">
+         <font>
+            <Font name="Corbel" size="13.0" />
+         </font>
+      </MFXButton>
+      <MFXButton fx:id="cancelButton" layoutX="430.0" layoutY="430.0" onAction="#cancelClickButton" prefHeight="13.0" prefWidth="75.0" rippleColor="#770fd994" style="-fx-border-color: #acacac; -fx-border-radius: 5;" text="Cancel" textAlignment="CENTER">
+         <font>
+            <Font name="Corbel" size="13.0" />
+         </font>
+      </MFXButton>
+   </children>
+</AnchorPane>
