@@ -118,5 +118,12 @@ public class MysqlCategoryDao implements CategoryDao {
 			return category;
 		}
 	}
+	//TODO test
+	@Override
+	public boolean deleteByProduct(Product product) throws NoSuchElementException, NullPointerException {
+		String sql = "DELETE FROM product_has_category phc WHERE phc.product_id = " + product.getId();
+		int changed = jdbcTemplate.update(sql);
+		return changed == 1;
+	}
 
 }

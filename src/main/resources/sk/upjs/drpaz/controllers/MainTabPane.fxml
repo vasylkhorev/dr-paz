@@ -10,7 +10,7 @@
             <fx:include source="SellingTab.fxml" />
          </content>
       </Tab>
-      <Tab fx:id="addingTab" text="Adding">
+      <Tab fx:id="addingTab" onSelectionChanged="#onAddingTabClicked" text="Adding">
       	 <content>
             <fx:include source="AddingTab.fxml" />
          </content>

@@ -46,6 +46,8 @@ public interface CategoryDao {
 	 * @return {@link Category} that has specified id
 	 */
 	Category getById(long id);
+	
+	boolean deleteByProduct(Product product) throws NoSuchElementException, NullPointerException;
 		
 	
 	

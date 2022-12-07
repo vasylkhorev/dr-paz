@@ -1,5 +1,7 @@
 package sk.upjs.drpaz.storage.entities;
 
+import java.util.Objects;
+
 /**
  * <pre>
  * Category has 
@@ -39,6 +41,23 @@ public class Category {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		return Objects.equals(id, other.id);
 	}
 
 }

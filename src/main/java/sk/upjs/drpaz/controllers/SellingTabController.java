@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import com.mysql.cj.conf.StringProperty;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
@@ -34,7 +35,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import sk.upjs.LoggedUser;
+import sk.upjs.drpaz.LoggedUser;
 import sk.upjs.drpaz.models.ProductFxModel;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.entities.Category;
@@ -44,6 +45,8 @@ import sk.upjs.drpaz.storage.entities.Purchase;
 public class SellingTabController {
 
 	private ProductFxModel model;
+	@FXML
+	private MFXButton cancelButton;
 	@FXML
 	private MFXLegacyTableView<Product> allProductsTableView = new MFXLegacyTableView<>();;
 	@FXML
@@ -81,6 +84,12 @@ public class SellingTabController {
 
 	@FXML
 	void sellButtonClick(ActionEvent event) {
+		if(model.getProductsInPurchaseModel().size() == 0){
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setContentText("Please, add at least one product to purchase");
+			alert.show();
+			return;
+		}
 		List<Product> productsInPurchase = model.getProductsInPurchaseModel().stream().collect(Collectors.toList());
 		Purchase purchase = new Purchase(null, LoggedUser.INSTANCE.getLoggedUser(), LocalDateTime.now(),
 				productsInPurchase);
@@ -105,10 +114,13 @@ public class SellingTabController {
 	@FXML
 	void cancelButtonClick(ActionEvent event) {
 		categoryComboBox.clearSelection();
+		categoryComboBox.requestFocus();
+		cancelButton.requestFocus();
 	}
 
 	@FXML
 	void initialize() {
+		
 
 		addColumnsToAllProducts();
 		addColumnsToPurchase();
@@ -173,7 +185,7 @@ public class SellingTabController {
 					.collect(Collectors.toList());
 			collected.retainAll(col);
 		}
-		allProductsTableView.setItems(FXCollections.observableArrayList(collected));
+		allProductsTableView.getItems().addAll(FXCollections.observableArrayList(collected));
 	}
 
 	private void addColumnsToAllProducts() {

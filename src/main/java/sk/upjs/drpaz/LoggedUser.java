@@ -1,4 +1,4 @@
-package sk.upjs;
+package sk.upjs.drpaz;
 
 import sk.upjs.drpaz.storage.entities.Employee;
 

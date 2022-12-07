@@ -8,7 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import sk.upjs.LoggedUser;
+import sk.upjs.drpaz.LoggedUser;
 import sk.upjs.drpaz.models.EmployeeFxModel;
 import sk.upjs.drpaz.storage.entities.Employee;
 

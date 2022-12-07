@@ -1,0 +1,27 @@
+.text-area:focused {
+	-fx-border-color: BlueViolet;
+	-fx-border-width:  2;
+	-fx-focus-color: transparent;
+}
+.text-area {
+	-fx-font-size: 14;
+	-fx-font-family: Corbel;
+	-fx-prompt-text-fill: #363636;
+	-fx-text-fill: #363636;
+	-fx-background-color: white;
+	-fx-border-width: 1;
+	-fx-border-radius: 5;
+	-fx-border-color: #D5D5D5;
+	-fx-background-insets: 0;
+}
+.text-area .content {
+    -fx-background-color: transparent, white, transparent, white;
+}
+.text-area:focused .content {
+    -fx-background-color: transparent, white, transparent, white;
+}
+.text-area .content {
+	-fx-text-font-size: 14;
+    -fx-text-fill: #363636;
+
+}
