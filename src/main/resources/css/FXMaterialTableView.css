@@ -11,5 +11,6 @@
 }
 .table-row-cell:selected {
   -fx-background-color: #D6E8FC; 
+  -fx-text-background-color: black;
 }
 
