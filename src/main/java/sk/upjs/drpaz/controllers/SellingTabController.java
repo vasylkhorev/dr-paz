@@ -92,10 +92,9 @@ public class SellingTabController {
 			return;
 		}
 		model.getProductsInPurchaseModel().clear();
-		;
 		for (Product product : allProductsTableView.getItems()) {
-			// TODO
-			DaoFactory.INSTANCE.getProductDao().save(product);
+			if (productsInPurchase.contains(product))
+				DaoFactory.INSTANCE.getProductDao().save(product);
 		}
 		model = new ProductFxModel();
 		allProductsTableView.getItems().setAll(model.getAllProductsModel());

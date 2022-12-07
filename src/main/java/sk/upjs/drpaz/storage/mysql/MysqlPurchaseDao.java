@@ -98,8 +98,6 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			return purchase2;
 
 		} else { // UPDATE
-			// TODO update purchase_item
-			// ja si vobec tazko predstavujemm, ze by sme dakde potrebovali update purchase??			
 			String sql = "UPDATE purchase SET employee_id=?, created_at=? " + "WHERE id = ?";
 			int changed = jdbcTemplate.update(sql, purchase.getEmployee().getId(), purchase.getCreatedAt(),
 					purchase.getId());
