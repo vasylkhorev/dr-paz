@@ -1,9 +1,11 @@
 package sk.upjs.drpaz.controllers;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.mysql.cj.conf.StringProperty;
@@ -15,7 +17,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -36,14 +38,12 @@ import sk.upjs.LoggedUser;
 import sk.upjs.drpaz.models.ProductFxModel;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.entities.Category;
-import sk.upjs.drpaz.storage.entities.Employee;
 import sk.upjs.drpaz.storage.entities.Product;
+import sk.upjs.drpaz.storage.entities.Purchase;
 
 public class SellingTabController {
 
 	private ProductFxModel model;
-	private Employee currentEmployee;
-	
 	@FXML
 	private MFXLegacyTableView<Product> allProductsTableView = new MFXLegacyTableView<>();;
 	@FXML
@@ -81,7 +81,25 @@ public class SellingTabController {
 
 	@FXML
 	void sellButtonClick(ActionEvent event) {
-
+		List<Product> productsInPurchase = model.getProductsInPurchaseModel().stream().collect(Collectors.toList());
+		Purchase purchase = new Purchase(null, LoggedUser.INSTANCE.getLoggedUser(), LocalDateTime.now(),
+				productsInPurchase);
+		DaoFactory.INSTANCE.getPurchaseDao().save(purchase);
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setContentText("You are going to sell purchase!");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == alert.getButtonTypes().get(1)) {
+			return;
+		}
+		model.getProductsInPurchaseModel().clear();
+		;
+		for (Product product : allProductsTableView.getItems()) {
+			// TODO
+			DaoFactory.INSTANCE.getProductDao().save(product);
+		}
+		model = new ProductFxModel();
+		allProductsTableView.getItems().setAll(model.getAllProductsModel());
+		totalLabel.setText("Total: 0.00");
 	}
 
 	@FXML
@@ -91,14 +109,14 @@ public class SellingTabController {
 
 	@FXML
 	void initialize() {
-		currentEmployee = LoggedUser.INSTANCE.getLoggedUser();
+
 		addColumnsToAllProducts();
 		addColumnsToPurchase();
 
 		allProductsAddListener();
 		productsInPurchaseListener();
 		categoryComboBoxLogic();
-		
+
 		productNameTextField.textProperty().bindBidirectional(model.nameProperty());
 
 		productsInPurchaseTableView.setItems(model.getProductsInPurchaseModel());
@@ -124,6 +142,10 @@ public class SellingTabController {
 		nameColumnPurchase.setCellValueFactory(new PropertyValueFactory<>("name"));
 		priceColumnPurchase.setCellValueFactory(new PropertyValueFactory<>("price"));
 		quantityColumnPurchase.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+		nameColumnPurchase.prefWidthProperty().bind(productsInPurchaseTableView.widthProperty().multiply(0.49));
+		priceColumnPurchase.prefWidthProperty().bind(productsInPurchaseTableView.widthProperty().multiply(0.25));
+		quantityColumnPurchase.prefWidthProperty().bind(productsInPurchaseTableView.widthProperty().multiply(0.245));
 
 	}
 
@@ -160,6 +182,13 @@ public class SellingTabController {
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 		alertQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("alertQuantity"));
 		descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+//		adsda
+		nameColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.196));
+		priceColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.1));
+		quantityColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.10));
+		alertQuantityColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.15));
+		descriptionColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.4465));
+
 	}
 
 	private void productsInPurchaseListener() {
@@ -184,8 +213,7 @@ public class SellingTabController {
 					int index = model.getProductsInPurchaseModel().indexOf(p);
 
 					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../controllers/Dialog.fxml"));
-					DialogController dialogController = new DialogController(p,
-							allProductsTableView);
+					DialogController dialogController = new DialogController(p, allProductsTableView);
 					fxmlLoader.setController(dialogController);
 					Parent parent;
 					try {
@@ -215,6 +243,7 @@ public class SellingTabController {
 			if (event.getCode().equals(KeyCode.DELETE)) {
 				Product p = productsInPurchaseTableView.getSelectionModel().getSelectedItem();
 				model.getProductsInPurchaseModel().remove(p);
+				setTotal();
 			}
 		});
 
@@ -257,7 +286,7 @@ public class SellingTabController {
 		Product product = allProductsTableView.getSelectionModel().getSelectedItem();
 		if (product == null)
 			return;
-		if(product.getQuantity() <= 0) {
+		if (product.getQuantity() <= 0) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("There is no more product in warehouse");
 			alert.show();
@@ -278,7 +307,7 @@ public class SellingTabController {
 
 		int indexInAll = allProductsTableView.getItems().indexOf(product);
 		allProductsTableView.getItems().set(indexInAll, new Product(product.getId(), product.getName(),
-				product.getPrice(), product.getQuantity()-1, product.getAlertQuantity(), product.getDescription()));
+				product.getPrice(), product.getQuantity() - 1, product.getAlertQuantity(), product.getDescription()));
 
 		setTotal();
 

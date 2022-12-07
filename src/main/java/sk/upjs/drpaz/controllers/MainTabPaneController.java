@@ -7,13 +7,7 @@ import javafx.scene.control.Tab;
 
 public class MainTabPaneController {
 
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
+       @FXML
     private Tab sellingTab;
     
     @FXML
@@ -32,7 +26,12 @@ public class MainTabPaneController {
     private EmployeeTabController employeeTabController;
     
     @FXML
-    void initialize(URL location, ResourceBundle resources) {
+    void onSellingTabClicked() {
+    	
+    }
+    
+    @FXML
+    void initialize() {
     }
 
 }
