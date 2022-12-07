@@ -32,14 +32,18 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sk.upjs.LoggedUser;
 import sk.upjs.drpaz.models.ProductFxModel;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.entities.Category;
+import sk.upjs.drpaz.storage.entities.Employee;
 import sk.upjs.drpaz.storage.entities.Product;
 
 public class SellingTabController {
 
 	private ProductFxModel model;
+	private Employee currentEmployee;
+	
 	@FXML
 	private MFXLegacyTableView<Product> allProductsTableView = new MFXLegacyTableView<>();;
 	@FXML
@@ -87,13 +91,14 @@ public class SellingTabController {
 
 	@FXML
 	void initialize() {
+		currentEmployee = LoggedUser.INSTANCE.getLoggedUser();
 		addColumnsToAllProducts();
 		addColumnsToPurchase();
 
 		allProductsAddListener();
 		productsInPurchaseListener();
 		categoryComboBoxLogic();
-
+		
 		productNameTextField.textProperty().bindBidirectional(model.nameProperty());
 
 		productsInPurchaseTableView.setItems(model.getProductsInPurchaseModel());

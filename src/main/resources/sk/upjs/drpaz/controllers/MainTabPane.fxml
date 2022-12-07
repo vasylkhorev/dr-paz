@@ -20,5 +20,10 @@
             <fx:include source="EmployeeTab.fxml" />
          </content>
       </Tab>
+      <Tab fx:id="purchaseTab" text="Purchases">
+      	 <content>
+            <fx:include source="PurchaseTab.fxml" />
+         </content>
+      </Tab>
    </tabs>
 </TabPane>

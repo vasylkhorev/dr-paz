@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import sk.upjs.LoggedUser;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.entities.Employee;
 
@@ -87,6 +88,7 @@ public class LoginController {
 
 	void showEditSubject(String filepath) {
 		try {
+			LoggedUser.INSTANCE.setLoggedUser(currentUser);
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(filepath));
 			//controller specified in fxml
 			//MainTabPaneController mainTabPaneController = new MainTabPaneController();

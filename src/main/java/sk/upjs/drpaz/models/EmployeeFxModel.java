@@ -17,7 +17,6 @@ public class EmployeeFxModel {
 	private StringProperty surname = new SimpleStringProperty();
 	private StringProperty phone = new SimpleStringProperty();
 	private StringProperty email = new SimpleStringProperty();
-	//login and password needed???
 	private StringProperty login = new SimpleStringProperty();
 	private StringProperty password = new SimpleStringProperty();
 	private StringProperty role = new SimpleStringProperty();

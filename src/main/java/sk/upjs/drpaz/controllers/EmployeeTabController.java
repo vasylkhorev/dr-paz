@@ -1,12 +1,14 @@
 package sk.upjs.drpaz.controllers;
 
 
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import sk.upjs.LoggedUser;
 import sk.upjs.drpaz.models.EmployeeFxModel;
 import sk.upjs.drpaz.storage.entities.Employee;
 
@@ -14,24 +16,22 @@ public class EmployeeTabController {
 
 	private EmployeeFxModel model;
 	
+	private Employee currentUser;
+	
     @FXML
     private TableView<Employee> allEmployeeTableView;
-
     @FXML
-    private TextField employeeNameTextField;
-
+    private MFXTextField employeeNameTextField;
     @FXML
-    private TextField employeeSurnameTextField;
-
+    private MFXTextField employeeSurnameTextField;
+    @FXML
+    private TableColumn<Employee, Integer> idAllColumn;
     @FXML
     private TableColumn<Employee, String> nameAllColumn;
-
     @FXML
     private TableColumn<Employee, String> surnameAllColumn;
-    
     @FXML
     private TableColumn<Employee, String> phoneAllColumn;
-
     @FXML
     private TableColumn<Employee, String> emailAllColumn;
     
@@ -46,6 +46,7 @@ public class EmployeeTabController {
     
     @FXML
     void initialize() {
+    	currentUser = LoggedUser.INSTANCE.getLoggedUser();
     	employeeNameTextField.textProperty().bindBidirectional(model.nameProperty());
     	employeeSurnameTextField.textProperty().bindBidirectional(model.surnameProperty());
     	setAllColumns();
@@ -68,6 +69,7 @@ public class EmployeeTabController {
     }
     
     void setAllColumns() {
+    	idAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("id"));
     	nameAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));
     	surnameAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("surname"));
     	phoneAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("phone"));
