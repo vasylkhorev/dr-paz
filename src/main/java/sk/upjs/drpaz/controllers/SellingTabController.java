@@ -29,6 +29,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
@@ -43,7 +44,9 @@ import sk.upjs.drpaz.storage.entities.Product;
 import sk.upjs.drpaz.storage.entities.Purchase;
 
 public class SellingTabController {
-
+	
+    @FXML
+    private SplitPane splitPane;
 	private ProductFxModel model;
 	@FXML
 	private MFXButton cancelButton;
@@ -121,7 +124,10 @@ public class SellingTabController {
 	@FXML
 	void initialize() {
 		
-
+		splitPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
+						setWidth();
+		});
+		
 		addColumnsToAllProducts();
 		addColumnsToPurchase();
 
@@ -194,13 +200,16 @@ public class SellingTabController {
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 		alertQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("alertQuantity"));
 		descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-//		adsda
+		setWidth();
+
+	}
+
+	private void setWidth() {
 		nameColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.196));
 		priceColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.1));
 		quantityColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.10));
 		alertQuantityColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.15));
 		descriptionColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.4465));
-
 	}
 
 	private void productsInPurchaseListener() {

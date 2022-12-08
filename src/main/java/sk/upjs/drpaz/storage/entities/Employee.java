@@ -115,6 +115,6 @@ public class Employee {
 
 	@Override
 	public String toString() {
-		return this.getId()  + " "+ this.name + " " + this.surname;
+		return this.name + " " + this.surname;
 	}
 }

@@ -13,7 +13,7 @@
             <fx:include source="SellingTab.fxml" />
          </content>
          <graphic>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Selling">
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;" stylesheets="@../../../../css/FXMaterialButton.css" text="Selling">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -28,7 +28,7 @@
             <fx:include source="AddingTab.fxml" />
          </content>
          <graphic>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Adding">
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;" stylesheets="@../../../../css/FXMaterialButton.css" text="Adding">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -43,7 +43,7 @@
             <fx:include source="EmployeeTabNoAdmin.fxml" />
          </content>
          <graphic>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Employee's">
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;" stylesheets="@../../../../css/FXMaterialButton.css" text="Employee's">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -58,7 +58,7 @@
             <fx:include source="PurchaseTab.fxml" />
          </content>
          <graphic>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Purchase's">
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;" stylesheets="@../../../../css/FXMaterialButton.css" text="Purchase's">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
