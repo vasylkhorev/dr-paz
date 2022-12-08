@@ -1,6 +1,7 @@
 package sk.upjs.drpaz.storage.entities;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -61,6 +62,10 @@ public class Purchase {
 
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+	
+	public String getFormattedDate() {
+		return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm:ss"));
 	}
 	
 	@Override

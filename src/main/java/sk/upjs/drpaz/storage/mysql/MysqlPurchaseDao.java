@@ -153,8 +153,26 @@ public class MysqlPurchaseDao implements PurchaseDao {
 	@Override
 	public List<Purchase> getByDate(LocalDateTime datetimeStart, LocalDateTime datetimeEnd)
 			throws NullPointerException, NoSuchElementException {
-		if (datetimeStart == null || datetimeEnd == null)
-			throw new NullPointerException("dates cannot be null");
+		if (datetimeStart == null && datetimeEnd == null)
+			throw new NullPointerException("both dates cannot be null");
+		if(datetimeEnd == null && datetimeStart != null) {
+			String sql = "SELECT id, employee_id, created_at FROM purchase WHERE created_at > ? ";
+			try {
+				return jdbcTemplate.query(sql, new PurchaseRowMapper(), datetimeStart);
+			} catch (DataAccessException e) {
+				throw new NoSuchElementException(
+						"No Purchase after " + datetimeStart.toString());
+			}
+		}
+		if(datetimeEnd != null && datetimeStart == null) {
+			String sql = "SELECT id, employee_id, created_at FROM purchase WHERE created_at < ? ";
+			try {
+				return jdbcTemplate.query(sql, new PurchaseRowMapper(), datetimeEnd);
+			} catch (DataAccessException e) {
+				throw new NoSuchElementException(
+						"No Purchase after " + datetimeStart.toString());
+			}
+		}
 		String sql = "SELECT id, employee_id, created_at FROM purchase WHERE created_at BETWEEN ? AND ?";
 		try {
 			return jdbcTemplate.query(sql, new PurchaseRowMapper(), datetimeStart, datetimeEnd);
