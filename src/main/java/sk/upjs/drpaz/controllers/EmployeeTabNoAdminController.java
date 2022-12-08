@@ -6,13 +6,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sk.upjs.drpaz.LoggedUser;
 import sk.upjs.drpaz.models.EmployeeFxModel;
 import sk.upjs.drpaz.storage.entities.Employee;
 
-public class EmployeeTabController {
+public class EmployeeTabNoAdminController {
 
 	private EmployeeFxModel model;
 	
@@ -34,13 +33,14 @@ public class EmployeeTabController {
     private TableColumn<Employee, String> phoneAllColumn;
     @FXML
     private TableColumn<Employee, String> emailAllColumn;
-    
+    @FXML
+    private TableColumn<Employee, String> roleAllColumn;
 
-    public EmployeeTabController() {
+    public EmployeeTabNoAdminController() {
     	model = new EmployeeFxModel();
     }
     
-    public EmployeeTabController(Employee employee) {
+    public EmployeeTabNoAdminController(Employee employee) {
     	model = new EmployeeFxModel(employee);
     }
     
@@ -74,7 +74,7 @@ public class EmployeeTabController {
     	surnameAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("surname"));
     	phoneAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("phone"));
     	emailAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("email"));
-    	
+    	roleAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));
     }
 
 }

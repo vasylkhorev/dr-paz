@@ -42,9 +42,12 @@ public class LoginController {
 		} else {
 			if (currentUser.getRole().equals("Admin")) {
 				passwordField.getScene().getWindow().hide();
-				showEditSubject("MainTabPane.fxml");
+				showEditSubject("MainTabPaneAdmin.fxml");
+				
+			}else if (currentUser.getRole().equals("Predaj")) {
+				passwordField.getScene().getWindow().hide();
+				showEditSubject("MainTabPaneNoAdmin.fxml");
 			}
-			
 		}
 	}
 	@FXML
@@ -84,6 +87,7 @@ public class LoginController {
 			Scene scene = new Scene(parent);
 			stage = new Stage();
 			stage.setScene(scene);
+			stage.setTitle("Dr.Paz");
 			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();

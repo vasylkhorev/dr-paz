@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+
+<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.MainTabPaneAdminController">
+   <tabs>
+      <Tab fx:id="sellingTab" onSelectionChanged="#onSellingTabClicked" text="Selling">
+         <content>
+            <fx:include source="SellingTab.fxml" />
+         </content>
+      </Tab>
+      <Tab fx:id="addingTab" onSelectionChanged="#onAddingTabClicked" text="Adding">
+      	 <content>
+            <fx:include source="AddingTab.fxml" />
+         </content>
+      </Tab>
+      <Tab fx:id="employeeTab" text="Employee's">
+      	 <content>
+            <fx:include source="EmployeeTabAdmin.fxml" />
+         </content>
+      </Tab>
+      <Tab fx:id="purchaseTab" text="Purchase's">
+      	 <content>
+            <fx:include source="PurchaseTab.fxml" />
+         </content>
+      </Tab>
+   </tabs>
+</TabPane>

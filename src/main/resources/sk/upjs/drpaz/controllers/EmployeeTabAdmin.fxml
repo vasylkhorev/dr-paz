@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+
+<SplitPane dividerPositions="0.6035058430717863" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.EmployeeTabAdminController">
+   <items>
+      <BorderPane prefHeight="430.0" prefWidth="303.0">
+         <top>
+            <GridPane prefHeight="50.0" prefWidth="722.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <MFXTextField fx:id="employeeNameTextField" floatMode="BORDER" floatingText="Type employee name here..." floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0">
+                     <font>
+                        <Font name="Corbel" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </GridPane.margin>
+                  </MFXTextField>
+                  <MFXTextField fx:id="employeeSurnameTextField" floatMode="BORDER" floatingText="Type employee surname here..." floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Corbel" size="14.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </MFXTextField>
+               </children>
+            </GridPane>
+         </top>
+         <center>
+            <MFXLegacyTableView fx:id="allEmployeeTableView" prefHeight="363.0" prefWidth="295.0" stylesheets="@../../../../css/FXMaterialTableView.css" BorderPane.alignment="CENTER">
+               <columns>
+                  <TableColumn fx:id="idAllColumn" prefWidth="75.0" text="Id" />
+                  <TableColumn fx:id="nameAllColumn" prefWidth="103.0" text="Name" />
+                  <TableColumn fx:id="surnameAllColumn" minWidth="0.0" prefWidth="129.0" text="Surname" />
+                  <TableColumn fx:id="phoneAllColumn" prefWidth="145.0" text="Phone" />
+                  <TableColumn fx:id="emailAllColumn" prefWidth="148.0" text="Email" />
+                  <TableColumn fx:id="roleAllColumn" prefWidth="79.0" text="Role" />
+               </columns>
+               <BorderPane.margin>
+                  <Insets left="20.0" right="20.0" top="10.0" />
+               </BorderPane.margin>
+            </MFXLegacyTableView>
+         </center>
+         <bottom>
+            <GridPane prefHeight="56.0" prefWidth="595.0" BorderPane.alignment="CENTER">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <MFXButton onAction="#deleteButtonClick" prefHeight="36.0" prefWidth="90.0" style="-fx-background-color: #5164ae;" text="DELETE" textFill="WHITE" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="Corbel" size="17.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton onAction="#editButtonClick" prefWidth="90.0" style="-fx-background-color: #5164ae;" text="EDIT" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="Corbel" size="17.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton onAction="#newButtonClick" prefWidth="90.0" style="-fx-background-color: #5164ae;" text="NEW" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="Corbel" size="17.0" />
+                     </font>
+                  </MFXButton>
+               </children>
+            </GridPane>
+         </bottom>
+      </BorderPane>
+      <GridPane prefHeight="798.0" prefWidth="437.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="186.0" minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="148.0" minHeight="0.0" prefHeight="80.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="233.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="237.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="223.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="280.0" minHeight="10.0" prefHeight="79.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="459.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="359.0" minHeight="10.0" prefHeight="177.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <MFXTextField fx:id="employeeEditEmailTextField" floatMode="BORDER" floatingText="Employee e-mail" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="4">
+               <font>
+                  <Font name="Corbel" size="14.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
+            </MFXTextField>
+            <MFXTextField fx:id="employeeEditPhoneTextField" floatMode="BORDER" floatingText="Employee phone" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Corbel" size="14.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
+            </MFXTextField>
+            <MFXTextField fx:id="employeeEditSurnameTextField" floatMode="BORDER" floatingText="Employee surname" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="2">
+               <font>
+                  <Font name="Corbel" size="14.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
+            </MFXTextField>
+            <MFXTextField fx:id="employeeEditNameTextField" floatMode="BORDER" floatingText="Employee name" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Corbel" size="14.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
+            </MFXTextField>
+            <MFXButton fx:id="saveButton" onAction="#saveButtonClick" prefHeight="49.0" prefWidth="122.0" style="-fx-background-color: #5164ae;" text="SAVE" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="Corbel" size="17.0" />
+               </font>
+            </MFXButton>
+            <Label fx:id="newEmployeeLabel" text="New Employee" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="Corbel Bold" size="17.0" />
+               </font>
+            </Label>
+            <MFXFilterComboBox fx:id="roleComboBox" floatMode="BORDER" floatingText="Employee role" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="309.0" GridPane.rowIndex="5">
+               <font>
+                  <Font name="Corbel" size="14.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
+            </MFXFilterComboBox>
+         </children>
+      </GridPane>
+   </items>
+</SplitPane>

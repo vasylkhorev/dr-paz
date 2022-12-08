@@ -3,7 +3,7 @@ package sk.upjs.drpaz.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 
-public class MainTabPaneController {
+public class MainTabPaneNoAdminController {
 
 	@FXML
 	private Tab sellingTab;
@@ -21,7 +21,7 @@ public class MainTabPaneController {
 	private Tab employeeTab;
 
 	@FXML
-	private EmployeeTabController employeeTabController;
+	private EmployeeTabNoAdminController employeeTabNoAdminController;
 
 	@FXML
 	void onSellingTabClicked() {
@@ -37,3 +37,4 @@ public class MainTabPaneController {
 	}
 
 }
+

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 
-<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.MainTabPaneController">
+<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.MainTabPaneNoAdminController">
    <tabs>
       <Tab fx:id="sellingTab" onSelectionChanged="#onSellingTabClicked" text="Selling">
          <content>
@@ -17,7 +17,7 @@
       </Tab>
       <Tab fx:id="employeeTab" text="Employee's">
       	 <content>
-            <fx:include source="EmployeeTab.fxml" />
+            <fx:include source="EmployeeTabNoAdmin.fxml" />
          </content>
       </Tab>
       <Tab fx:id="purchaseTab" text="Purchase's">

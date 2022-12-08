@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
 <?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -32,5 +35,30 @@
       <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" />
       <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <MFXDatePicker>
+         <GridPane.margin>
+            <Insets left="480.0" />
+         </GridPane.margin>
+      </MFXDatePicker>
+      <MFXDatePicker>
+         <GridPane.margin>
+            <Insets left="100.0" />
+         </GridPane.margin>
+      </MFXDatePicker>
+      <Label text="From:">
+         <GridPane.margin>
+            <Insets left="50.0" />
+         </GridPane.margin>
+      </Label>
+      <Label text="To:">
+         <GridPane.margin>
+            <Insets left="450.0" />
+         </GridPane.margin>
+      </Label>
+      <MFXButton fx:id="refreshButton" maxWidth="-Infinity" onAction="#refreshButtonClick" prefHeight="34.0" prefWidth="61.0" rippleColor="#9d8c8c" style="-fx-border-color: #9d8c8c; -fx-border-radius: 5;" text="Refresh" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets left="20.0" right="20.0" />
+         </GridPane.margin>
+      </MFXButton>
    </children>
 </GridPane>

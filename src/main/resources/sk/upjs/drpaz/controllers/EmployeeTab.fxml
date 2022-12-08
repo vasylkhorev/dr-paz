@@ -10,10 +10,10 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.EmployeeTabController">
+<GridPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.EmployeeTabController">
    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1003.0" minWidth="10.0" prefWidth="942.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="593.3333129882812" minWidth="10.0" prefWidth="259.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1003.0" minWidth="10.0" prefWidth="730.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="593.3333129882812" minWidth="10.0" prefWidth="459.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints maxHeight="251.00001525878906" minHeight="0.0" prefHeight="43.666677474975586" vgrow="SOMETIMES" />
@@ -21,23 +21,24 @@
       <RowConstraints maxHeight="80.33331298828125" minHeight="10.0" prefHeight="41.66668701171875" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <MFXTextField fx:id="employeeNameTextField" floatMode="BORDER" floatingText="Type employee name here..." prefHeight="33.0" prefWidth="342.0">
+      <MFXTextField fx:id="employeeNameTextField" floatMode="BORDER" floatingText="Type employee name here..." prefHeight="38.0" prefWidth="260.0">
          <GridPane.margin>
-            <Insets left="50.0" right="550.0" />
+            <Insets left="20.0" right="450.0" />
          </GridPane.margin>
       </MFXTextField>
-      <MFXTextField fx:id="employeeSurnameTextField" floatMode="BORDER" floatingText="Type employee surname here..." prefHeight="33.0" prefWidth="342.0">
+      <MFXTextField fx:id="employeeSurnameTextField" floatMode="BORDER" floatingText="Type employee surname here..." prefHeight="38.0" prefWidth="260.0">
          <GridPane.margin>
-            <Insets left="550.0" right="50.0" />
+            <Insets left="450.0" right="20.0" />
          </GridPane.margin>
       </MFXTextField>
       <MFXLegacyTableView fx:id="allEmployeeTableView" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../../../css/FXMaterialTableView.css" GridPane.rowIndex="1">
          <columns>
-            <TableColumn fx:id="idAllColumn" prefWidth="91.0" text="Id" />
-            <TableColumn fx:id="nameAllColumn" prefWidth="163.0" text="Name" />
-            <TableColumn fx:id="surnameAllColumn" minWidth="0.0" prefWidth="232.0" text="Surname" />
-            <TableColumn fx:id="phoneAllColumn" prefWidth="209.0" text="Phone" />
-            <TableColumn fx:id="emailAllColumn" prefWidth="206.0" text="Email" />
+            <TableColumn fx:id="idAllColumn" prefWidth="75.0" text="Id" />
+            <TableColumn fx:id="nameAllColumn" prefWidth="103.0" text="Name" />
+            <TableColumn fx:id="surnameAllColumn" minWidth="0.0" prefWidth="124.0" text="Surname" />
+            <TableColumn fx:id="phoneAllColumn" prefWidth="129.0" text="Phone" />
+            <TableColumn fx:id="emailAllColumn" prefWidth="155.0" text="Email" />
+            <TableColumn fx:id="roleAllColumn" prefWidth="115.0" text="Role" />
          </columns>
          <GridPane.margin>
             <Insets left="20.0" right="20.0" />
