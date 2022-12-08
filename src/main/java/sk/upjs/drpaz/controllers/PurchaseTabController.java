@@ -45,7 +45,12 @@ public class PurchaseTabController {
     		model = new PurchaseFxModel();
     	}
     	setAllColumns();
-    	allPurchasesTableView.setItems(model.getAllPurchasesModel());
+    	// LOOK HERE
+    	// its better to use :
+    	allPurchasesTableView.getItems().clear();
+    	allPurchasesTableView.getItems().addAll(model.getAllPurchasesModel());
+    	// than
+//    	allPurchasesTableView.setItems(model.getAllPurchasesModel());
     }
 
     @FXML

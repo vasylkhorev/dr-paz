@@ -6,14 +6,14 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.text.Font?>
 
-<TabPane fx:id="tabPane" style="-fx-background-color: white;" stylesheets="@../../../../css/FXMaterialTabPane.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.MainTabPaneAdminController">
+<TabPane fx:id="tabPane" style="-fx-background-color: transparent;" stylesheets="@../../../../css/FXMaterialTabPane.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.MainTabPaneController">
    <tabs>
       <Tab fx:id="sellingTab" onSelectionChanged="#onSellingTabClicked" style="-fx-pref-height: 50;">
          <content>
             <fx:include source="SellingTab.fxml" />
          </content>
          <graphic>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onSellingTabClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Selling">
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Selling">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -28,7 +28,7 @@
             <fx:include source="AddingTab.fxml" />
          </content>
          <graphic>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Adding">
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Adding">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -40,10 +40,10 @@
       </Tab>
       <Tab fx:id="employeeTab" style="-fx-pref-height: 50;">
       	 <content>
-            <fx:include source="EmployeeTabAdmin.fxml" />
+            <fx:include source="EmployeeTab.fxml" />
          </content>
          <graphic>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Employee's">
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Employee's">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -58,7 +58,7 @@
             <fx:include source="PurchaseTab.fxml" />
          </content>
          <graphic>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Purchase's">
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Purchase's">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

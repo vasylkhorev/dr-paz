@@ -1,29 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.text.Font?>
 
-<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.MainTabPaneNoAdminController">
+<TabPane fx:id="tabPane" style="-fx-background-color: white;" stylesheets="@../../../../css/FXMaterialTabPane.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.MainTabPaneNoAdminController">
    <tabs>
-      <Tab fx:id="sellingTab" onSelectionChanged="#onSellingTabClicked" text="Selling">
+      <Tab fx:id="sellingTab" onSelectionChanged="#onSellingTabClicked" style="-fx-pref-height: 50;">
          <content>
             <fx:include source="SellingTab.fxml" />
          </content>
+         <graphic>
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Selling">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="Corbel" size="15.0" />
+               </font>
+            </Label>
+         </graphic>
       </Tab>
-      <Tab fx:id="addingTab" onSelectionChanged="#onAddingTabClicked" text="Adding">
+      <Tab fx:id="addingTab" onSelectionChanged="#onAddingTabClicked" style="-fx-pref-height: 50;">
       	 <content>
             <fx:include source="AddingTab.fxml" />
          </content>
+         <graphic>
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Adding">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="Corbel" size="15.0" />
+               </font>
+            </Label>
+         </graphic>
       </Tab>
-      <Tab fx:id="employeeTab" text="Employee's">
+      <Tab fx:id="employeeTab" style="-fx-pref-height: 50;">
       	 <content>
             <fx:include source="EmployeeTabNoAdmin.fxml" />
          </content>
+         <graphic>
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Employee's">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="Corbel" size="15.0" />
+               </font>
+            </Label>
+         </graphic>
       </Tab>
-      <Tab fx:id="purchaseTab" text="Purchase's">
+      <Tab fx:id="purchaseTab" style="-fx-pref-height: 50;">
       	 <content>
             <fx:include source="PurchaseTab.fxml" />
          </content>
+         <graphic>
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5;" stylesheets="@../../../../css/FXMaterialButton.css" text="Purchase's">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="Corbel" size="15.0" />
+               </font>
+            </Label>
+         </graphic>
       </Tab>
    </tabs>
 </TabPane>

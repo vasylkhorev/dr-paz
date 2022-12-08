@@ -1,0 +1,7 @@
+* :disabled, .button:disabled > * {
+ 	-fx-opacity: 1.0 ;
+}
+* {
+	-fx-text-fill: black;
+	-fx-background-color: #6DB4FE;
+}

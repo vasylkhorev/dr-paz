@@ -84,7 +84,6 @@ public class AddingTabController {
 	@FXML
 	void newButtonClick(ActionEvent event) {
 		edited = null;
-		
 		newProductLabel.setText("New product");
 		clearFields();
 		nameTextField.requestFocus();
