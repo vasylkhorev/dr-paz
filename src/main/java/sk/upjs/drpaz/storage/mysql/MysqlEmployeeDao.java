@@ -140,14 +140,14 @@ public class MysqlEmployeeDao implements EmployeeDao {
 		} catch (EmptyResultDataAccessException e) {
 			return false;
 		}
-			sql = "UPDATE employee SET login=?,password=? WHERE login=?";
-			if (BCrypt.checkpw(oldPassword, employee.getPassword())) {
-				int updated = jdbcTemplate.update(sql, newLogin, BCrypt.hashpw(newPassword, BCrypt.gensalt()),
-						oldLogin);
-				if (updated == 1) {
-					return true;
-				}
+		sql = "UPDATE employee SET login=?,password=? WHERE login=?";
+		if (BCrypt.checkpw(oldPassword, employee.getPassword())) {
+			int updated = jdbcTemplate.update(sql, newLogin, BCrypt.hashpw(newPassword, BCrypt.gensalt()),
+					oldLogin);
+			if (updated == 1) {
+				return true;
 			}
+		}
 		return false;
 	}
 

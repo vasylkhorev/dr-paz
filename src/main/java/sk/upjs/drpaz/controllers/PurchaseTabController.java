@@ -52,13 +52,11 @@ public class PurchaseTabController {
 		} else {
 			model = new PurchaseFxModel();
 		}
+		fromDatePicker.setValue(null);
+		toDatePicker.setValue(null);
 		setAllColumns();
-		// LOOK HERE
-		// its better to use :
 		allPurchasesTableView.getItems().clear();
 		allPurchasesTableView.getItems().addAll(model.getAllPurchasesModel());
-		// than
-//    	allPurchasesTableView.setItems(model.getAllPurchasesModel());
 	}
 
 	@FXML
@@ -81,12 +79,16 @@ public class PurchaseTabController {
 
 	private void refreshDates() {
 		allPurchasesTableView.getItems().clear();
+		/* MysqlPurchaseDao,getByDate() -> both dates cannot be null otherwise NullPointerException
+		
 		if (fromDatePicker.getValue() == null && toDatePicker.getValue() == null) {
 			allPurchasesTableView.getItems()
 					.addAll(FXCollections.observableArrayList(DaoFactory.INSTANCE.getPurchaseDao().getByDate(
 							null, null)));
 			return;
 		}
+		
+		*/
 		if (fromDatePicker.getValue() != null && toDatePicker.getValue() == null) {
 			allPurchasesTableView.getItems()
 					.addAll(FXCollections.observableArrayList(DaoFactory.INSTANCE.getPurchaseDao().getByDate(
@@ -96,11 +98,13 @@ public class PurchaseTabController {
 		if (fromDatePicker.getValue() == null && toDatePicker.getValue() != null) {
 			allPurchasesTableView.getItems()
 					.addAll(FXCollections.observableArrayList(DaoFactory.INSTANCE.getPurchaseDao().getByDate(
-							null,  toDatePicker.getValue().atStartOfDay())));
+							null,  toDatePicker.getValue().plusDays(1).atStartOfDay())));
 			return;
 		}
-		allPurchasesTableView.getItems().addAll(FXCollections.observableArrayList(DaoFactory.INSTANCE.getPurchaseDao()
-				.getByDate(fromDatePicker.getValue().atStartOfDay(), toDatePicker.getValue().atStartOfDay())));
+		if (fromDatePicker.getValue() != null && toDatePicker.getValue() != null) {
+			allPurchasesTableView.getItems().addAll(FXCollections.observableArrayList(DaoFactory.INSTANCE.getPurchaseDao()
+					.getByDate(fromDatePicker.getValue().atStartOfDay(), toDatePicker.getValue().plusDays(1).atStartOfDay())));
+		}
 	}
 
 	private void setAllColumns() {

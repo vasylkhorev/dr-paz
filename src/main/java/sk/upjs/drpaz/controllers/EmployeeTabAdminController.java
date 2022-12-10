@@ -2,9 +2,11 @@ package sk.upjs.drpaz.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
+import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
@@ -23,32 +28,46 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import sk.upjs.drpaz.LoggedUser;
 import sk.upjs.drpaz.models.EmployeeFxModel;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
+import sk.upjs.drpaz.storage.dao.EmployeeDao;
 import sk.upjs.drpaz.storage.entities.Employee;
 
 public class EmployeeTabAdminController {
 
+	private EmployeeDao employeeDao;
 	private Employee currentUser;
 	private EmployeeFxModel model = new EmployeeFxModel();	
 	private Employee edited;
 	private List<String> list = Arrays.asList("Admin","Predaj");
 	
-    @FXML
-    private MFXLegacyTableView<Employee> allEmployeeTableView;
-    @FXML
-    private MFXTextField employeeEditEmailTextField;
-    @FXML
-    private MFXTextField employeeEditNameTextField;
-    @FXML
-    private MFXTextField employeeEditPhoneTextField;
-    @FXML
-    private MFXTextField employeeEditSurnameTextField;
-    @FXML
+	@FXML
     private MFXTextField employeeNameTextField;
     @FXML
     private MFXTextField employeeSurnameTextField;
+    
+    @FXML
+    private MFXTextField employeeEditNameTextField;
+    @FXML
+    private MFXTextField employeeEditSurnameTextField;
+    @FXML
+    private MFXTextField employeeEditPhoneTextField;
+    @FXML
+    private MFXTextField employeeEditEmailTextField;
+    @FXML
+    private MFXFilterComboBox<String> roleComboBox;
+    @FXML
+    private MFXTextField employeeEditLoginTextField;
+    @FXML
+    private MFXPasswordField employeeEditPasswordTextField;
+    @FXML
+    private MFXPasswordField employeeEditConfirmPasswordTextField;
+    
+    @FXML
+    private MFXLegacyTableView<Employee> allEmployeeTableView;
     @FXML
     private TableColumn<Employee, Integer> idAllColumn;
     @FXML
@@ -62,9 +81,10 @@ public class EmployeeTabAdminController {
     @FXML
     private TableColumn<Employee, String> roleAllColumn;
     @FXML
-    private Label newEmployeeLabel;
+    private TableColumn<Employee, String> loginAllColumn;
+    
     @FXML
-    private MFXFilterComboBox<String> roleComboBox;
+    private Label newEmployeeLabel;
     @FXML
     private MFXButton saveButton;
 
@@ -79,11 +99,12 @@ public class EmployeeTabAdminController {
     @FXML
     void deleteButtonClick(ActionEvent event) {
     	deleteEmployee();
+    	newButtonClick(null);
     }
 
     @FXML
     void editButtonClick(ActionEvent event) {
-
+    	editSelectedEmployee();
     }
 
     @FXML
@@ -91,14 +112,30 @@ public class EmployeeTabAdminController {
     	edited= null;
     	newEmployeeLabel.setText("New Employee");
     	clearFields();
+    	unHideLoginPassword();
     	employeeEditNameTextField.requestFocus();
     }
-
-    private void clearFields() {
+    
+    private void hideLoginPassword() {
+    	employeeEditLoginTextField.setVisible(false);
+		employeeEditPasswordTextField.setVisible(false);
+		employeeEditConfirmPasswordTextField.setVisible(false);
+	}
+    
+    private void unHideLoginPassword() {
+		employeeEditLoginTextField.setVisible(true);
+		employeeEditPasswordTextField.setVisible(true);
+		employeeEditConfirmPasswordTextField.setVisible(true);
+	}
+	
+	private void clearFields() {
         employeeEditNameTextField.clear();
         employeeEditSurnameTextField.clear();
         employeeEditPhoneTextField.clear();
         employeeEditEmailTextField.clear();
+        employeeEditLoginTextField.clear();
+        employeeEditPasswordTextField.clear();
+        employeeEditConfirmPasswordTextField.clear();
 
         roleComboBox.clearSelection();
         
@@ -109,16 +146,30 @@ public class EmployeeTabAdminController {
 
 	@FXML
     void saveButtonClick(ActionEvent event) {
-		//TODO
+		
 		Employee newEmployee = null;
 		if (edited == null) {
-			//TODO
+			newEmployee = new Employee(
+					employeeEditNameTextField.getText(),
+					employeeEditSurnameTextField.getText(),
+					employeeEditPhoneTextField.getText(),
+					employeeEditEmailTextField.getText(),
+					employeeEditLoginTextField.getText(),
+					employeeEditPasswordTextField.getText(),
+					roleComboBox.getSelectedItem());
 		}else {
-			newEmployee = new Employee(edited.getName(), edited.getSurname(), edited.getPhone(), edited.getEmail(), edited.getLogin(), edited.getPassword(), edited.getRole());
+			newEmployee = new Employee(
+					edited.getId(),
+					employeeEditNameTextField.getText(),
+					employeeEditSurnameTextField.getText(),
+					employeeEditPhoneTextField.getText(),
+					employeeEditEmailTextField.getText(),
+					edited.getLogin(),
+					edited.getPassword(),
+					edited.getRole());
 		}
 		newEmployee = DaoFactory.INSTANCE.getEmployeeDao().save(newEmployee);
 			
-		
 		int index = model.getAllEmployeesModel().indexOf(edited);
 		if (index == -1) {
 			model.getAllEmployeesModel().add(newEmployee);
@@ -126,15 +177,18 @@ public class EmployeeTabAdminController {
 			model.getAllEmployeesModel().set(index, newEmployee);
 		}
 		
-		edited = null;
 		newEmployeeLabel.setText("Edit Employee");
 		
 		clearFields();
+		
+		edited=null;
     }
 
     @FXML
     void initialize() {
+    	employeeDao = DaoFactory.INSTANCE.getEmployeeDao();
     	currentUser = LoggedUser.INSTANCE.getLoggedUser();
+    	saveButton.setDisable(true);
     	employeeNameTextField.textProperty().bindBidirectional(model.nameProperty());
     	employeeSurnameTextField.textProperty().bindBidirectional(model.surnameProperty());
     	setRoleItem();
@@ -146,18 +200,25 @@ public class EmployeeTabAdminController {
     	allEmployeeTableView.setItems(model.getAllEmployeesModel());
     	
     	employeeNameTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue,
-				newValue) -> allEmployeeTableView.setItems((employeeSurnameTextField.getText() == null)
-															? model.getAllEmployeesModelByName(newValue)
-															: (employeeSurnameTextField.getText().isBlank())
-																? model.getAllEmployeesModelByName(newValue)
-																: model.getAllEmployeesModelByNameAndSurname(newValue, employeeSurnameTextField.getText())));
+				newValue) -> employeeSurnameSort(newValue));
     	
     	employeeSurnameTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue,
-				newValue) -> allEmployeeTableView.setItems((employeeNameTextField.getText() == null)
-															? model.getAllEmployeesModelBySurname(newValue)
-															: (employeeNameTextField.getText().isBlank())
-																? model.getAllEmployeesModelBySurname(newValue)
-    															: model.getAllEmployeesModelByNameAndSurname(employeeNameTextField.getText(), newValue)));
+				newValue) -> employeeNameSort(newValue));
+    }
+    private void employeeNameSort(String newValue) {
+    	allEmployeeTableView.setItems((employeeNameTextField.getText() == null)
+				? model.getAllEmployeesModelBySurname(newValue)
+				: (employeeNameTextField.getText().isBlank())
+					? model.getAllEmployeesModelBySurname(newValue)
+					: model.getAllEmployeesModelByNameAndSurname(employeeNameTextField.getText(), newValue));
+    }
+    
+    private void employeeSurnameSort(String newValue) {
+    	allEmployeeTableView.setItems((employeeSurnameTextField.getText() == null)
+				? model.getAllEmployeesModelByName(newValue)
+				: (employeeSurnameTextField.getText().isBlank())
+					? model.getAllEmployeesModelByName(newValue)
+					: model.getAllEmployeesModelByNameAndSurname(newValue, employeeSurnameTextField.getText()));
     }
 
 	private void employeesListener() {
@@ -168,7 +229,8 @@ public class EmployeeTabAdminController {
 			if (event.getButton().equals(MouseButton.SECONDARY)) {
 				MenuItem editItem = new MenuItem("Edit");
 				MenuItem deleteItem = new MenuItem("Delete");
-				ContextMenu contextMenu = new ContextMenu(editItem, deleteItem);
+				MenuItem changeLogin = new MenuItem("Change Login/Password");
+				ContextMenu contextMenu = new ContextMenu(editItem, deleteItem, changeLogin);
 				contextMenu.setX(event.getScreenX());
 				contextMenu.setY(event.getScreenY());
 				contextMenu.show(allEmployeeTableView.getScene().getWindow());
@@ -178,9 +240,40 @@ public class EmployeeTabAdminController {
 				deleteItem.setOnAction(event1 -> {
 					deleteEmployee();
 				});
+				changeLogin.setOnAction(e -> {
+					changeLogin();
+				});
 			}	
 		});
 		
+	}
+
+	private void changeLogin() {
+		Employee e = allEmployeeTableView.getSelectionModel().getSelectedItem();
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../controllers/ChangeLogin.fxml"));
+		ChangeLoginController changeLoginController = new ChangeLoginController(e, currentUser, allEmployeeTableView);
+		fxmlLoader.setController(changeLoginController);
+		Parent parent;
+		try {
+			parent = fxmlLoader.load();
+			Scene scene = new Scene(parent);
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.setTitle("Change Login/Password");
+			stage.showAndWait();
+			refresh();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+	}
+	private void refresh() {
+		model = new EmployeeFxModel();
+		saveButton.setDisable(true);
+    	setAllColumns();
+		allEmployeeTableView.getItems().clear();
+		allEmployeeTableView.getItems().addAll(model.getAllEmployeesModel());
 	}
 
 	private void setAllColumns() {
@@ -190,6 +283,7 @@ public class EmployeeTabAdminController {
     	phoneAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("phone"));
     	emailAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("email"));
     	roleAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));
+    	loginAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("login"));
 	}
 	
 	private void setRoleItem() {
@@ -198,20 +292,71 @@ public class EmployeeTabAdminController {
 		roleComboBox.setItems(all);
 	}
 	
+	private boolean checkLoginInDB(String s) {
+		Employee employee = employeeDao.getByLogin(s);
+		if (employee == null) {
+			return false;
+		}
+		return true;
+	}
+	
 	private void checkCorrect() {
 		//TODO 
+		boolean check = true;
 		if (employeeEditNameTextField.getText() == null || employeeEditNameTextField.getText().isEmpty() || employeeEditNameTextField.getText().isBlank()) {
 			saveButton.setDisable(true);
-			return;
-		}
-		if (employeeEditSurnameTextField.getText() == null || employeeEditSurnameTextField.getText().isEmpty() || employeeEditSurnameTextField.getText().isBlank()) {
-			saveButton.setDisable(true);
-			return;
+			employeeEditNameTextField.setStyle("-fx-border-color: red");
+			check = false;
+		}else {
+			employeeEditNameTextField.setStyle("-fx-border-color: none");
 		}
 		
-		if (roleComboBox.getText() == null || roleComboBox.getText().isEmpty() || roleComboBox.getText().isBlank()) {
+		if (employeeEditSurnameTextField.getText() == null || employeeEditSurnameTextField.getText().isEmpty() || employeeEditSurnameTextField.getText().isBlank()) {
 			saveButton.setDisable(true);
-			return;
+			employeeEditSurnameTextField.setStyle("-fx-border-color: red");
+			check = false;;
+		}else {
+			employeeEditSurnameTextField.setStyle("-fx-border-color: none");
+		}
+		
+		if(edited == null) {
+			if (roleComboBox.getSelectedItem() == null || roleComboBox.getSelectedItem().isEmpty() || roleComboBox.getSelectedItem().isBlank()) {
+				saveButton.setDisable(true);
+				roleComboBox.setStyle("-fx-border-color: red");
+				check = false;
+			}else {
+				roleComboBox.setStyle("-fx-border-color: none");
+			}
+			
+			if (employeeEditLoginTextField.getText() == null || employeeEditLoginTextField.getText().isEmpty() || employeeEditLoginTextField.getText().isBlank() || checkLoginInDB(employeeEditLoginTextField.getText())) {
+				employeeEditLoginTextField.setStyle("-fx-border-color: red");
+				saveButton.setDisable(true);
+				check = false;
+			}else {	
+				employeeEditLoginTextField.setStyle("-fx-border-color: none");
+			}
+			
+			if (employeeEditPasswordTextField.getText() == null || employeeEditPasswordTextField.getText().isEmpty() || employeeEditPasswordTextField.getText().isBlank()) {
+				employeeEditPasswordTextField.setStyle("-fx-border-color: red");
+				saveButton.setDisable(true);
+				check = false;
+			}else {
+				employeeEditPasswordTextField.setStyle("-fx-border-color: none");
+			}
+			
+			//check if confirm password is null, empty, blank and not equals with password
+			if (employeeEditConfirmPasswordTextField.getText() == null || employeeEditConfirmPasswordTextField.getText().isEmpty() || employeeEditConfirmPasswordTextField.getText().isBlank() || !employeeEditConfirmPasswordTextField.getText().equals(employeeEditPasswordTextField.getText())) {
+				employeeEditConfirmPasswordTextField.setStyle("-fx-border-color: red");
+				saveButton.setDisable(true);
+				check = false;
+			}else {
+				employeeEditConfirmPasswordTextField.setStyle("-fx-border-color: none");
+			}
+		}
+		
+		
+		if (check) {
+			saveButton.setDisable(false);
 		}
 	}
 	
@@ -222,20 +367,43 @@ public class EmployeeTabAdminController {
 		employeeEditSurnameTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
 			checkCorrect();
 		});
-		/*
-		employeeEditPhoneTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+		
+		employeeEditLoginTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
 			checkCorrect();
 		});
-		employeeEditEmailTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+		employeeEditPasswordTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
 			checkCorrect();
 		});
-		*/
+		employeeEditConfirmPasswordTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+			checkCorrect();
+		});
+		
+		roleComboBox.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+			if(edited == null)
+				checkCorrect();
+		});
+		
 	}
 	
 	private void editSelectedEmployee() {
-		cancelButtonClick1(null);
-		
+		hideLoginPassword();
 		edited = allEmployeeTableView.getSelectionModel().getSelectedItem();
+		cancelButtonClick1(null);
+		clearFields();
+		
+		if (edited == null) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setContentText("Select employee for editing!");
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == alert.getButtonTypes().get(1)) {
+				return;
+			}
+		}
+		roleComboBox.selectItem(edited.getRole());
+		//? at this point we know that role is not null because of edited 
+		roleComboBox.setStyle("-fx-border-color: none");
+		saveButton.setDisable(true);
+		
 		newEmployeeLabel.setText("Edit Employee");
 		
 		employeeEditNameTextField.setText(edited.getName());
@@ -251,11 +419,8 @@ public class EmployeeTabAdminController {
 		}else {
 			employeeEditEmailTextField.clear();
 		}
-		
-		roleComboBox.selectItem(edited.getRole());
-		
 	}
-	
+
 	@FXML
 	void cancelButtonClick1(ActionEvent event) {
 		roleComboBox.clearSelection();

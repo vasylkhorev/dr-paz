@@ -2,6 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView?>
 <?import javafx.geometry.Insets?>
@@ -57,10 +58,11 @@
                <columns>
                   <TableColumn fx:id="idAllColumn" prefWidth="75.0" text="Id" />
                   <TableColumn fx:id="nameAllColumn" prefWidth="109.0" text="Name" />
-                  <TableColumn fx:id="surnameAllColumn" minWidth="0.0" prefWidth="132.0" text="Surname" />
-                  <TableColumn fx:id="phoneAllColumn" prefWidth="177.0" text="Phone" />
-                  <TableColumn fx:id="emailAllColumn" prefWidth="176.0" text="Email" />
-                  <TableColumn fx:id="roleAllColumn" prefWidth="114.0" text="Role" />
+                  <TableColumn fx:id="surnameAllColumn" minWidth="0.0" prefWidth="104.0" text="Surname" />
+                  <TableColumn fx:id="phoneAllColumn" prefWidth="146.0" text="Phone" />
+                  <TableColumn fx:id="emailAllColumn" prefWidth="173.0" text="Email" />
+                  <TableColumn fx:id="roleAllColumn" prefWidth="92.0" text="Role" />
+                  <TableColumn fx:id="loginAllColumn" prefWidth="84.0" text="Login" />
                </columns>
                <BorderPane.margin>
                   <Insets left="20.0" right="20.0" top="10.0" />
@@ -102,28 +104,24 @@
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="186.0" minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="148.0" minHeight="0.0" prefHeight="80.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="233.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="237.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="223.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="280.0" minHeight="10.0" prefHeight="79.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="459.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="359.0" minHeight="10.0" prefHeight="177.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="0.0" prefHeight="80.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="177.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <MFXTextField fx:id="employeeEditEmailTextField" floatMode="BORDER" floatingText="Employee e-mail" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="4">
+            <Label fx:id="newEmployeeLabel" text="New Employee" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
-                  <Font name="Corbel" size="14.0" />
+                  <Font name="Corbel Bold" size="17.0" />
                </font>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-               <GridPane.margin>
-                  <Insets left="50.0" right="50.0" />
-               </GridPane.margin>
-            </MFXTextField>
-            <MFXTextField fx:id="employeeEditPhoneTextField" floatMode="BORDER" floatingText="Employee phone" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="3">
+            </Label>
+            <MFXTextField fx:id="employeeEditNameTextField" floatMode="BORDER" floatingText="Employee name" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="1">
                <font>
                   <Font name="Corbel" size="14.0" />
                </font>
@@ -145,7 +143,7 @@
                   <Insets left="50.0" right="50.0" />
                </GridPane.margin>
             </MFXTextField>
-            <MFXTextField fx:id="employeeEditNameTextField" floatMode="BORDER" floatingText="Employee name" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="1">
+            <MFXTextField fx:id="employeeEditPhoneTextField" floatMode="BORDER" floatingText="Employee phone" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="3">
                <font>
                   <Font name="Corbel" size="14.0" />
                </font>
@@ -156,16 +154,17 @@
                   <Insets left="50.0" right="50.0" />
                </GridPane.margin>
             </MFXTextField>
-            <MFXButton fx:id="saveButton" onAction="#saveButtonClick" prefHeight="49.0" prefWidth="122.0" style="-fx-background-color: #5164ae;" text="SAVE" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+            <MFXTextField fx:id="employeeEditEmailTextField" floatMode="BORDER" floatingText="Employee e-mail" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="4">
                <font>
-                  <Font name="Corbel" size="17.0" />
+                  <Font name="Corbel" size="14.0" />
                </font>
-            </MFXButton>
-            <Label fx:id="newEmployeeLabel" text="New Employee" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <font>
-                  <Font name="Corbel Bold" size="17.0" />
-               </font>
-            </Label>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
+            </MFXTextField>
             <MFXFilterComboBox fx:id="roleComboBox" floatMode="BORDER" floatingText="Employee role" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="309.0" GridPane.rowIndex="5">
                <font>
                   <Font name="Corbel" size="14.0" />
@@ -174,6 +173,44 @@
                   <Insets left="50.0" right="50.0" />
                </GridPane.margin>
             </MFXFilterComboBox>
+            <MFXTextField fx:id="employeeEditLoginTextField" floatMode="BORDER" floatingText="Employee login" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="6">
+               <font>
+                  <Font name="Corbel" size="14.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
+            </MFXTextField>
+            <MFXPasswordField fx:id="employeeEditPasswordTextField" floatMode="BORDER" floatingText="Employee password" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="7">
+               <font>
+                  <Font name="Corbel" size="15.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
+            </MFXPasswordField>
+            <MFXPasswordField fx:id="employeeEditConfirmPasswordTextField" floatMode="BORDER" floatingText="Confirm Employee password" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="8">
+               <font>
+                  <Font name="Corbel" size="15.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
+            </MFXPasswordField>
+            <MFXButton fx:id="saveButton" onAction="#saveButtonClick" prefHeight="49.0" prefWidth="122.0" style="-fx-background-color: #5164ae;" text="SAVE" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="Corbel" size="17.0" />
+               </font>
+            </MFXButton>
          </children>
       </GridPane>
    </items>
