@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.StatisticsTabController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="1200.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="800.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <LineChart fx:id="dailyIncome" title="Plot of daily income" GridPane.halignment="CENTER">
+        <xAxis>
+          <CategoryAxis label="Days" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis label="Income " side="LEFT" />
+        </yAxis>
+         <GridPane.margin>
+            <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
+         </GridPane.margin>
+      </LineChart>
+   </children>
+</GridPane>

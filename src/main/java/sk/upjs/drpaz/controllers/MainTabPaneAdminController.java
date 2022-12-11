@@ -21,6 +21,7 @@ public class MainTabPaneAdminController {
 			put("employeeTab", "EmployeeTabAdmin");
 			put("purchaseTab", "PurchaseTab");
 			put("profileTab", "ProfileTab");
+			put("statisticsTab", "StatisticsTab");
 		}
 	};
 
@@ -42,7 +43,7 @@ public class MainTabPaneAdminController {
 	void initialize() {
 
 		tabPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
-			invisibleTab.setStyle("-fx-pref-width: " + ( newValue.intValue() - 5 * 107));
+			invisibleTab.setStyle("-fx-pref-width: " + ( newValue.intValue() - 6 * 107));
 		});
 
 		tabPane.getSelectionModel().clearSelection();
