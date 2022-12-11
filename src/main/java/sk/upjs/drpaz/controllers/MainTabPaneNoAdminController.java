@@ -19,10 +19,13 @@ public class MainTabPaneNoAdminController {
 		put("addingTab", "AddingTab");
 		put("employeeTab", "EmployeeTabNoAdmin");
 		put("purchaseTab", "PurchaseTab");
+		put("profileTab", "ProfileTab");
 	}};
 	
 	@FXML
 	private TabPane tabPane;
+
+	@FXML Tab invisibleTab;
 
 	@FXML
 	void onSellingTabClicked() {
@@ -33,6 +36,10 @@ public class MainTabPaneNoAdminController {
 
 	@FXML
 	void initialize() {
+		
+		tabPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
+			invisibleTab.setStyle("-fx-pref-width: " + ( newValue.intValue() - 5 * 107));
+		});
 		
 		tabPane.getSelectionModel().clearSelection();
 		

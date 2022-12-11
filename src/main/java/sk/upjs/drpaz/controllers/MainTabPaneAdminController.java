@@ -13,40 +13,51 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 public class MainTabPaneAdminController {
-	
-	private Map<String, String> tabMap = new HashMap<String, String>() {{
-		put("sellingTab", "SellingTab");
-		put("addingTab", "AddingTab");
-		put("employeeTab", "EmployeeTabAdmin");
-		put("purchaseTab", "PurchaseTab");
-	}};
-	
+
+	private Map<String, String> tabMap = new HashMap<String, String>() {
+		{
+			put("sellingTab", "SellingTab");
+			put("addingTab", "AddingTab");
+			put("employeeTab", "EmployeeTabAdmin");
+			put("purchaseTab", "PurchaseTab");
+			put("profileTab", "ProfileTab");
+		}
+	};
+
 	@FXML
 	private TabPane tabPane;
 
 	@FXML
+	Tab invisibleTab;
+
+	@FXML
 	void onSellingTabClicked() {
 	}
+
 	@FXML
 	void onAddingTabClicked() {
 	}
 
 	@FXML
 	void initialize() {
-		
+
+		tabPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
+			invisibleTab.setStyle("-fx-pref-width: " + ( newValue.intValue() - 5 * 107));
+		});
+
 		tabPane.getSelectionModel().clearSelection();
-		
+
 		tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
 			@Override
 			public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
-					try {
-						Parent root = FXMLLoader.load(this.getClass().getResource(tabMap.get(newValue.getId()) + ".fxml"));
-						
-						newValue.setContent(root);
+				try {
+					Parent root = FXMLLoader.load(this.getClass().getResource(tabMap.get(newValue.getId()) + ".fxml"));
 
-					}catch (IOException ex) {
-						ex.printStackTrace();
-					}
+					newValue.setContent(root);
+
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
 		tabPane.getSelectionModel().selectFirst();

@@ -172,6 +172,9 @@
                <GridPane.margin>
                   <Insets left="50.0" right="50.0" />
                </GridPane.margin>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
             </MFXFilterComboBox>
             <MFXTextField fx:id="employeeEditLoginTextField" floatMode="BORDER" floatingText="Employee login" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="6">
                <font>
@@ -186,7 +189,7 @@
             </MFXTextField>
             <MFXPasswordField fx:id="employeeEditPasswordTextField" floatMode="BORDER" floatingText="Employee password" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="7">
                <font>
-                  <Font name="Corbel" size="15.0" />
+                  <Font name="Corbel" size="14.0" />
                </font>
                <padding>
                   <Insets left="10.0" />
@@ -195,9 +198,9 @@
                   <Insets left="50.0" right="50.0" />
                </GridPane.margin>
             </MFXPasswordField>
-            <MFXPasswordField fx:id="employeeEditConfirmPasswordTextField" floatMode="BORDER" floatingText="Confirm Employee password" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="8">
+            <MFXPasswordField fx:id="employeeEditConfirmPasswordTextField" floatMode="BORDER" floatingText="Confirm password" floatingTextGap="0.0" maxWidth="1.7976931348623157E308" prefHeight="33.0" GridPane.rowIndex="8">
                <font>
-                  <Font name="Corbel" size="15.0" />
+                  <Font name="Corbel" size="14.0" />
                </font>
                <padding>
                   <Insets left="10.0" />

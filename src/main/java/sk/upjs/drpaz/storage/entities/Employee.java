@@ -1,5 +1,7 @@
 package sk.upjs.drpaz.storage.entities;
 
+import java.util.Objects;
+
 /**
  * <pre>
  * Employee has
@@ -117,4 +119,22 @@ public class Employee {
 	public String toString() {
 		return this.name + " " + this.surname;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Employee other = (Employee) obj;
+		return Objects.equals(email, other.email);
+	}
+	
 }

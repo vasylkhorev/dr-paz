@@ -2,34 +2,39 @@
 	-fx-background-color: transparent;
 	
 }
-
+.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button{
+	-fx-pref-width: 0;
+	-fx-opacity: 0;
+}
 .tab{
     -fx-background-color: #FFFFFF;
     -fx-background-insets: 0.0;
     -fx-background-radius: 0.0;
-	-fx-border-width: 0;
+	-fx-border-width: 0.0;
 	-fx-border-color: gray;
 }
 
 .tab:selected{
 	-fx-border-color: #D6E8FC;
-	-fx-background-radius: 5;
-	-fx-border-width: 3 0 0 0;
+	-fx-background-radius: 5.0;
+	-fx-border-width: 3.0 0.0 0.0 0.0;
 }
+
 
 .tab:focused{
  	-fx-focus-color: transparent;
 }
 
+
 .tab-pane *.tab-header-background{
-	-fx-border-width: 0 0 1 0;
+	-fx-border-width: 0.0 0.0 1.0 0.0;
 	-fx-border-color: gray;
     -fx-background-color: transparent;
 }
 
 .tab-pane *.tab-header-area{
-	-fx-padding: 0 0 3 10;
-	-fx-border-width: 0;
+	-fx-padding: 0.0 0 3.0 10.0;
+	-fx-border-width: 0.0;
 	-fx-border-color: gray;
 }
 

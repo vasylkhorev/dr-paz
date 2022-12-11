@@ -53,7 +53,7 @@ public class ChangeLoginController {
     @FXML
     void initialize() {
     	okButton.setDisable(true);
-		nameLabel.setText("Id: " + employeeToEdit.getId() + " -> " + employeeToEdit.getName() + " " + employeeToEdit.getSurname());
+		nameLabel.setText(employeeToEdit.getName() + " " + employeeToEdit.getSurname());
 		newLoginTextField.setText(employeeToEdit.getLogin());
 		correctInputListeners();
 		
@@ -78,7 +78,7 @@ public class ChangeLoginController {
 			newLoginTextField.setStyle("-fx-border-color: red");
 			check = false;
 		}else {
-			newLoginTextField.setStyle("-fx-border-color: none");
+			newLoginTextField.setStyle("-fx-border-style: none");
 		}
 		
 		if (passwordNewField.getText() == null || passwordNewField.getText().isEmpty() || passwordNewField.getText().isBlank()) {
@@ -86,7 +86,7 @@ public class ChangeLoginController {
 			passwordNewField.setStyle("-fx-border-color: red");
 			check = false;
 		}else {
-			passwordNewField.setStyle("-fx-border-color: none");
+			passwordNewField.setStyle("-fx-border-style: none");
 		}
 		
 		if (passwordNewConfirmField.getText() == null || passwordNewConfirmField.getText().isEmpty() || passwordNewConfirmField.getText().isBlank() || !passwordNewConfirmField.getText().equals(passwordNewField.getText())) {
@@ -94,7 +94,7 @@ public class ChangeLoginController {
 			passwordNewConfirmField.setStyle("-fx-border-color: red");
 			check = false;
 		}else {
-			passwordNewConfirmField.setStyle("-fx-border-color: none");
+			passwordNewConfirmField.setStyle("-fx-border-style: none");
 		}
 		
 		if (check) {
