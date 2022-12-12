@@ -1,31 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
+<?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.StatisticsTabController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="1200.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="800.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <LineChart fx:id="dailyIncome" title="Plot of daily income" GridPane.halignment="CENTER">
-        <xAxis>
-          <CategoryAxis label="Days" side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis label="Income " side="LEFT" />
-        </yAxis>
-         <GridPane.margin>
-            <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
-         </GridPane.margin>
-      </LineChart>
-   </children>
-</GridPane>
+<SplitPane dividerPositions="0.5968280467445742" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.StatisticsTabController">
+   <items>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <LineChart fx:id="dailyIncome" title="Plot of daily income">
+               <xAxis>
+                  <CategoryAxis label="Days" side="BOTTOM" />
+               </xAxis>
+               <yAxis>
+                  <NumberAxis label="Income " side="LEFT" />
+               </yAxis>
+            </LineChart>
+         </children>
+      </GridPane>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <center>
+            <MFXLegacyTableView fx:id="allProductsTableView" BorderPane.alignment="CENTER">
+               <columns>
+                  <TableColumn fx:id="nameColumn" prefWidth="172.0" text="Name" />
+                  <TableColumn fx:id="quantityColumn" prefWidth="81.0" text="Quantity" />
+                  <TableColumn fx:id="totalColumn" prefWidth="126.0" text="Total Price" />
+               </columns>
+               <BorderPane.margin>
+                  <Insets bottom="50.0" left="50.0" right="50.0" />
+               </BorderPane.margin>
+            </MFXLegacyTableView>
+         </center>
+         <top>
+            <GridPane prefHeight="75.0" prefWidth="540.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <MFXDatePicker fx:id="fromDatePicker" onAction="#onFromDatePickerClick" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="50.0" right="50.0" />
+                     </GridPane.margin>
+                  </MFXDatePicker>
+                  <MFXDatePicker fx:id="toDatePicker" onAction="#onToDatePickerClick" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="50.0" right="50.0" />
+                     </GridPane.margin>
+                  </MFXDatePicker>
+                  <Label text="From:">
+                     <GridPane.margin>
+                        <Insets left="50.0" right="50.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="To:" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets left="50.0" right="50.0" />
+                     </GridPane.margin>
+                  </Label>
+               </children>
+            </GridPane>
+         </top>
+      </BorderPane>
+   </items>
+</SplitPane>

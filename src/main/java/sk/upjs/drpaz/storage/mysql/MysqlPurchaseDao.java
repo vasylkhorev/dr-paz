@@ -78,22 +78,19 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			simpleJdbcInsertPurchaseItem.withTableName("purchase_item");
 			simpleJdbcInsertPurchaseItem.usingColumns("purchase_id", "product_id", "quantity", "price");
 			
-			//List of products without duplicates
-			List<Product> productsInPurchaseNoDup = purchase2.getProductsInPurchase().stream().distinct().collect(Collectors.toList());
-			
-			for (Product product : productsInPurchaseNoDup) {
+			for (Product product : purchase2.getProductsInPurchase()) {
 				Map<String, Object> values1 = new HashMap<>();
 				values1.put("purchase_id", id);
 				values1.put("product_id", product.getId());
 				//Using .frequency to find how many same products are in list
-				values1.put("quantity", Collections.frequency(purchase2.getProductsInPurchase(), product));
+				values1.put("quantity", product.getQuantity());
 				values1.put("price", product.getPrice());
 				simpleJdbcInsertPurchaseItem.execute(values1);
 				
 			}
 			//updating correct quantities.
-			for (Product product : productsInPurchaseNoDup) {
-				jdbcTemplate.update("UPDATE product SET quantity = quantity - ? WHERE id = ?",Collections.frequency(purchase2.getProductsInPurchase(), product), product.getId());
+			for (Product product : purchase2.getProductsInPurchase()) {
+				jdbcTemplate.update("UPDATE product SET quantity = quantity - ? WHERE id = ?",product.getQuantity(), product.getId());
 			}
 			return purchase2;
 

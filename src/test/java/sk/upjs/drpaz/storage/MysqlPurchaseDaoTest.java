@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Timestamp;
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -197,14 +198,14 @@ class MysqlPurchaseDaoTest {
 		Purchase savedPurchase = purchaseDao.save(purchase);
 		
 		List<Product> listOfProducts = purchaseDao.getProductsByPurchaseId(savedPurchase.getId());
-		List<Product> listOfCorrectProducts = Stream.of(savedProduct1,savedProduct2).collect(Collectors.toList());
+		List<Product> listOfCorrectProducts = Arrays.asList(savedProduct1,savedProduct2);
 
 		for (int i = 0; i < listOfCorrectProducts.size(); i++) {
 			assertEquals(listOfProducts.get(i).getId(),listOfCorrectProducts.get(i).getId());
 			assertEquals(listOfProducts.get(i).getName(),listOfCorrectProducts.get(i).getName());
 			assertEquals(listOfProducts.get(i).getPrice(),listOfCorrectProducts.get(i).getPrice());
 			//reminder getProductsByPurchaseId creates Products where quantity represent number in purchase!
-			assertEquals(listOfProducts.get(i).getQuantity(),1);
+			assertEquals(listOfProducts.get(i).getQuantity(),listOfCorrectProducts.get(i).getQuantity());
 			assertEquals(listOfProducts.get(i).getAlertQuantity(),listOfCorrectProducts.get(i).getAlertQuantity());
 			assertEquals(listOfProducts.get(i).getDescription(),listOfCorrectProducts.get(i).getDescription());
 		}
@@ -219,12 +220,11 @@ class MysqlPurchaseDaoTest {
 	void getTotalPriceByIdTest() {
 		List<Product> productsListTotalTest = new ArrayList<>();
 		double totalPrice = (savedProduct1.getPrice()*5)+(savedProduct2.getPrice()*7); 
-		for (int i = 0; i < 5; i++) {
-			productsListTotalTest.add(savedProduct1);
-		}
-		for (int i = 0; i < 7; i++) {
-			productsListTotalTest.add(savedProduct2);
-		}
+		savedProduct1.setQuantity(5);
+		productsListTotalTest.add(savedProduct1);
+		savedProduct2.setQuantity(7);
+		productsListTotalTest.add(savedProduct2);
+
 		Purchase purchaseTotalTest = new Purchase();
 		
 		purchaseTotalTest.setEmployee(savedEmployee);

@@ -207,7 +207,6 @@ public class EmployeeTabAdminController {
 				stage.setTitle("Login");
 				stage.show();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -497,7 +496,6 @@ public class EmployeeTabAdminController {
 
 		DaoFactory.INSTANCE.getEmployeeDao().delete(selected.getId());
 		allEmployeeTableView.getItems().remove(selected);
-		clearFields();
-		newEmployeeLabel.setText("New employee");
+		newButtonClick(null);
 	}
 }

@@ -71,7 +71,7 @@
 				</Label>
 			</graphic>
 		</Tab>
-		<Tab fx:id="invisibleTab" disable="true" style="-fx-pref-width: 700;" text="invisible">
+		<Tab fx:id="invisibleTab" disable="true" style="-fx-pref-width: 700;">
          <graphic>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" />
          </graphic>

@@ -11,22 +11,58 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
+import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.entities.Purchase;
+import sk.upjs.drpaz.biznis.ProductStatistics;
+import sk.upjs.drpaz.biznis.ProductStatisticsImpl;
+import sk.upjs.drpaz.biznis.ProductStatisticsManager;
 
 public class StatisticsTabController {
 
 	@FXML
-	private LineChart<String, Number> dailyIncome;
+	private LineChart<String, Number> dailyIncome;	
+	@FXML
+    private MFXDatePicker fromDatePicker;
+	@FXML
+    private MFXDatePicker toDatePicker; 	
+	@FXML
+    private MFXLegacyTableView<ProductStatistics> allProductsTableView;
+    @FXML
+    private TableColumn<ProductStatistics, String> nameColumn;
+    @FXML
+    private TableColumn<ProductStatistics, Integer> quantityColumn;
+    @FXML
+    private TableColumn<ProductStatistics, Double> totalColumn;   
 
+    private ObservableList<ProductStatistics> productStatisticsModel;
+    private ProductStatisticsManager productStatisticsManager = new ProductStatisticsImpl();
+    @FXML
+    void onFromDatePickerClick(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onToDatePickerClick(ActionEvent event) {
+
+    }
+    
 	@FXML
 	void initialize() {
+		setAllColumns(null, null);
+		
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis();
 
@@ -57,6 +93,17 @@ public class StatisticsTabController {
 			}
 		});
 		dailyIncome.getData().add(series);
+	}
+
+	private void setAllColumns(LocalDateTime datetimeStart, LocalDateTime datetimeEnd) {
+		totalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
+		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
+		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+		
+		List<ProductStatistics> productStatistics = productStatisticsManager.getProductStatistics(datetimeStart, datetimeEnd);
+		productStatisticsModel = FXCollections.observableArrayList(productStatistics);
+		
+		allProductsTableView.setItems(productStatisticsModel);
 	}
 
 }
