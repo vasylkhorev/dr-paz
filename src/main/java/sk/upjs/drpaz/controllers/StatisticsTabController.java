@@ -33,41 +33,42 @@ import sk.upjs.drpaz.biznis.ProductStatisticsManager;
 public class StatisticsTabController {
 
 	@FXML
-	private LineChart<String, Number> dailyIncome;	
+	private LineChart<String, Number> dailyIncome;
 	@FXML
-    private MFXDatePicker fromDatePicker;
+	private MFXDatePicker fromDatePicker;
 	@FXML
-    private MFXDatePicker toDatePicker; 	
+	private MFXDatePicker toDatePicker;
 	@FXML
-    private MFXLegacyTableView<ProductStatistics> allProductsTableView;
-    @FXML
-    private TableColumn<ProductStatistics, String> nameColumn;
-    @FXML
-    private TableColumn<ProductStatistics, Integer> quantityColumn;
-    @FXML
-    private TableColumn<ProductStatistics, Double> totalColumn;   
+	private MFXLegacyTableView<ProductStatistics> allProductsTableView;
+	@FXML
+	private TableColumn<ProductStatistics, String> nameColumn;
+	@FXML
+	private TableColumn<ProductStatistics, Integer> quantityColumn;
+	@FXML
+	private TableColumn<ProductStatistics, Double> totalColumn;
 
-    private ObservableList<ProductStatistics> productStatisticsModel;
-    private ProductStatisticsManager productStatisticsManager = new ProductStatisticsImpl();
-    @FXML
-    void onFromDatePickerClick(ActionEvent event) {
+	private ObservableList<ProductStatistics> productStatisticsModel;
+	private ProductStatisticsManager productStatisticsManager = new ProductStatisticsImpl();
 
-    }
+	@FXML
+	void onFromDatePickerClick(ActionEvent event) {
 
-    @FXML
-    void onToDatePickerClick(ActionEvent event) {
+	}
 
-    }
-    
+	@FXML
+	void onToDatePickerClick(ActionEvent event) {
+
+	}
+
 	@FXML
 	void initialize() {
 		setAllColumns(null, null);
-		
+
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis();
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
-		series.setName("My portfolio");
+		series.setName("Last 30 days");
 
 		List<Purchase> byDate = DaoFactory.INSTANCE.getPurchaseDao()
 				.getByDate(LocalDateTime.now().toLocalDate().atStartOfDay().minusMonths(31), LocalDateTime.now());
@@ -99,10 +100,11 @@ public class StatisticsTabController {
 		totalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
 		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-		
-		List<ProductStatistics> productStatistics = productStatisticsManager.getProductStatistics(datetimeStart, datetimeEnd);
+
+		List<ProductStatistics> productStatistics = productStatisticsManager.getProductStatistics(datetimeStart,
+				datetimeEnd);
 		productStatisticsModel = FXCollections.observableArrayList(productStatistics);
-		
+
 		allProductsTableView.setItems(productStatisticsModel);
 	}
 

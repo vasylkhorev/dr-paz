@@ -81,11 +81,20 @@
 				<fx:include source="ProfileTab.fxml" />
 			</content>
          <graphic>
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../icons/usericon.png" />
-               </image>
-            </ImageView>
+            <AnchorPane prefHeight="40.0" prefWidth="2.0">
+               <children>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0">
+                     <image>
+                        <Image url="@../../../../icons/usericon.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="nameLabel" text="name and surname" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0">
+                     <font>
+                        <Font name="Corbel" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
          </graphic>
 		</Tab>
 	</tabs>

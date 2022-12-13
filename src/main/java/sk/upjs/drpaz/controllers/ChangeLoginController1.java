@@ -36,6 +36,7 @@ public class ChangeLoginController1 {
 
 	@FXML
 	void okButtonClick(ActionEvent event) {
+		// TODO 
 		boolean check = DaoFactory.INSTANCE.getEmployeeDao().changePassword(currentUser.getLogin(), oldPasswordTextField.getText(), currentUser.getLogin(), passwordNewField.getText());
     	passwordNewConfirmField.getScene().getWindow().hide();
 	}

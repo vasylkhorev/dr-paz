@@ -9,8 +9,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import sk.upjs.drpaz.LoggedUser;
 
 public class MainTabPaneNoAdminController {
 
@@ -33,14 +35,17 @@ public class MainTabPaneNoAdminController {
 	@FXML
 	void onAddingTabClicked() {
 	}
+	@FXML
+	private Label nameLabel;
 
 	@FXML
 	void initialize() {
-		
+		nameLabel.setText(
+				LoggedUser.INSTANCE.getLoggedUser().getName() + " " + LoggedUser.INSTANCE.getLoggedUser().getSurname());
+
 		tabPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
-			invisibleTab.setStyle("-fx-pref-width: " + ( newValue.intValue() - 5 * 107));
+			invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 5 * 107 - nameLabel.getWidth() - 15));
 		});
-		
 		tabPane.getSelectionModel().clearSelection();
 		
 		tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {

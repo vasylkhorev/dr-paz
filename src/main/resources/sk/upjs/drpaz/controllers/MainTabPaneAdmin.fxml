@@ -9,24 +9,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TabPane fx:id="tabPane" style="-fx-background-color: white;"
-	stylesheets="@../../../../css/FXMaterialTabPane.css"
-	tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="sk.upjs.drpaz.controllers.MainTabPaneAdminController">
+<TabPane fx:id="tabPane" style="-fx-background-color: white;" stylesheets="@../../../../css/FXMaterialTabPane.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.MainTabPaneAdminController">
 	<tabs>
-		<Tab fx:id="sellingTab" onSelectionChanged="#onSellingTabClicked"
-			style="-fx-pref-height: 50;">
+		<Tab fx:id="sellingTab" onSelectionChanged="#onSellingTabClicked" style="-fx-pref-height: 50;">
 			<content>
 				<fx:include source="SellingTab.fxml" />
 			</content>
 			<graphic>
-				<Label alignment="CENTER" contentDisplay="CENTER"
-					maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-					minWidth="-Infinity" onMouseClicked="#onSellingTabClicked"
-					prefHeight="40.0" prefWidth="100.0"
-					style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;"
-					stylesheets="@../../../../css/FXMaterialButton.css" text="Selling">
+				<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onSellingTabClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;" stylesheets="@../../../../css/FXMaterialButton.css" text="Selling">
 					<cursor>
 						<Cursor fx:constant="HAND" />
 					</cursor>
@@ -36,17 +26,12 @@
 				</Label>
 			</graphic>
 		</Tab>
-		<Tab fx:id="addingTab" onSelectionChanged="#onAddingTabClicked"
-			style="-fx-pref-height: 50;">
+		<Tab fx:id="addingTab" onSelectionChanged="#onAddingTabClicked" style="-fx-pref-height: 50;">
 			<content>
 				<fx:include source="AddingTab.fxml" />
 			</content>
 			<graphic>
-				<Label alignment="CENTER" contentDisplay="CENTER"
-					maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-					minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0"
-					style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;"
-					stylesheets="@../../../../css/FXMaterialButton.css" text="Adding">
+				<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;" stylesheets="@../../../../css/FXMaterialButton.css" text="Adding">
 					<cursor>
 						<Cursor fx:constant="HAND" />
 					</cursor>
@@ -61,13 +46,7 @@
 				<fx:include source="EmployeeTabAdmin.fxml" />
 			</content>
 			<graphic>
-				<Label alignment="CENTER" contentDisplay="CENTER"
-					maxHeight="1.7976931348623157E308"
-					maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-					minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0"
-					style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;"
-					stylesheets="@../../../../css/FXMaterialButton.css"
-					text="Employee's">
+				<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;" stylesheets="@../../../../css/FXMaterialButton.css" text="Employee's">
 					<cursor>
 						<Cursor fx:constant="HAND" />
 					</cursor>
@@ -82,12 +61,7 @@
 				<fx:include source="PurchaseTab.fxml" />
 			</content>
 			<graphic>
-				<Label alignment="CENTER" contentDisplay="CENTER"
-					maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-					minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0"
-					style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;"
-					stylesheets="@../../../../css/FXMaterialButton.css"
-					text="Purchase's">
+				<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;" stylesheets="@../../../../css/FXMaterialButton.css" text="Purchase's">
 					<cursor>
 						<Cursor fx:constant="HAND" />
 					</cursor>
@@ -103,12 +77,7 @@
 				<fx:include source="StatisticsTab.fxml" />
 			</content>
 			<graphic>
-				<Label alignment="CENTER" contentDisplay="CENTER"
-					maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-					minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0"
-					style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;"
-					stylesheets="@../../../../css/FXMaterialButton.css"
-					text="Statistics">
+				<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;" stylesheets="@../../../../css/FXMaterialButton.css" text="Statistics">
 					<cursor>
 						<Cursor fx:constant="HAND" />
 					</cursor>
@@ -118,25 +87,31 @@
 				</Label>
 			</graphic>
 		</Tab>
-		<Tab fx:id="invisibleTab" disable="true"
-			style="-fx-pref-width: 700; -fx-border-width: 0;">
+		<Tab fx:id="invisibleTab" disable="true" style="-fx-pref-width: 700; -fx-border-width: 0;">
 			<content>
-				<AnchorPane minHeight="0.0" minWidth="0.0"
-					prefHeight="180.0" prefWidth="200.0" />
+				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
 			</content>
 		</Tab>
 		<Tab fx:id="profileTab" style="-fx-pref-height: 50;">
 			<content>
 				<fx:include source="ProfileTab.fxml" />
 			</content>
-			<graphic>
-				<ImageView fitHeight="40.0" fitWidth="40.0"
-					pickOnBounds="true" preserveRatio="true">
-					<image>
-						<Image url="@../../../../icons/usericon.png" />
-					</image>
-				</ImageView>
-			</graphic>
+         <graphic>
+            <AnchorPane prefHeight="40.0" prefWidth="2.0">
+               <children>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0">
+                     <image>
+                        <Image url="@../../../../icons/usericon.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="nameLabel" text="name and surname" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0">
+                     <font>
+                        <Font name="Corbel" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </graphic>
 		</Tab>
 	</tabs>
 </TabPane>
