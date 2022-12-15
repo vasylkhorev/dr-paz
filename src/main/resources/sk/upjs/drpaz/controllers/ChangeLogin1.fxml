@@ -2,7 +2,6 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,14 +14,14 @@
             <Font name="Corbel" size="17.0" />
          </font>
       </Label>
-      <MFXTextField fx:id="oldPasswordTextField" floatMode="BORDER" floatingText="Old password" layoutX="50.0" layoutY="60.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="35.0" prefWidth="174.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
-         <padding>
-            <Insets left="10.0" />
-         </padding>
+      <MFXPasswordField fx:id="oldPasswordTextField" floatMode="BORDER" floatingText="Old password" layoutX="50.0" layoutY="60.0" maxHeight="-Infinity" minHeight="-Infinity" minWidth="150.0" prefHeight="35.0" prefWidth="238.0">
          <font>
             <Font name="Corbel" size="14.0" />
          </font>
-      </MFXTextField>
+         <padding>
+            <Insets left="10.0" right="7.0" />
+         </padding>
+      </MFXPasswordField>
       <MFXPasswordField fx:id="passwordNewField" floatMode="BORDER" floatingText="New password" layoutX="50.0" layoutY="110.0" maxHeight="-Infinity" minHeight="-Infinity" minWidth="150.0" prefHeight="35.0" prefWidth="238.0">
          <font>
             <Font name="Corbel" size="14.0" />

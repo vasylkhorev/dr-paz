@@ -3,9 +3,9 @@ package sk.upjs.drpaz.controllers;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import sk.upjs.drpaz.LoggedUser;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.entities.Employee;
@@ -21,7 +21,7 @@ public class ChangeLoginController1 {
 	private MFXButton okButton;
 
 	@FXML
-	private MFXTextField oldPasswordTextField;
+    private MFXPasswordField oldPasswordTextField;
 
 	@FXML
 	private MFXPasswordField passwordNewConfirmField;
@@ -33,12 +33,35 @@ public class ChangeLoginController1 {
 	void cancelClickButton(ActionEvent event) {
 		passwordNewConfirmField.getScene().getWindow().hide();
 	}
+	
+	@FXML
+    void initialize() {
+		correctInputListeners();
+	}
 
 	@FXML
 	void okButtonClick(ActionEvent event) {
-		// TODO 
+		 
 		boolean check = DaoFactory.INSTANCE.getEmployeeDao().changePassword(currentUser.getLogin(), oldPasswordTextField.getText(), currentUser.getLogin(), passwordNewField.getText());
-    	passwordNewConfirmField.getScene().getWindow().hide();
+		if (check) {
+			passwordNewConfirmField.getScene().getWindow().hide();
+		} else {
+			oldPasswordTextField.setStyle("-fx-border-color: red");
+		}
+	}
+	
+	private void correctInputListeners() {
+		oldPasswordTextField.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+			checkCorrect();
+		});
+		
+		passwordNewConfirmField.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+			checkCorrect();
+		});
+		
+		passwordNewField.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+			checkCorrect();
+		});
 	}
 
 	private void checkCorrect() {
@@ -53,7 +76,8 @@ public class ChangeLoginController1 {
 		}
 
 		if (passwordNewField.getText() == null || passwordNewField.getText().isEmpty()
-				|| passwordNewField.getText().isBlank()) {
+				|| passwordNewField.getText().isBlank()
+				|| !passwordNewConfirmField.getText().equals(passwordNewField.getText())) {
 			okButton.setDisable(true);
 			passwordNewField.setStyle("-fx-border-color: red");
 			check = false;

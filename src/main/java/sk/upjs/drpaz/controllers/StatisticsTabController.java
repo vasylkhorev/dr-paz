@@ -1,18 +1,15 @@
 package sk.upjs.drpaz.controllers;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +19,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
@@ -32,6 +30,8 @@ import sk.upjs.drpaz.biznis.ProductStatisticsManager;
 
 public class StatisticsTabController {
 
+	@FXML
+    private SplitPane splitPane;
 	@FXML
 	private LineChart<String, Number> dailyIncome;
 	@FXML
@@ -52,16 +52,52 @@ public class StatisticsTabController {
 
 	@FXML
 	void onFromDatePickerClick(ActionEvent event) {
-
+		refreshDates();
 	}
 
 	@FXML
 	void onToDatePickerClick(ActionEvent event) {
+		refreshDates();
+	}
 
+	private void refreshDates() {
+		allProductsTableView.getItems().clear();
+		
+		if (fromDatePicker.getValue() != null && toDatePicker.getValue() == null) {
+			allProductsTableView.getItems()
+					.addAll(FXCollections.observableArrayList(productStatisticsManager.getProductStatistics(
+								fromDatePicker.getValue().atStartOfDay(),
+								null
+							)));
+			return;
+		}
+		
+		if (fromDatePicker.getValue() == null && toDatePicker.getValue() != null) {
+			allProductsTableView.getItems()
+					.addAll(FXCollections.observableArrayList(productStatisticsManager.getProductStatistics(
+							null,
+							toDatePicker.getValue().plusDays(1).atStartOfDay()
+						)));
+			return;
+		}
+		
+		if (fromDatePicker.getValue() != null && toDatePicker.getValue() != null) {
+			allProductsTableView.getItems()
+					.addAll(FXCollections.observableArrayList(productStatisticsManager.getProductStatistics(
+							fromDatePicker.getValue().atStartOfDay(),
+							toDatePicker.getValue().plusDays(1).atStartOfDay()
+						)));
+			return;
+		}
 	}
 
 	@FXML
 	void initialize() {
+		
+		splitPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
+			setWidth();
+		});
+		
 		setAllColumns(null, null);
 
 		CategoryAxis xAxis = new CategoryAxis();
@@ -71,7 +107,7 @@ public class StatisticsTabController {
 		series.setName("Last 30 days");
 
 		List<Purchase> byDate = DaoFactory.INSTANCE.getPurchaseDao()
-				.getByDate(LocalDateTime.now().toLocalDate().atStartOfDay().minusMonths(31), LocalDateTime.now());
+				.getByDate(LocalDateTime.now().toLocalDate().atStartOfDay().minusDays(29), LocalDateTime.now());
 
 		Map<LocalDate, Double> map = new HashMap<LocalDate, Double>();
 		for (int i = 0; i < 30; i++) {
@@ -106,6 +142,13 @@ public class StatisticsTabController {
 		productStatisticsModel = FXCollections.observableArrayList(productStatistics);
 
 		allProductsTableView.setItems(productStatisticsModel);
+		setWidth();
+	}
+	
+	private void setWidth() {
+		totalColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.3));
+		quantityColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.3));
+		nameColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.401));
 	}
 
 }

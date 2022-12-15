@@ -5,60 +5,107 @@
 <?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<GridPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.PurchaseTabController">
-   <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1003.0" minWidth="10.0" prefWidth="942.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="593.3333129882812" minWidth="10.0" prefWidth="259.0" />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints maxHeight="251.00001525878906" minHeight="0.0" prefHeight="53.33332824707031" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="690.0000203450521" minHeight="10.0" prefHeight="656.6666717529297" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="80.33331298828125" minHeight="10.0" prefHeight="41.66668701171875" vgrow="SOMETIMES" />
-   </rowConstraints>
-   <children>
-      <MFXLegacyTableView fx:id="allPurchasesTableView" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../../../css/FXMaterialTableView.css" GridPane.rowIndex="1">
-         <columns>
-            <TableColumn fx:id="idAllColumn" prefWidth="223.0" text="ID of purchase" />
-            <TableColumn fx:id="employeeAllColumn" minWidth="0.0" prefWidth="323.0" text="Employee" />
-            <TableColumn fx:id="createdAllColumn" prefWidth="355.0" text="Date and time" />
-         </columns>
-         <GridPane.margin>
-            <Insets left="20.0" right="20.0" />
-         </GridPane.margin>
-      </MFXLegacyTableView>
-      <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" />
-      <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <MFXDatePicker fx:id="toDatePicker" onAction="#onToDatePickerClick">
-         <GridPane.margin>
-            <Insets left="480.0" />
-         </GridPane.margin>
-      </MFXDatePicker>
-      <MFXDatePicker fx:id="fromDatePicker" onAction="#onFromDatePickerClick">
-         <GridPane.margin>
-            <Insets left="100.0" />
-         </GridPane.margin>
-      </MFXDatePicker>
-      <Label text="From:">
-         <GridPane.margin>
-            <Insets left="50.0" />
-         </GridPane.margin>
-      </Label>
-      <Label text="To:">
-         <GridPane.margin>
-            <Insets left="450.0" />
-         </GridPane.margin>
-      </Label>
-      <MFXButton fx:id="refreshButton" maxWidth="-Infinity" onAction="#refreshButtonClick" prefHeight="34.0" prefWidth="73.0" rippleColor="#9d8c8c" style="-fx-border-color: #9d8c8c; -fx-border-radius: 5;" text="Refresh" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets left="20.0" right="20.0" />
-         </GridPane.margin>
-      </MFXButton>
-   </children>
-</GridPane>
+<SplitPane fx:id="splitPane" dividerPositions="0.6335559265442404" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.PurchaseTabController">
+  <items>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <center>
+            <MFXLegacyTableView fx:id="allPurchasesTableView" stylesheets="@../../../../css/FXMaterialTableView.css" BorderPane.alignment="CENTER">
+               <columns>
+                  <TableColumn fx:id="idAllColumn" prefWidth="132.0" text="ID of purchase" />
+                  <TableColumn fx:id="employeeAllColumn" minWidth="0.0" prefWidth="227.0" text="Employee" />
+                  <TableColumn fx:id="createdAllColumn" prefWidth="221.0" text="Date and time" />
+                  <TableColumn fx:id="totalPriceAllColumn" prefWidth="135.0" text="Total Price" />
+               </columns>
+               <BorderPane.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" />
+               </BorderPane.margin>
+            </MFXLegacyTableView>
+         </center>
+         <top>
+            <GridPane prefHeight="60.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <MFXDatePicker fx:id="fromDatePicker" onAction="#onFromDatePickerClick" promptText="From:" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="Corbel Bold" size="12.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </MFXDatePicker>
+                  <MFXDatePicker fx:id="toDatePicker" onAction="#onToDatePickerClick" promptText="To:">
+                     <font>
+                        <Font name="Corbel Bold" size="12.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="240.0" />
+                     </GridPane.margin>
+                  </MFXDatePicker>
+                  <MFXButton fx:id="refreshButton" maxWidth="-Infinity" onAction="#refreshButtonClick" prefHeight="34.0" prefWidth="73.0" rippleColor="#9d8c8c" style="-fx-border-color: #9d8c8c; -fx-border-radius: 5;" text="Refresh">
+                     <font>
+                        <Font name="Corbel" size="13.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="480.0" />
+                     </GridPane.margin>
+                  </MFXButton>
+               </children>
+            </GridPane>
+         </top>
+      </BorderPane>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <center>
+            <MFXLegacyTableView fx:id="allProductTableView" stylesheets="@../../../../css/FXMaterialTableView.css" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="10.0" left="20.0" right="20.0" />
+               </BorderPane.margin>
+               <columns>
+                  <TableColumn fx:id="nameProductAllColumn" prefWidth="182.0" text="Name" />
+                  <TableColumn fx:id="quantityProductAllColumn" prefWidth="106.0" text="Quantity" />
+                  <TableColumn fx:id="priceProductAllColumn" prefWidth="107.0" text="Price" />
+               </columns>
+            </MFXLegacyTableView>
+         </center>
+         <top>
+            <GridPane prefHeight="60.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+         </top>
+         <bottom>
+            <GridPane prefHeight="60.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label fx:id="totalLabel" text="Total: 0.00" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+            </GridPane>
+         </bottom>
+      </BorderPane>
+  </items>
+</SplitPane>

@@ -46,10 +46,8 @@ public class MainTabPaneAdminController {
 
 	@FXML
 	void initialize() {
-
 		nameLabel.setText(
 				LoggedUser.INSTANCE.getLoggedUser().getName() + " " + LoggedUser.INSTANCE.getLoggedUser().getSurname());
-
 		tabPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
 			invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 6 * 107 - nameLabel.getWidth() - 15));
 		});

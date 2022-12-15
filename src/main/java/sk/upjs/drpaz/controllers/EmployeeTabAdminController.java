@@ -11,8 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.platform.launcher.Launcher;
-
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,13 +24,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import sk.upjs.drpaz.DrPAZ;
 import sk.upjs.drpaz.LoggedUser;
 import sk.upjs.drpaz.models.EmployeeFxModel;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
@@ -47,6 +45,8 @@ public class EmployeeTabAdminController {
 	private Employee edited;
 	private List<String> list = Arrays.asList("Admin", "Predaj");
 
+	@FXML
+    private SplitPane splitPane;
 	@FXML
 	private MFXTextField employeeNameTextField;
 	@FXML
@@ -222,6 +222,10 @@ public class EmployeeTabAdminController {
 
 	@FXML
 	void initialize() {
+		splitPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
+			setWidth();
+		});
+		
 		employeeDao = DaoFactory.INSTANCE.getEmployeeDao();
 		currentUser = LoggedUser.INSTANCE.getLoggedUser();
 		saveButton.setDisable(true);
@@ -320,6 +324,7 @@ public class EmployeeTabAdminController {
 		emailAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("email"));
 		roleAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));
 		loginAllColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("login"));
+		setWidth();
 	}
 
 	private void setRoleItem() {
@@ -497,5 +502,15 @@ public class EmployeeTabAdminController {
 		DaoFactory.INSTANCE.getEmployeeDao().delete(selected.getId());
 		allEmployeeTableView.getItems().remove(selected);
 		newButtonClick(null);
+	}
+	
+	private void setWidth() {
+		idAllColumn.prefWidthProperty().bind(allEmployeeTableView.widthProperty().multiply(0.10));
+		nameAllColumn.prefWidthProperty().bind(allEmployeeTableView.widthProperty().multiply(0.15));
+		surnameAllColumn.prefWidthProperty().bind(allEmployeeTableView.widthProperty().multiply(0.15));
+		phoneAllColumn.prefWidthProperty().bind(allEmployeeTableView.widthProperty().multiply(0.15));
+		emailAllColumn.prefWidthProperty().bind(allEmployeeTableView.widthProperty().multiply(0.20));
+		roleAllColumn.prefWidthProperty().bind(allEmployeeTableView.widthProperty().multiply(0.10));
+		loginAllColumn.prefWidthProperty().bind(allEmployeeTableView.widthProperty().multiply(0.151));
 	}
 }
