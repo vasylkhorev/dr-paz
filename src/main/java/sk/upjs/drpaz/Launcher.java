@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import sk.upjs.drpaz.controllers.LoginController;
 
@@ -20,6 +21,7 @@ public class Launcher extends Application {
 		stage.setMinHeight(300);
 		stage.setScene(scene);
 		stage.setTitle("Login");
+		stage.getIcons().add(new Image("icons/icon.png"));
 		stage.show();
 
 	}
