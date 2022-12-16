@@ -148,6 +148,13 @@ public class MysqlEmployeeDao implements EmployeeDao {
 				return true;
 			}
 		}
+		if (oldPassword.equals(employee.getPassword())) {
+			int updated = jdbcTemplate.update(sql, newLogin, BCrypt.hashpw(newPassword, BCrypt.gensalt()),
+					oldLogin);
+			if (updated == 1) {
+				return true;
+			}
+		}
 		return false;
 	}
 

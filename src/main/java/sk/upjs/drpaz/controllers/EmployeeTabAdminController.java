@@ -28,6 +28,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -205,6 +206,7 @@ public class EmployeeTabAdminController {
 				stage.setMinHeight(300);
 				stage.setScene(scene);
 				stage.setTitle("Login");
+				stage.getIcons().add(new Image("icons/icon.png"));
 				stage.show();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -300,6 +302,7 @@ public class EmployeeTabAdminController {
 			stage.setScene(scene);
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.setTitle("Change login or password");
+			stage.getIcons().add(new Image("icons/icon.png"));
 			stage.showAndWait();
 			refresh();
 		} catch (IOException e1) {

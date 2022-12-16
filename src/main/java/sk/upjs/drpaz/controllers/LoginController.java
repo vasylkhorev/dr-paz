@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -80,14 +81,12 @@ public class LoginController {
 		try {
 			LoggedUser.INSTANCE.setLoggedUser(currentUser);
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(filepath));
-			//controller specified in fxml
-			//MainTabPaneController mainTabPaneController = new MainTabPaneController();
-			//fxmlLoader.setController(mainTabPaneController);
 			Parent parent = fxmlLoader.load();
 			Scene scene = new Scene(parent);
 			stage = new Stage();
 			stage.setScene(scene);
-			stage.setTitle("Dr.Paz");
+			stage.setTitle("Dr. PAZ");
+			stage.getIcons().add(new Image("icons/icon.png"));
 			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();

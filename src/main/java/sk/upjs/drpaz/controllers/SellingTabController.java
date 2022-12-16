@@ -32,6 +32,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Modality;
@@ -244,6 +245,7 @@ public class SellingTabController {
 						stage.setScene(scene);
 						stage.initModality(Modality.APPLICATION_MODAL);
 						stage.setTitle("Edit quantity");
+						stage.getIcons().add(new Image("icons/icon.png"));
 						stage.showAndWait();
 					} catch (IOException e1) {
 						e1.printStackTrace();

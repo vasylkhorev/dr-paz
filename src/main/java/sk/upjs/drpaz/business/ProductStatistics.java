@@ -1,4 +1,4 @@
-package sk.upjs.drpaz.biznis;
+package sk.upjs.drpaz.business;
 
 import sk.upjs.drpaz.storage.entities.Product;
 

@@ -1,4 +1,4 @@
-package sk.upjs.drpaz.biznis;
+package sk.upjs.drpaz.business;
 
 import java.time.LocalDateTime;
 import java.util.List;

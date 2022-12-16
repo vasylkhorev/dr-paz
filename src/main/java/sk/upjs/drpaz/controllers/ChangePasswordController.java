@@ -10,7 +10,7 @@ import sk.upjs.drpaz.LoggedUser;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.entities.Employee;
 
-public class ChangeLoginController1 {
+public class ChangePasswordController{
 	
 	private Employee currentUser = LoggedUser.INSTANCE.getLoggedUser();
 

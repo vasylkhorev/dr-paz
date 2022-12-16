@@ -22,11 +22,11 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
+import sk.upjs.drpaz.business.ProductStatistics;
+import sk.upjs.drpaz.business.ProductStatisticsImpl;
+import sk.upjs.drpaz.business.ProductStatisticsManager;
 import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.entities.Purchase;
-import sk.upjs.drpaz.biznis.ProductStatistics;
-import sk.upjs.drpaz.biznis.ProductStatisticsImpl;
-import sk.upjs.drpaz.biznis.ProductStatisticsManager;
 
 public class StatisticsTabController {
 

@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sk.upjs.drpaz.LoggedUser;
@@ -39,7 +40,7 @@ public class ProfileTabController {
 
 	@FXML
 	void changePassword(ActionEvent event) {
-		ChangeLoginController1 controller1 = new ChangeLoginController1();
+		ChangePasswordController controller1 = new ChangePasswordController();
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../controllers/ChangeLogin1.fxml"));
 			fxmlLoader.setController(controller1);
@@ -50,6 +51,7 @@ public class ProfileTabController {
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.setScene(scene);
 			stage.setTitle("Change password");
+			stage.getIcons().add(new Image("icons/icon.png"));
 			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -59,7 +61,7 @@ public class ProfileTabController {
 	@FXML
 	void logoutClick(ActionEvent event) {
 		editEmailTextField.getScene().getWindow().hide();
-
+		LoggedUser.INSTANCE.setLoggedUser(null);
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Login.fxml"));
 			LoginController loginController = new LoginController();
@@ -72,10 +74,12 @@ public class ProfileTabController {
 			stage.setMinHeight(300);
 			stage.setScene(scene);
 			stage.setTitle("Login");
+			stage.getIcons().add(new Image("icons/icon.png"));
 			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	@FXML
@@ -84,7 +88,7 @@ public class ProfileTabController {
 				editPhoneTextField.getText(), editEmailTextField.getText(), currentUser.getLogin(), currentUser.getPassword(),
 				currentUser.getRole());
 		newEmployee = DaoFactory.INSTANCE.getEmployeeDao().save(newEmployee);
-		System.out.println(newEmployee);
+		LoggedUser.INSTANCE.setLoggedUser(newEmployee);
 	}
 
 	@FXML
