@@ -15,8 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.SplitPane;
@@ -99,9 +97,6 @@ public class StatisticsTabController {
 		});
 		
 		setAllColumns(null, null);
-
-		CategoryAxis xAxis = new CategoryAxis();
-		NumberAxis yAxis = new NumberAxis();
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		series.setName("Last 30 days");

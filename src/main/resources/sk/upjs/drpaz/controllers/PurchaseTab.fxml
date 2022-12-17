@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane fx:id="splitPane" dividerPositions="0.6335559265442404" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.PurchaseTabController">
+<SplitPane fx:id="splitPane" dividerPositions="0.6335559265442404" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.PurchaseTabController">
   <items>
       <BorderPane prefHeight="200.0" prefWidth="200.0">
          <center>

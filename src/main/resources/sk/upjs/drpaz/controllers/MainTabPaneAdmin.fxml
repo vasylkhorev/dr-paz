@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TabPane fx:id="tabPane" style="-fx-background-color: white;" stylesheets="@../../../../css/FXMaterialTabPane.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.MainTabPaneAdminController">
+<TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: white;" stylesheets="@../../../../css/FXMaterialTabPane.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.drpaz.controllers.MainTabPaneAdminController">
 	<tabs>
 		<Tab fx:id="sellingTab" onSelectionChanged="#onSellingTabClicked" style="-fx-pref-height: 50;">
 			<content>
@@ -87,9 +87,9 @@
 				</Label>
 			</graphic>
 		</Tab>
-		<Tab fx:id="invisibleTab" disable="true" style="-fx-pref-width: 700; -fx-border-width: 0;">
+		<Tab fx:id="invisibleTab" disable="true" style="-fx-border-width: 0;">
 			<content>
-				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+				<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1200.0" />
 			</content>
 		</Tab>
 		<Tab fx:id="profileTab" style="-fx-pref-height: 50;">

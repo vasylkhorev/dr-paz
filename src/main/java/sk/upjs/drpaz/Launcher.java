@@ -21,7 +21,7 @@ public class Launcher extends Application {
 		stage.setMinHeight(300);
 		stage.setScene(scene);
 		stage.setTitle("Login");
-		stage.getIcons().add(new Image("icons/icon.png"));
+		stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
 		stage.show();
 
 	}

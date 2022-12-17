@@ -86,7 +86,7 @@ public class LoginController {
 			stage = new Stage();
 			stage.setScene(scene);
 			stage.setTitle("Dr. PAZ");
-			stage.getIcons().add(new Image("icons/icon.png"));
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
 			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();

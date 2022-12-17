@@ -16,6 +16,7 @@ import sk.upjs.drpaz.LoggedUser;
 
 public class MainTabPaneAdminController {
 
+	@SuppressWarnings("serial")
 	private Map<String, String> tabMap = new HashMap<String, String>() {
 		{
 			put("sellingTab", "SellingTab");
@@ -46,10 +47,12 @@ public class MainTabPaneAdminController {
 
 	@FXML
 	void initialize() {
+		
 		nameLabel.setText(
 				LoggedUser.INSTANCE.getLoggedUser().getName() + " " + LoggedUser.INSTANCE.getLoggedUser().getSurname());
+		Double nameLabelWidth = nameLabel.getWidth();
 		tabPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
-			invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 6 * 107 - nameLabel.getWidth() - 15));
+			invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 5 * 127 - nameLabelWidth  - 15 - 80));
 		});
 
 		tabPane.getSelectionModel().clearSelection();

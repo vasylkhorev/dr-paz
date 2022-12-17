@@ -36,8 +36,7 @@ public class PurchaseFxModel {
 		
 		List<Purchase> list1 = DaoFactory.INSTANCE.getPurchaseDao().getAll();
 		allPurchases = FXCollections.observableArrayList(list1);
-		List<Product> list2 = DaoFactory.INSTANCE.getPurchaseDao().getProductsByPurchaseId(purchase.getId());
-		productsInPurchase = FXCollections.observableArrayList(list2);
+		productsInPurchase = FXCollections.observableArrayList(purchase.getProductsInPurchase());
 	}
 	
 	

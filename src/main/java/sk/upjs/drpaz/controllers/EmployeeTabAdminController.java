@@ -206,7 +206,7 @@ public class EmployeeTabAdminController {
 				stage.setMinHeight(300);
 				stage.setScene(scene);
 				stage.setTitle("Login");
-				stage.getIcons().add(new Image("icons/icon.png"));
+				stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
 				stage.show();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -302,7 +302,7 @@ public class EmployeeTabAdminController {
 			stage.setScene(scene);
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.setTitle("Change login or password");
-			stage.getIcons().add(new Image("icons/icon.png"));
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
 			stage.showAndWait();
 			refresh();
 		} catch (IOException e1) {

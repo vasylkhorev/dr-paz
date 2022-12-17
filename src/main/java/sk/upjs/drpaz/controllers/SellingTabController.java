@@ -194,6 +194,7 @@ public class SellingTabController {
 		}
 		allProductsTableView.getItems().addAll(FXCollections.observableArrayList(collected));
 	}
+	
 
 	private void addColumnsToAllProducts() {
 		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -245,7 +246,9 @@ public class SellingTabController {
 						stage.setScene(scene);
 						stage.initModality(Modality.APPLICATION_MODAL);
 						stage.setTitle("Edit quantity");
-						stage.getIcons().add(new Image("icons/icon.png"));
+						stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
+
+						stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
 						stage.showAndWait();
 					} catch (IOException e1) {
 						e1.printStackTrace();

@@ -51,7 +51,7 @@ public class ProfileTabController {
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.setScene(scene);
 			stage.setTitle("Change password");
-			stage.getIcons().add(new Image("icons/icon.png"));
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
 			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -74,7 +74,7 @@ public class ProfileTabController {
 			stage.setMinHeight(300);
 			stage.setScene(scene);
 			stage.setTitle("Login");
-			stage.getIcons().add(new Image("icons/icon.png"));
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
 			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -93,6 +93,8 @@ public class ProfileTabController {
 
 	@FXML
 	void initialize() {
+		
+		correctInputListener();
 
 		editNameTextField.setText(currentUser.getName());
 		editSurnameTextField.setText(currentUser.getSurname());

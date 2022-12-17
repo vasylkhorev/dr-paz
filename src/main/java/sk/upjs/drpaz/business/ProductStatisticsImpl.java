@@ -27,8 +27,7 @@ public class ProductStatisticsImpl implements ProductStatisticsManager {
 		if (purchases.isEmpty())
 			return new ArrayList<>();
 		for (Purchase purchase: purchases) {
-			List<Product> products = purchaseDao.getProductsByPurchaseId(purchase.getId());
-			for (Product product: products) {
+			for (Product product: purchase.getProductsInPurchase()) {
 				if(result.containsKey(product.getId())) {
 					ProductStatistics productStatistics = result.get(product.getId());
 					

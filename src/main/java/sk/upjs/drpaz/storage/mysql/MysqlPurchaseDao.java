@@ -40,15 +40,20 @@ public class MysqlPurchaseDao implements PurchaseDao {
 	}
 
 	public List<Purchase> getAll() {
-		String sql = "SELECT id, employee_id, created_at FROM purchase ORDER BY id;";
+		String sql = "SELECT id, employee_id, created_at FROM purchase ORDER BY id";
 		List<Purchase> purchases = jdbcTemplate.query(sql, new PurchaseRowMapper());
+		for (Purchase purchase : purchases) {
+			purchase.setProductsInPurchase(getProductsByPurchaseId(purchase.getId()));
+		}
 		return purchases;
 	}
 
 	public Purchase getById(long id) throws NoSuchElementException {
 		String sql = "SELECT id, employee_id, created_at FROM Purchase WHERE id=" + id;
 		try {
-			return jdbcTemplate.queryForObject(sql, new PurchaseRowMapper());
+			Purchase purchase = jdbcTemplate.queryForObject(sql, new PurchaseRowMapper());
+			purchase.setProductsInPurchase(getProductsByPurchaseId(purchase.getId()));
+			return purchase;
 		} catch (EmptyResultDataAccessException e) {
 			throw new NoSuchElementException("Purchase with id " + id + " not in DB");
 		}
@@ -64,9 +69,11 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			simpleJdbcInsert.withTableName("Purchase");
 			simpleJdbcInsert.usingGeneratedKeyColumns("id");
 			simpleJdbcInsert.usingColumns("employee_id", "created_at");
+			
 			Map<String, Object> values = new HashMap<>();
 			values.put("employee_id", purchase.getEmployee().getId());
 			values.put("created_at", purchase.getCreatedAt());
+			
 			long id = simpleJdbcInsert.executeAndReturnKey(values).longValue();
 			
 			Purchase purchase2 = new Purchase(id, purchase.getEmployee(), purchase.getCreatedAt(),purchase.getProductsInPurchase());
@@ -165,7 +172,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 				return jdbcTemplate.query(sql, new PurchaseRowMapper(), datetimeEnd);
 			} catch (DataAccessException e) {
 				throw new NoSuchElementException(
-						"No Purchase after " + datetimeStart.toString());
+						"No Purchase after " + datetimeEnd.toString());
 			}
 		}
 		String sql = "SELECT id, employee_id, created_at FROM purchase WHERE created_at BETWEEN ? AND ?";
