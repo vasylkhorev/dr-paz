@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.dao.EmployeeDao;
@@ -25,6 +24,7 @@ import sk.upjs.drpaz.storage.entities.Purchase;
 
 class MysqlPurchaseDaoTest {
 	
+	private JdbcTemplate jdbcTemplate;
 	private Purchase savedPurchase;
 	private PurchaseDao purchaseDao;
 	private EmployeeDao employeeDao;
@@ -42,12 +42,19 @@ class MysqlPurchaseDaoTest {
 		purchaseDao = DaoFactory.INSTANCE.getPurchaseDao();
 		employeeDao = DaoFactory.INSTANCE.getEmployeeDao();
 		productDao = DaoFactory.INSTANCE.getProductDao();
+		jdbcTemplate = DaoFactory.INSTANCE.getJdbcTemplate();
 	}
+	
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		Purchase purchase = new Purchase();
-		Employee employee1 = new Employee("TestPurchaseEmployee1Name","TestPurchaseEmployeeSurname","7357","test@email.com","testlogin","test","admin");
+		Employee employee1 = new Employee(
+				"TestPurchaseEmployee1Name",
+				"TestPurchaseEmployeeSurname",
+				"7357","test@email.com",
+				String.valueOf(System.currentTimeMillis()),
+				"test",
+				"admin");
 		Product product1 = new Product();
 		Product product2 = new Product();
 		
@@ -70,7 +77,7 @@ class MysqlPurchaseDaoTest {
 		
 		savedEmployee = employeeDao.save(employee1);
 		
-		
+		Purchase purchase = new Purchase();
 		purchase.setEmployee(savedEmployee);
 		purchase.setCreatedAt(new Timestamp(( Instant.now().toEpochMilli() + 500) / 1000 * 1000).toLocalDateTime()); // rounded to second
 		purchase.setProductsInPurchase(productsList);
@@ -80,6 +87,7 @@ class MysqlPurchaseDaoTest {
 
 	@AfterEach
 	void tearDown() throws Exception {
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + savedPurchase.getId());
 		purchaseDao.delete(savedPurchase.getId());
 		employeeDao.delete(savedEmployee.getId());
 		if(savedEmployeeTest != null)
@@ -110,7 +118,14 @@ class MysqlPurchaseDaoTest {
 	
 	@Test
 	void insertTest() {
-		Employee employeeTest = new Employee("TestNamePurchaseInsertTest","TestSurnamePurchaseInsertTest","7357","TestPurchaseInsertTest@email.com","TestLoginPurchaseInsertTest","TestPasswordPurchaseInsertTest","admin");
+		Employee employeeTest = new Employee(
+				"TestNamePurchaseInsertTest",
+				"TestSurnamePurchaseInsertTest",
+				"7357",
+				"TestPurchaseInsertTest@email.com",
+				String.valueOf(System.currentTimeMillis()),
+				"TestPasswordPurchaseInsertTest",
+				"admin");
 		
 		savedEmployeeTest = employeeDao.save(employeeTest);
 		
@@ -130,13 +145,21 @@ class MysqlPurchaseDaoTest {
 		assertEquals(purchase.getCreatedAt(), saved.getCreatedAt());
 		assertThrows(NullPointerException.class, () -> purchaseDao.save(new Purchase(null, null, null,null)),"Purchase name cannot be null");
 		
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + saved.getId());
 		purchaseDao.delete(saved.getId());
 		employeeDao.delete(savedEmployeeTest.getId());
 	}
 	
 	@Test
 	void updateTest() {
-		Employee employeeTest = new Employee("TestPurchaseEmployeeTestNameChanged","TestPurchaseEmployeeSurnameChanged","7357111","testchanged@email.com","testloginChanged","testChanged","admin");
+		Employee employeeTest = new Employee(
+				"TestPurchaseEmployeeTestNameChanged",
+				"TestPurchaseEmployeeSurnameChanged",
+				"7357111",
+				"testchanged@email.com",
+				String.valueOf(System.currentTimeMillis()),
+				"testChanged",
+				"admin");
 		
 		savedEmployeeTest = employeeDao.save(employeeTest);
 		
@@ -156,9 +179,17 @@ class MysqlPurchaseDaoTest {
 		assertEquals(updated.getCreatedAt(), fromDb.getCreatedAt());
 		assertThrows(NoSuchElementException.class, 
 				()->purchaseDao.save(new Purchase(-1L, 
-						new Employee("TestPurchaseEmployeeNameChanged","TestPurchaseEmployeeSurnameChanged","7357111","testchanged@email.com","testloginChanged","testChanged","admin"),
+						new Employee("TestPurchaseEmployeeNameChanged",
+								"TestPurchaseEmployeeSurnameChanged",
+								"7357111",
+								"testchanged@email.com",
+								String.valueOf(System.currentTimeMillis()),
+								"testChanged",
+								"admin"),
 						new Timestamp(0).toLocalDateTime(),
 						productsList)));
+		
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + updated.getId());
 		purchaseDao.delete(updated.getId());
 		employeeDao.delete(savedEmployeeTest.getId());
 	}
@@ -168,7 +199,14 @@ class MysqlPurchaseDaoTest {
 		List<Product> productsList = new ArrayList<>();
 		
 		Purchase purchase = new Purchase();
-		Employee employee1 = new Employee("TestPurchaseEmployee1NameGetProducts","TestPurchaseEmployeeSurnameGetProducts","7357","test@email.com","testloginGetProducts","test","admin");
+		Employee employee1 = new Employee(
+				"TestPurchaseEmployee1NameGetProducts",
+				"TestPurchaseEmployeeSurnameGetProducts",
+				"7357",
+				"test@email.com",
+				String.valueOf(System.currentTimeMillis()),
+				"test",
+				"admin");
 		Product product1 = new Product();
 		Product product2 = new Product();
 		
@@ -209,7 +247,8 @@ class MysqlPurchaseDaoTest {
 			assertEquals(listOfProducts.get(i).getAlertQuantity(),listOfCorrectProducts.get(i).getAlertQuantity());
 			assertEquals(listOfProducts.get(i).getDescription(),listOfCorrectProducts.get(i).getDescription());
 		}
-		
+
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + savedPurchase.getId());
 		purchaseDao.delete(savedPurchase.getId());
 		employeeDao.delete(savedEmployee.getId());
 		productDao.delete(savedProduct1.getId());
@@ -232,6 +271,8 @@ class MysqlPurchaseDaoTest {
 		purchaseTotalTest.setProductsInPurchase(productsListTotalTest);
 		purchaseTotalTest = purchaseDao.save(purchaseTotalTest);
 		assertEquals(totalPrice, purchaseDao.getTotalPriceById(purchaseTotalTest.getId()));
+		
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + purchaseTotalTest.getId());
 		purchaseDao.delete(purchaseTotalTest.getId());
 	}
 
@@ -244,6 +285,18 @@ class MysqlPurchaseDaoTest {
 		assertTrue(dateStart.isBefore(savedPurchase.getCreatedAt()));
 		assertTrue(dateEnd.isAfter(savedPurchase.getCreatedAt()));
 		assertThrows(NullPointerException.class, ()->purchaseDao.getByDate(null, null));
+	}
+	
+	//TODO
+	@Test
+	void checkIfCanDelete() {
+		
+	}
+	
+	//TODO
+	@Test
+	void deleteTest() {
+		
 	}
 }
 

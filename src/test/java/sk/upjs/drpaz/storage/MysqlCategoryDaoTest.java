@@ -183,6 +183,25 @@ class MysqlCategoryDaoTest {
 		productDao.delete(savedProduct2.getId());
 	}
 	
-
-
+	//TODO
+	@Test
+	void deleteByProductTest() {
+		
+	}
+	
+	@Test
+	void deleteTest() {
+		Category category = new Category();
+		category.setName("deleteTest");
+		
+		Category savedCategory = categoryDao.save(category);
+		int size = categoryDao.getAll().size();
+		boolean delBool = categoryDao.delete(savedCategory.getId());
+		assertTrue(delBool);
+		int size2 = categoryDao.getAll().size();
+		assertEquals(size-1, size2);
+		
+		boolean delBool2 = categoryDao.delete(-1);
+		assertTrue(!delBool2);
+	}
 }

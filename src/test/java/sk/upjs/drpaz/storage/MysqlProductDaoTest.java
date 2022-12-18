@@ -64,7 +64,7 @@ class MysqlProductDaoTest {
 	void getByNameTest() {
 		List<Product> fromDb = productDao.getByName(savedProduct.getName());
 		for (Product productGetByNameTest: fromDb) {
-			assertEquals(savedProduct.getName(), productGetByNameTest.getName());
+			assertTrue(productGetByNameTest.getName().startsWith(savedProduct.getName()));
 		}
 		assertThrows(NoSuchElementException.class, ()->productDao.getByName(null));
 	}
@@ -102,5 +102,26 @@ class MysqlProductDaoTest {
 		assertThrows(NoSuchElementException.class,
 				()->productDao.save(new Product(-1L, "Test Product ChangedChanged", 7, 7, 7, "Test Product Description ChangedChanged")));
 		
+	}
+	
+	//TODO
+	@Test
+	void getByCategoryTest() {
+		
+	}
+	
+	@Test
+	void deleteTest() {
+		Product product = new Product();
+		product.setName("DeleteTest");
+		product.setQuantity(0);
+		product.setPrice(0);
+		
+		Product savedProduct = productDao.save(product);
+		int size = productDao.getAll().size();
+		boolean check = productDao.delete(savedProduct.getId());
+		int size2 = productDao.getAll().size();
+		assertTrue(check);
+		assertEquals(size-1, size2);
 	}
 }

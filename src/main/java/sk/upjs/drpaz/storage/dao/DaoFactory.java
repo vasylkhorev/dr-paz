@@ -38,6 +38,10 @@ public enum DaoFactory {
 		}
 		return jdbcTemplate;
 	}
+	
+	public JdbcTemplate getjdbcTemplate() {
+		return this.jdbcTemplate;
+	}
 
 	public ProductDao getProductDao() {
 		if (productDao == null)

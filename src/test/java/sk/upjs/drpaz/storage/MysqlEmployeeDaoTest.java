@@ -26,12 +26,13 @@ class MysqlEmployeeDaoTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
+		
 		Employee employee = new Employee();
 		employee.setName("TestName");
 		employee.setSurname("TestSurname");
 		employee.setPhone("7357");
 		employee.setEmail("test@email.com");
-		employee.setLogin("testLogin");
+		employee.setLogin("testLoginEmployee");
 		employee.setPassword("TestPassword");
 		employee.setRole("Admin");
 		savedEmployee = employeeDao.save(employee);
@@ -180,5 +181,17 @@ class MysqlEmployeeDaoTest {
 										"testLoginUpdateTest",
 										"TestPasswordUpdateTest",
 										"Admin")));
+	}
+	
+	//TODO
+	@Test
+	void checkIfCanDeleteTest() {
+		
+	}
+	
+	//TODO
+	@Test
+	void deleteTest() {
+		
 	}
 }
