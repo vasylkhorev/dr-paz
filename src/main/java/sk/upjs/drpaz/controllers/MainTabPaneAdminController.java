@@ -51,9 +51,11 @@ public class MainTabPaneAdminController {
 		
 		nameLabel.setText(
 				LoggedUser.INSTANCE.getLoggedUser().getName() + " " + LoggedUser.INSTANCE.getLoggedUser().getSurname());
+		
+		//THIS alsways is 0.0 not even slightest idea why same in NoAdmin
 		Double nameLabelWidth = nameLabel.getWidth();
 		tabPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
-			invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 5 * 127 - nameLabelWidth  - 15 - 80));
+			invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 6 * 127 - nameLabelWidth  - 15 - 95));
 		});
 
 		tabPane.getSelectionModel().clearSelection();

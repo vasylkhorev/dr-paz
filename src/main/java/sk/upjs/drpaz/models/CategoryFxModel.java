@@ -64,4 +64,10 @@ public class CategoryFxModel {
 	public Category getCategory() {
 		return new Category(id, getName());
 	}
+	
+	public ObservableList<Category> getAllCategoriesModelByName(String name){
+		List<Category> list = DaoFactory.INSTANCE.getCategoryDao().getByName(name);
+		allCategories = FXCollections.observableArrayList(list);
+		return allCategories;
+	}
 }
