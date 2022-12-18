@@ -23,8 +23,9 @@ public class MainTabPaneAdminController {
 			put("addingTab", "AddingTab");
 			put("employeeTab", "EmployeeTabAdmin");
 			put("purchaseTab", "PurchaseTab");
-			put("profileTab", "ProfileTab");
 			put("statisticsTab", "StatisticsTab");
+			put("categoryTab", "CategoryTab");
+			put("profileTab", "ProfileTab");
 		}
 	};
 

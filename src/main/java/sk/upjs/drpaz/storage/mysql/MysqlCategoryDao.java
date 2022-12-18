@@ -125,4 +125,18 @@ public class MysqlCategoryDao implements CategoryDao {
 		int changed = jdbcTemplate.update(sql);
 		return changed == 1;
 	}
+	
+	//TODO test
+	@Override
+	public List<Category> getByName(String name) throws NullPointerException {
+		if (name == null) {
+			throw new NullPointerException("Name of category cannot be null.");
+		}
+		try {
+			String sql = "SELECT id, name FROM category WHERE name LIKE ?";
+			return jdbcTemplate.query(sql, new CategoryRowMapper(), name + "%");
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }

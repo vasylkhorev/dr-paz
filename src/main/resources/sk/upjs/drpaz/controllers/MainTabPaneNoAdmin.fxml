@@ -71,6 +71,21 @@
 				</Label>
 			</graphic>
 		</Tab>
+		<Tab fx:id="categoryTab" style="-fx-pref-height: 50;">
+			<content>
+				<fx:include source="CategoryTab.fxml" />
+			</content>
+			<graphic>
+				<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #6DB4FE;" stylesheets="@../../../../css/FXMaterialButton.css" text="Categories">
+					<cursor>
+						<Cursor fx:constant="HAND" />
+					</cursor>
+					<font>
+						<Font name="Corbel" size="15.0" />
+					</font>
+				</Label>
+			</graphic>
+		</Tab>
 		<Tab fx:id="invisibleTab" disable="true" style="-fx-pref-width: 550;" />
 		<Tab fx:id="profileTab" style="-fx-pref-height: 50;">
 			<content>

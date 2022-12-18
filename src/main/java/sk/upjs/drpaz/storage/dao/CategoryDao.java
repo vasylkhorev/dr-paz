@@ -54,4 +54,11 @@ public interface CategoryDao {
 	 * @throws NullPointerException
 	 */
 	boolean deleteByProduct(Product product) throws NoSuchElementException, NullPointerException;
+	
+	/**
+	 * @param name
+	 * @return List of {@link Category}
+	 * @throws NullPointerException
+	 */
+	public List<Category> getByName(String name) throws NullPointerException;
 }

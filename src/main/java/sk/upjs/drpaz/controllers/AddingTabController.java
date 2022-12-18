@@ -211,6 +211,9 @@ public class AddingTabController {
 
 		edited = productsTableView.getSelectionModel().getSelectedItem();
 		if(edited == null) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("Select product to edit!");
+			alert.showAndWait();
 			return;
 		}
 		newProductLabel.setText("Edit product");
@@ -280,6 +283,12 @@ public class AddingTabController {
 
 	void deleteProduct() {
 		Product selected = productsTableView.getSelectionModel().getSelectedItem();
+		if(selected == null) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("Select product to delete!");
+			alert.showAndWait();
+			return;
+		}
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setContentText("You are going to delete product!");
 		Optional<ButtonType> result = alert.showAndWait();

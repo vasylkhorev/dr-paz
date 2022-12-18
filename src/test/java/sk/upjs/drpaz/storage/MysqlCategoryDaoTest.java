@@ -204,4 +204,13 @@ class MysqlCategoryDaoTest {
 		boolean delBool2 = categoryDao.delete(-1);
 		assertTrue(!delBool2);
 	}
+	
+	@Test
+	void getByNameTest() {
+		List<Category> fromDb = categoryDao.getByName(savedCategory.getName());
+		for (Category category: fromDb) {
+			assertEquals(category.getName(), savedCategory.getName());
+		}
+		assertThrows(NullPointerException.class, ()-> categoryDao.getByName(null));
+	}
 }

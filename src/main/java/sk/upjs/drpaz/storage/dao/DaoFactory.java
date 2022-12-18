@@ -39,8 +39,13 @@ public enum DaoFactory {
 		return jdbcTemplate;
 	}
 	
+	//Is this OK????
 	public JdbcTemplate getjdbcTemplate() {
-		return this.jdbcTemplate;
+		if (this.testing == true) {
+			return this.jdbcTemplate;
+		}else {
+			return null;
+		}
 	}
 
 	public ProductDao getProductDao() {

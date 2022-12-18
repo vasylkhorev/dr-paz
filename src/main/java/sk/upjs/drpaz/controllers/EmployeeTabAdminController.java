@@ -184,45 +184,68 @@ public class EmployeeTabAdminController {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setContentText("You must relogin into your account to be changes saved");
 			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == alert.getButtonTypes().get(1)) {
+			if (result.get() == alert.getButtonTypes().get(0)) {
+				
+				newEmployee = DaoFactory.INSTANCE.getEmployeeDao().save(newEmployee);
+
+				int index = model.getAllEmployeesModel().indexOf(edited);
+				if (index == -1) {
+					model.getAllEmployeesModel().add(newEmployee);
+				} else {
+					model.getAllEmployeesModel().set(index, newEmployee);
+				}
+
+				newEmployeeLabel.setText("Edit employee");
+
+				clearFields();
+				setDefaultBorders();
+
+				edited = null;
+				
+				employeeEditEmailTextField.getScene().getWindow().hide();
+
+				try {
+					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Login.fxml"));
+					LoginController loginController = new LoginController();
+					fxmlLoader.setController(loginController);
+
+					Stage stage = new Stage();
+					Parent parent = fxmlLoader.load();
+					Scene scene = new Scene(parent);
+					stage.setMinWidth(380);
+					stage.setMinHeight(300);
+					stage.setScene(scene);
+					stage.setTitle("Login");
+					stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
+					stage.show();
+					return;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}else {
 				return;
 			}
-			
-			employeeEditEmailTextField.getScene().getWindow().hide();
+		}
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setContentText("Do you want to save changes?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == alert.getButtonTypes().get(0)) {
+			newEmployee = DaoFactory.INSTANCE.getEmployeeDao().save(newEmployee);
 
-			try {
-				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Login.fxml"));
-				LoginController loginController = new LoginController();
-				fxmlLoader.setController(loginController);
-
-				Stage stage = new Stage();
-				Parent parent = fxmlLoader.load();
-				Scene scene = new Scene(parent);
-				stage.setMinWidth(380);
-				stage.setMinHeight(300);
-				stage.setScene(scene);
-				stage.setTitle("Login");
-				stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
-				stage.show();
-			} catch (IOException e) {
-				e.printStackTrace();
+			int index = model.getAllEmployeesModel().indexOf(edited);
+			if (index == -1) {
+				model.getAllEmployeesModel().add(newEmployee);
+			} else {
+				model.getAllEmployeesModel().set(index, newEmployee);
 			}
+
+			newEmployeeLabel.setText("Edit employee");
+
+			clearFields();
+			setDefaultBorders();
+
+			edited = null;
 		}
-		newEmployee = DaoFactory.INSTANCE.getEmployeeDao().save(newEmployee);
-
-		int index = model.getAllEmployeesModel().indexOf(edited);
-		if (index == -1) {
-			model.getAllEmployeesModel().add(newEmployee);
-		} else {
-			model.getAllEmployeesModel().set(index, newEmployee);
-		}
-
-		newEmployeeLabel.setText("Edit employee");
-
-		clearFields();
-		setDefaultBorders();
-
-		edited = null;
 	}
 
 	@FXML
@@ -456,12 +479,10 @@ public class EmployeeTabAdminController {
 		clearFields();
 
 		if (edited == null) {
-			Alert alert = new Alert(AlertType.CONFIRMATION);
+			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("Select employee for editing!");
-			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == alert.getButtonTypes().get(1)) {
-				return;
-			}
+			alert.showAndWait();
+			return;
 		}
 		newEmployeeLabel.setText("Edit employee");
 		roleComboBox.selectItem(edited.getRole());
@@ -490,7 +511,13 @@ public class EmployeeTabAdminController {
 
 	void deleteEmployee() {
 		Employee selected = allEmployeeTableView.getSelectionModel().getSelectedItem();
-
+		if(selected == null) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("Select employee to delete!");
+			alert.showAndWait();
+			return;
+		}
+		
 		if (currentUser.equals(selected)) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("You can not delete yourself!");

@@ -22,6 +22,7 @@ public class MainTabPaneNoAdminController {
 		put("addingTab", "AddingTab");
 		put("employeeTab", "EmployeeTabNoAdmin");
 		put("purchaseTab", "PurchaseTab");
+		put("categoryTab", "CategoryTab");
 		put("profileTab", "ProfileTab");
 	}};
 	
