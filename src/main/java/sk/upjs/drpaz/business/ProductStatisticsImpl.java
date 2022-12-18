@@ -34,11 +34,12 @@ public class ProductStatisticsImpl implements ProductStatisticsManager {
 					productStatistics.setCount(productStatistics.getCount()+product.getQuantity());
 					
 					Double productTotal = product.getPrice() * product.getQuantity();
-					productStatistics.setTotal(productStatistics.getTotal()+productTotal);
+					productStatistics.setTotal(Math.round( productStatistics.getTotal() + productTotal * 100.0) / 100.0);
 					
 					result.put(product.getId(), productStatistics);
 				}else {
 					Double productTotal = product.getPrice() * product.getQuantity();
+					productTotal =  Math.round( productTotal * 100.0) / 100.0;
 					ProductStatistics productStatistics = new ProductStatistics(product, product.getQuantity(), productTotal);
 					result.put(product.getId(), productStatistics);
 				}

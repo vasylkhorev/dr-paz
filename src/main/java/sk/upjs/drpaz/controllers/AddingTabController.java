@@ -78,7 +78,7 @@ public class AddingTabController {
 
 	@FXML
 	void editButtonClick(ActionEvent event) {
-
+		editSelectedProduct();
 	}
 
 	@FXML
@@ -210,6 +210,9 @@ public class AddingTabController {
 		cancelButtonClick3(null);
 
 		edited = productsTableView.getSelectionModel().getSelectedItem();
+		if(edited == null) {
+			return;
+		}
 		newProductLabel.setText("Edit product");
 
 		nameTextField.setText(edited.getName());
@@ -284,11 +287,17 @@ public class AddingTabController {
 			return;
 		}
 
-		DaoFactory.INSTANCE.getProductDao().delete(selected.getId());
-		productsTableView.getItems().remove(selected);
-		clearFields();
-		edited = null;
-		newProductLabel.setText("New product");
-
+		if(DaoFactory.INSTANCE.getProductDao().checkIfCanDelete(selected.getId())) {
+			DaoFactory.INSTANCE.getProductDao().delete(selected.getId());
+			productsTableView.getItems().remove(selected);
+			clearFields();
+			edited = null;
+			newProductLabel.setText("New product");
+		}else {
+			Alert alert2 = new Alert(AlertType.WARNING);
+			alert2.setContentText("You can not delete Product that already is in a purchase!");
+			alert2.showAndWait();
+			return;
+		}
 	}
 }

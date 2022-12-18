@@ -39,7 +39,7 @@ public class PurchaseTabController {
 	@FXML
 	private TableColumn<Purchase, LocalDateTime> createdAllColumn;
 	@FXML
-    private TableColumn<Product, Double> totalPriceAllColumn;
+    private TableColumn<Purchase, Double> totalPriceAllColumn;
 	@FXML
 	private MFXButton refreshButton;
 	
@@ -70,6 +70,7 @@ public class PurchaseTabController {
 		} else {
 			model = new PurchaseFxModel();
 		}
+		totalLabel.setText("Total: 0.00" );
 		fromDatePicker.setValue(null);
 		toDatePicker.setValue(null);
 		setAllColumns();
@@ -104,7 +105,8 @@ public class PurchaseTabController {
 
 	private void refreshDates() {
 		allPurchasesTableView.getItems().clear();
-
+		totalLabel.setText("Total: 0.00");
+		
 		if (fromDatePicker.getValue() != null && toDatePicker.getValue() == null) {
 			allPurchasesTableView.getItems()
 					.addAll(FXCollections.observableArrayList(DaoFactory.INSTANCE.getPurchaseDao().getByDate(
@@ -127,7 +129,7 @@ public class PurchaseTabController {
 		idAllColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 		employeeAllColumn.setCellValueFactory(new PropertyValueFactory<>("employee"));
 		createdAllColumn.setCellValueFactory(new PropertyValueFactory<>("formattedDate"));
-		//TODO total price, its late i will finish it on friday.
+		totalPriceAllColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
 		
 		nameProductAllColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		quantityProductAllColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
@@ -151,11 +153,16 @@ public class PurchaseTabController {
 		}
 		PurchaseFxModel modelPurchase = new PurchaseFxModel(purchase);
 		allProductTableView.getItems().addAll(modelPurchase.getAllProductsInPurchaseModel());
-		setTotalLabel();	
+		setTotalLabel(purchase.getTotalPrice());	
 	}
 
-	private void setTotalLabel() {
-		//TODO totalLabel to display totalPrice, its late i will finish it on friday.
+	private void setTotalLabel(Double totalPrice) {
+		//This is not needed if database don't have purchase with 0.0 totalPrice 
+		if(totalPrice == 0){
+			totalLabel.setText("Total: 0.00");
+		}else {
+			totalLabel.setText("Total: " + totalPrice);
+		}
 	}		
 	
 	private void setWidth() {

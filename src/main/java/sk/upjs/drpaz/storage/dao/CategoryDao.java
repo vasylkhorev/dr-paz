@@ -47,8 +47,11 @@ public interface CategoryDao {
 	 */
 	Category getById(long id);
 	
+	/**
+	 * @param product
+	 * @return
+	 * @throws NoSuchElementException
+	 * @throws NullPointerException
+	 */
 	boolean deleteByProduct(Product product) throws NoSuchElementException, NullPointerException;
-		
-	
-	
 }

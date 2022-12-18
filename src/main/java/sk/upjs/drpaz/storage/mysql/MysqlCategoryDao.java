@@ -125,5 +125,4 @@ public class MysqlCategoryDao implements CategoryDao {
 		int changed = jdbcTemplate.update(sql);
 		return changed == 1;
 	}
-
 }

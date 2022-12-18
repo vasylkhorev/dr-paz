@@ -20,6 +20,7 @@ import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.dao.PurchaseDao;
 import sk.upjs.drpaz.storage.entities.Product;
 import sk.upjs.drpaz.storage.entities.Purchase;
+import sk.upjs.drpaz.storage.exceptions.EntityAlreadyReferencedInDatabaseException;
 
 public class MysqlPurchaseDao implements PurchaseDao {
 	private JdbcTemplate jdbcTemplate;
@@ -35,6 +36,7 @@ public class MysqlPurchaseDao implements PurchaseDao {
 			purchase.setId(rs.getLong("id"));
 			purchase.setEmployee(DaoFactory.INSTANCE.getEmployeeDao().getById(rs.getLong("employee_id")));
 			purchase.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+			purchase.setProductsInPurchase(getProductsByPurchaseId(purchase.getId()));
 			return purchase;
 		}
 	}
@@ -42,9 +44,6 @@ public class MysqlPurchaseDao implements PurchaseDao {
 	public List<Purchase> getAll() {
 		String sql = "SELECT id, employee_id, created_at FROM purchase ORDER BY id";
 		List<Purchase> purchases = jdbcTemplate.query(sql, new PurchaseRowMapper());
-		for (Purchase purchase : purchases) {
-			purchase.setProductsInPurchase(getProductsByPurchaseId(purchase.getId()));
-		}
 		return purchases;
 	}
 
@@ -52,7 +51,6 @@ public class MysqlPurchaseDao implements PurchaseDao {
 		String sql = "SELECT id, employee_id, created_at FROM Purchase WHERE id=" + id;
 		try {
 			Purchase purchase = jdbcTemplate.queryForObject(sql, new PurchaseRowMapper());
-			purchase.setProductsInPurchase(getProductsByPurchaseId(purchase.getId()));
 			return purchase;
 		} catch (EmptyResultDataAccessException e) {
 			throw new NoSuchElementException("Purchase with id " + id + " not in DB");
@@ -184,13 +182,30 @@ public class MysqlPurchaseDao implements PurchaseDao {
 		}
 	}
 
+	//TODO need to update UnitTest
 	@Override
 	public boolean delete(long id) {
-		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + id);
-		int changed = jdbcTemplate.update("DELETE FROM purchase WHERE id = " + id);
-		return changed == 1;
+		if (!checkIfCanDelete(id)) {
+			throw new EntityAlreadyReferencedInDatabaseException("Purchase with id "+ id + "is already referenced in DB.");
+		}else {
+			int changed = jdbcTemplate.update("DELETE FROM purchase WHERE id = " + id);
+			return changed == 1;
+		}
 	}
 
+	//TODO tests for this
+	//THIS IS FOR CHECKING IF WE CAN DELETE Purchase
+	@Override
+	public boolean checkIfCanDelete(long id) throws NullPointerException, NoSuchElementException {
+		String sql = "SELECT COUNT(*) FROM purchase_item WHERE purchase_id = " + id;
+		int count = jdbcTemplate.queryForObject(sql, Integer.class);
+		
+		if (count == 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 
 }

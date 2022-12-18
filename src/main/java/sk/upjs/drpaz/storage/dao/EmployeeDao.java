@@ -76,4 +76,12 @@ public interface EmployeeDao {
 	 */
 	List<Employee> getByNameAndSurname(String name, String surname) throws NoSuchElementException;
 
+	/**
+	 * @param id
+	 * @return boolean
+	 * @throws NullPointerException
+	 * @throws NoSuchElementException
+	 */
+	boolean checkIfCanDelete(long id) throws NullPointerException, NoSuchElementException;
+
 }

@@ -179,19 +179,15 @@ public class EmployeeTabAdminController {
 					employeeEditEmailTextField.getText(), edited.getLogin(), edited.getPassword(),
 					roleComboBox.getSelectedItem());
 		}
-		newEmployee = DaoFactory.INSTANCE.getEmployeeDao().save(newEmployee);
-
-		int index = model.getAllEmployeesModel().indexOf(edited);
-		if (index == -1) {
-			model.getAllEmployeesModel().add(newEmployee);
-		} else {
-			model.getAllEmployeesModel().set(index, newEmployee);
-		}
 
 		if (newEmployee.equals(LoggedUser.INSTANCE.getLoggedUser())) {
-			Alert alert = new Alert(AlertType.INFORMATION);
+			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setContentText("You must relogin into your account to be changes saved");
-			alert.showAndWait();
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == alert.getButtonTypes().get(1)) {
+				return;
+			}
+			
 			employeeEditEmailTextField.getScene().getWindow().hide();
 
 			try {
@@ -211,7 +207,14 @@ public class EmployeeTabAdminController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+		newEmployee = DaoFactory.INSTANCE.getEmployeeDao().save(newEmployee);
 
+		int index = model.getAllEmployeesModel().indexOf(edited);
+		if (index == -1) {
+			model.getAllEmployeesModel().add(newEmployee);
+		} else {
+			model.getAllEmployeesModel().set(index, newEmployee);
 		}
 
 		newEmployeeLabel.setText("Edit employee");
@@ -502,9 +505,18 @@ public class EmployeeTabAdminController {
 			return;
 		}
 
-		DaoFactory.INSTANCE.getEmployeeDao().delete(selected.getId());
-		allEmployeeTableView.getItems().remove(selected);
-		newButtonClick(null);
+		if (DaoFactory.INSTANCE.getEmployeeDao().checkIfCanDelete(selected.getId())) {
+			
+			DaoFactory.INSTANCE.getEmployeeDao().delete(selected.getId());
+			allEmployeeTableView.getItems().remove(selected);
+			newButtonClick(null);
+			
+		}else {
+			Alert alert2 = new Alert(AlertType.WARNING);
+			alert2.setContentText("You can not delete Employee that already made a purchase!");
+			alert2.showAndWait();
+			return;
+		}
 	}
 	
 	private void setWidth() {

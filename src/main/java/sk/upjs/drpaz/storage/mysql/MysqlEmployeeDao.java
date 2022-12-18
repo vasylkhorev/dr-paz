@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import sk.upjs.drpaz.storage.dao.EmployeeDao;
 import sk.upjs.drpaz.storage.entities.Employee;
+import sk.upjs.drpaz.storage.exceptions.EntityAlreadyReferencedInDatabaseException;
 import sk.upjs.drpaz.storage.exceptions.UniqueAlreadyInDatabaseException;
 
 public class MysqlEmployeeDao implements EmployeeDao {
@@ -101,12 +102,15 @@ public class MysqlEmployeeDao implements EmployeeDao {
 		}
 
 	}
-
+	//TODO need to update UnitTEST
 	@Override
-	public boolean delete(long id) {
-		jdbcTemplate.update("DELETE FROM purchase WHERE employee_id = " + id);
-		int changed = jdbcTemplate.update("DELETE FROM employee WHERE id = " + id);
-		return changed == 1;
+	public boolean delete(long id) throws EntityAlreadyReferencedInDatabaseException {
+		if(!checkIfCanDelete(id)) {
+			throw new EntityAlreadyReferencedInDatabaseException("Employee with id: " + id + " is already referenced in Purchase");
+		}else {
+			int changed = jdbcTemplate.update("DELETE FROM employee WHERE id = " + id);
+			return changed == 1;
+		}
 	}
 
 	@Override
@@ -191,6 +195,20 @@ public class MysqlEmployeeDao implements EmployeeDao {
 			return jdbcTemplate.query(sql, new EmployeeRowMapper(), name + "%", surname + "%");
 		} catch (EmptyResultDataAccessException e) {
 			return null;
+		}
+	}
+	
+	//TODO tests for this
+	//THIS IS FOR CHECKING IF WE CAN DELETE Employee
+	@Override
+	public boolean checkIfCanDelete(long id) throws NullPointerException, NoSuchElementException {
+		String sql = "SELECT COUNT(*) FROM purchase WHERE employee_id = " + id;
+		int count = jdbcTemplate.queryForObject(sql, Integer.class);
+		
+		if (count == 0) {
+			return true;
+		}else {
+			return false;
 		}
 	}
 }

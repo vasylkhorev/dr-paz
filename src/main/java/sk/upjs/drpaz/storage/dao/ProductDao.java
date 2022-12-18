@@ -41,6 +41,20 @@ public interface ProductDao {
 	 */
 	boolean delete(long id);
 	
+	/**
+	 * @param category
+	 * @return List of Products
+	 * @throws NullPointerException
+	 * @throws NoSuchElementException
+	 */
 	List<Product> getByCategory(Category category) throws NullPointerException, NoSuchElementException;
+
+	/**
+	 * @param id
+	 * @return boolean
+	 * @throws NullPointerException
+	 * @throws NoSuchElementException
+	 */
+	boolean checkIfCanDelete(long id) throws NullPointerException, NoSuchElementException;
 
 }

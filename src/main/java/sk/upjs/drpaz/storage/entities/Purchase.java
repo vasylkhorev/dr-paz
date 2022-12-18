@@ -11,6 +11,7 @@ import java.util.List;
  * -{@link Employee} employee
  * -{@link LocalDateTime} createdAt
  * -List of {@link Product} productsInPurchase
+ * -{@link Double} totalPrice
  * </pre>
  */
 public class Purchase {
@@ -19,6 +20,7 @@ public class Purchase {
 	private Employee employee;
 	private LocalDateTime createdAt;
 	private List<Product> productsInPurchase;
+	private Double totalPrice;
 
 	public List<Product> getProductsInPurchase() {
 		return productsInPurchase;
@@ -26,6 +28,7 @@ public class Purchase {
 
 	public void setProductsInPurchase(List<Product> productsInPurchase) {
 		this.productsInPurchase = productsInPurchase;
+		calculateTotalPrice();
 	}
 
 	
@@ -35,9 +38,29 @@ public class Purchase {
 		this.employee = employee;
 		this.createdAt = createdAt;
 		this.productsInPurchase = productsInPurchase;
+		this.totalPrice = 0.0;
+		calculateTotalPrice();
 	}
 
 	public Purchase() {
+		this.totalPrice = 0.0;
+	}
+	
+	public void calculateTotalPrice() {
+		if(productsInPurchase != null) {
+			for(Product product: productsInPurchase) {
+				this.totalPrice = this.totalPrice + product.getQuantity() * product.getPrice();
+			}
+			this.totalPrice = Math.round(this.totalPrice * 100.0) / 100.0;
+		}
+	}
+	
+	public Double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 	public Employee getEmployee() {

@@ -59,4 +59,12 @@ public interface PurchaseDao {
 	 * @return True if deleted
 	 */
 	boolean delete(long id);
+
+	/**
+	 * @param id
+	 * @return boolean
+	 * @throws NullPointerException
+	 * @throws NoSuchElementException
+	 */
+	boolean checkIfCanDelete(long id) throws NullPointerException, NoSuchElementException;
 }
