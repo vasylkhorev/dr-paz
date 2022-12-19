@@ -87,7 +87,6 @@ public class MysqlProductDao implements ProductDao {
 
 	}
 
-	//TODO need to update UnitTEST
 	public boolean delete(long id) throws EntityAlreadyReferencedInDatabaseException {
 		if(!checkIfCanDelete(id)) {
 			throw new EntityAlreadyReferencedInDatabaseException("Product with id: " + id + " is already referenced in DB.");
@@ -118,7 +117,7 @@ public class MysqlProductDao implements ProductDao {
 		return jdbcTemplate.query(sql, new ProductRowMapper());
 	}
 	
-	//TODO tests for this
+
 	//THIS IS FOR CHECKING IF WE CAN DELETE Product
 	@Override
 	public boolean checkIfCanDelete(long id) throws NullPointerException, NoSuchElementException {

@@ -44,6 +44,11 @@ public class DialogController {
 	@FXML
 	void okButtonClick(ActionEvent event) {
 		int quantity = Integer.parseInt(quantityTextField.getText());
+		if (productInPurchase.getQuantity() - quantity < productInPurchase.getAlertQuantity()) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("The stock is getting low!");
+			alert.show();
+		}
 		if (product.getQuantity() < quantity - productInPurchase.getQuantity()) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("There is no more product in warehouse");

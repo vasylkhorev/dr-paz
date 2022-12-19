@@ -21,6 +21,7 @@ import sk.upjs.drpaz.storage.dao.PurchaseDao;
 import sk.upjs.drpaz.storage.entities.Employee;
 import sk.upjs.drpaz.storage.entities.Product;
 import sk.upjs.drpaz.storage.entities.Purchase;
+import sk.upjs.drpaz.storage.exceptions.EntityAlreadyReferencedInDatabaseException;
 
 class MysqlPurchaseDaoTest {
 	
@@ -287,16 +288,56 @@ class MysqlPurchaseDaoTest {
 		assertThrows(NullPointerException.class, ()->purchaseDao.getByDate(null, null));
 	}
 	
-	//TODO
 	@Test
 	void checkIfCanDelete() {
+		assertFalse(purchaseDao.checkIfCanDelete(savedPurchase.getId()));
 		
+		assertTrue(purchaseDao.checkIfCanDelete(-1));
+		
+		Employee employee = new Employee("TestEmployee", "Surname", null, null, String.valueOf(System.currentTimeMillis()), "heslo", "Predaj");
+		Employee savedEmployee = employeeDao.save(employee);
+		Product product = new Product("Test",1.0, 1, 1, "testDescription");
+		Product savedProduct = productDao.save(product);
+		Purchase purchase = new Purchase();
+		purchase.setEmployee(savedEmployee);
+		purchase.setCreatedAt(new Timestamp(Instant.now().toEpochMilli()).toLocalDateTime());
+		List<Product> list = Arrays.asList(savedProduct);
+		purchase.setProductsInPurchase(list);
+		Purchase savedPurchase = purchaseDao.save(purchase);
+		
+		assertFalse(purchaseDao.checkIfCanDelete(savedPurchase.getId()));
+		
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + savedPurchase.getId());
+		purchaseDao.delete(savedPurchase.getId());
+		productDao.delete(savedProduct.getId());
+		employeeDao.delete(savedEmployee.getId());
 	}
 	
-	//TODO
 	@Test
 	void deleteTest() {
+		Employee employee = new Employee("TestEmployee", "Surname", null, null, String.valueOf(System.currentTimeMillis()), "heslo", "Predaj");
+		Employee savedEmployee = employeeDao.save(employee);
+		Product product = new Product("Test",1.0, 1, 1, "testDescription");
+		Product savedProduct = productDao.save(product);
+		Purchase purchase = new Purchase();
+		purchase.setEmployee(savedEmployee);
+		purchase.setCreatedAt(new Timestamp(Instant.now().toEpochMilli()).toLocalDateTime());
+		List<Product> list = Arrays.asList(savedProduct);
+		purchase.setProductsInPurchase(list);
+		Purchase savedPurchase = purchaseDao.save(purchase);
+		long savedPurchaseId = savedPurchase.getId();
+		int purchaseSize = purchaseDao.getAll().size();
 		
+		assertThrows(EntityAlreadyReferencedInDatabaseException.class, () -> purchaseDao.delete(savedPurchaseId));
+		
+		int purchaseSize2 = purchaseDao.getAll().size();
+		
+		assertEquals(purchaseSize, purchaseSize2);
+		
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + savedPurchaseId);
+		purchaseDao.delete(savedPurchase.getId());
+		productDao.delete(savedProduct.getId());
+		employeeDao.delete(savedEmployee.getId());
 	}
 }
 

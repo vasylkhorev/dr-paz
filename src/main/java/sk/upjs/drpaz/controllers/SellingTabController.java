@@ -226,8 +226,10 @@ public class SellingTabController {
 				contextMenu.setY(event.getScreenY());
 				contextMenu.show(allProductsTableView.getScene().getWindow());
 				addItem.setOnAction(e -> {
+					Product selected = productsInPurchaseTableView.getSelectionModel().getSelectedItem();
 					model.getProductsInPurchaseModel()
-							.remove(productsInPurchaseTableView.getSelectionModel().getSelectedItem());
+							.remove(selected);
+					//TODO when delete we need to update allProductTable
 					setTotal();
 				});
 
@@ -329,6 +331,11 @@ public class SellingTabController {
 		Product product = allProductsTableView.getSelectionModel().getSelectedItem();
 		if (product == null)
 			return;
+		if (product.getQuantity() < product.getAlertQuantity()+1) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("Stock is getting low!");
+			alert.show();
+		}
 		if (product.getQuantity() <= 0) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("There is no more product in warehouse");

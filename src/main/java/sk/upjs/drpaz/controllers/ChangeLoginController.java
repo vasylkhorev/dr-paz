@@ -15,8 +15,8 @@ import sk.upjs.drpaz.storage.entities.Employee;
 public class ChangeLoginController {
 
 	private EmployeeDao employeeDao;
-	private MFXLegacyTableView<Employee> employees;
 	private Employee employeeToEdit;
+	//For future update :)
 	private Employee currentUser;
 	
     @FXML

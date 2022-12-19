@@ -1,6 +1,5 @@
 package sk.upjs.drpaz.controllers;
 
-import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

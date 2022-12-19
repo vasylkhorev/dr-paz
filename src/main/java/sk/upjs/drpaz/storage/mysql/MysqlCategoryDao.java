@@ -126,7 +126,6 @@ public class MysqlCategoryDao implements CategoryDao {
 		return changed == 1;
 	}
 	
-	//TODO test
 	@Override
 	public List<Category> getByName(String name) throws NullPointerException {
 		if (name == null) {

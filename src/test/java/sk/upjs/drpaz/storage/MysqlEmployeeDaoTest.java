@@ -2,26 +2,41 @@ package sk.upjs.drpaz.storage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import sk.upjs.drpaz.storage.dao.DaoFactory;
 import sk.upjs.drpaz.storage.dao.EmployeeDao;
+import sk.upjs.drpaz.storage.dao.ProductDao;
+import sk.upjs.drpaz.storage.dao.PurchaseDao;
 import sk.upjs.drpaz.storage.entities.Employee;
+import sk.upjs.drpaz.storage.entities.Product;
+import sk.upjs.drpaz.storage.entities.Purchase;
+import sk.upjs.drpaz.storage.exceptions.EntityAlreadyReferencedInDatabaseException;
 
 class MysqlEmployeeDaoTest {
 
+	private JdbcTemplate jdbcTemplate;
 	private EmployeeDao employeeDao;
+	private PurchaseDao purchaseDao;
+	private ProductDao productDao;
 	private Employee savedEmployee;
 	
 	public MysqlEmployeeDaoTest() {
 		DaoFactory.INSTANCE.setTesting();
 		employeeDao = DaoFactory.INSTANCE.getEmployeeDao();
+		purchaseDao = DaoFactory.INSTANCE.getPurchaseDao();
+		productDao = DaoFactory.INSTANCE.getProductDao();
+		jdbcTemplate = DaoFactory.INSTANCE.getJdbcTemplate();
 	}
 
 	@BeforeEach
@@ -183,15 +198,53 @@ class MysqlEmployeeDaoTest {
 										"Admin")));
 	}
 	
-	//TODO
 	@Test
 	void checkIfCanDeleteTest() {
+		Employee employee = new Employee("name", "surname", null, null, String.valueOf(System.currentTimeMillis()), "heslo", "Predaj");
+		Employee savedEmployee = employeeDao.save(employee);
+		assertTrue(employeeDao.checkIfCanDelete(savedEmployee.getId()));
 		
+		Product product = new Product("Test",1.0, 1, 1, "testDescription");
+		Product savedProduct = productDao.save(product);
+		Purchase purchase = new Purchase();
+		purchase.setEmployee(savedEmployee);
+		purchase.setCreatedAt(new Timestamp(Instant.now().toEpochMilli()).toLocalDateTime());
+		List<Product> list = Arrays.asList(savedProduct);
+		purchase.setProductsInPurchase(list);
+		Purchase savedPurchase = purchaseDao.save(purchase);
+		
+		assertFalse(employeeDao.checkIfCanDelete(savedEmployee.getId()));
+		
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + savedPurchase.getId());
+		purchaseDao.delete(savedPurchase.getId());
+		productDao.delete(savedProduct.getId());
+		employeeDao.delete(savedEmployee.getId());
 	}
 	
-	//TODO
 	@Test
 	void deleteTest() {
+		Employee employee = new Employee("name", "surname", null, null, String.valueOf(System.currentTimeMillis()), "heslo", "Predaj");
+		Employee savedEmployee = employeeDao.save(employee);
 		
+		assertTrue(employeeDao.delete(savedEmployee.getId()));
+		
+		savedEmployee = employeeDao.save(employee);
+		
+		Product product = new Product("Test",1.0, 1, 1, "testDescription");
+		Product savedProduct = productDao.save(product);
+		Purchase purchase = new Purchase();
+		purchase.setEmployee(savedEmployee);
+		purchase.setCreatedAt(new Timestamp(Instant.now().toEpochMilli()).toLocalDateTime());
+		List<Product> list = Arrays.asList(savedProduct);
+		purchase.setProductsInPurchase(list);
+		Purchase savedPurchase = purchaseDao.save(purchase);
+		
+		long saveEmployeeId = savedEmployee.getId();
+		assertThrows(EntityAlreadyReferencedInDatabaseException.class, () -> employeeDao.delete(saveEmployeeId));
+		
+		jdbcTemplate.update("DELETE FROM purchase_item WHERE purchase_id = " + savedPurchase.getId());
+		purchaseDao.delete(savedPurchase.getId());
+		productDao.delete(savedProduct.getId());
+		employeeDao.delete(savedEmployee.getId());
 	}
 }
