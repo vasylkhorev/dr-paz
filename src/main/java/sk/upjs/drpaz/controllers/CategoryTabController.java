@@ -197,6 +197,7 @@ public class CategoryTabController {
 		if (result.get() == alert.getButtonTypes().get(0)) {
 			DaoFactory.INSTANCE.getCategoryDao().delete(selected.getId());
 			allCategoryTableView.getItems().remove(selected);
+			allProductTableView.getItems().clear();
 			newButtonClick(null);
 		}
 	}
