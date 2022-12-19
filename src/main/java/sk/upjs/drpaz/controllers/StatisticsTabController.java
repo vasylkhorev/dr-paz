@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.attribute.standard.PrinterMessageFromOperator;
+
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyTableView;
 import javafx.beans.value.ChangeListener;
@@ -29,7 +31,7 @@ import sk.upjs.drpaz.storage.entities.Purchase;
 public class StatisticsTabController {
 
 	@FXML
-    private SplitPane splitPane;
+	private SplitPane splitPane;
 	@FXML
 	private LineChart<String, Number> dailyIncome;
 	@FXML
@@ -60,42 +62,37 @@ public class StatisticsTabController {
 
 	private void refreshDates() {
 		allProductsTableView.getItems().clear();
-		
+
 		if (fromDatePicker.getValue() != null && toDatePicker.getValue() == null) {
-			allProductsTableView.getItems()
-					.addAll(FXCollections.observableArrayList(productStatisticsManager.getProductStatistics(
-								fromDatePicker.getValue().atStartOfDay(),
-								null
-							)));
+			allProductsTableView.getItems().addAll(FXCollections.observableArrayList(
+					productStatisticsManager.getProductStatistics(fromDatePicker.getValue().atStartOfDay(), null)));
 			return;
 		}
-		
+
 		if (fromDatePicker.getValue() == null && toDatePicker.getValue() != null) {
-			allProductsTableView.getItems()
-					.addAll(FXCollections.observableArrayList(productStatisticsManager.getProductStatistics(
-							null,
-							toDatePicker.getValue().plusDays(1).atStartOfDay()
-						)));
+			allProductsTableView.getItems().addAll(FXCollections.observableArrayList(productStatisticsManager
+					.getProductStatistics(null, toDatePicker.getValue().plusDays(1).atStartOfDay())));
 			return;
 		}
-		
+
 		if (fromDatePicker.getValue() != null && toDatePicker.getValue() != null) {
 			allProductsTableView.getItems()
-					.addAll(FXCollections.observableArrayList(productStatisticsManager.getProductStatistics(
-							fromDatePicker.getValue().atStartOfDay(),
-							toDatePicker.getValue().plusDays(1).atStartOfDay()
-						)));
+					.addAll(FXCollections.observableArrayList(
+							productStatisticsManager.getProductStatistics(fromDatePicker.getValue().atStartOfDay(),
+									toDatePicker.getValue().plusDays(1).atStartOfDay())));
 			return;
 		}
+		allProductsTableView.getItems().addAll(FXCollections.observableArrayList(
+				productStatisticsManager.getProductStatistics(null,null)));
 	}
 
 	@FXML
 	void initialize() {
-		
+
 		splitPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
 			setWidth();
 		});
-		
+
 		setAllColumns(null, null);
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
@@ -139,11 +136,23 @@ public class StatisticsTabController {
 		allProductsTableView.setItems(productStatisticsModel);
 		setWidth();
 	}
-	
+
 	private void setWidth() {
 		totalColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.3));
 		quantityColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.3));
 		nameColumn.prefWidthProperty().bind(allProductsTableView.widthProperty().multiply(0.401));
+	}
+
+	@FXML
+	void clearFrom(ActionEvent event) {
+		fromDatePicker.setValue(null);
+		refreshDates();
+	}
+
+	@FXML
+	void clearTo(ActionEvent event) {
+		toDatePicker.setValue(null);
+		refreshDates();
 	}
 
 }

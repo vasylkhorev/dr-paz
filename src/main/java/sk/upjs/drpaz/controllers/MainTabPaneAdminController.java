@@ -1,5 +1,6 @@
 package sk.upjs.drpaz.controllers;
 
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,14 +49,12 @@ public class MainTabPaneAdminController {
 
 	@FXML
 	void initialize() {
-		
 		nameLabel.setText(
 				LoggedUser.INSTANCE.getLoggedUser().getName() + " " + LoggedUser.INSTANCE.getLoggedUser().getSurname());
 		
-		//THIS alsways is 0.0 not even slightest idea why same in NoAdmin
-		Double nameLabelWidth = nameLabel.getWidth();
+		Double nameLabelWidth = nameLabel.getText().length() * 6.25;
 		tabPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
-			invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 6 * 127 - nameLabelWidth  - 15 - 95));
+			invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 6 * 127 - nameLabelWidth  - 10));
 		});
 
 		tabPane.getSelectionModel().clearSelection();
