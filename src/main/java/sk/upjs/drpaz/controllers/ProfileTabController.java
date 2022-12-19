@@ -89,6 +89,7 @@ public class ProfileTabController {
 				currentUser.getRole());
 		newEmployee = DaoFactory.INSTANCE.getEmployeeDao().save(newEmployee);
 		LoggedUser.INSTANCE.setLoggedUser(newEmployee);
+		LoggedUser.INSTANCE.getNameLabel().setText(LoggedUser.INSTANCE.getLoggedUser().getName() + " " + LoggedUser.INSTANCE.getLoggedUser().getSurname());
 	}
 
 	@FXML

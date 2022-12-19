@@ -48,12 +48,15 @@ public class MainTabPaneAdminController {
 
 	@FXML
 	void initialize() {
+		LoggedUser.INSTANCE.setNameLabel(nameLabel);
+
 		nameLabel.setText(
 				LoggedUser.INSTANCE.getLoggedUser().getName() + " " + LoggedUser.INSTANCE.getLoggedUser().getSurname());
+
+		nameLabel.textProperty().addListener((ChangeListener<String>) (ov, t, t1) -> resizeInvisibleTab(tabPane.getWidth())); 
 		
-		Double nameLabelWidth = nameLabel.getText().length() * 6.25;
 		tabPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
-			invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 6 * 127 - nameLabelWidth  - 10));
+			resizeInvisibleTab(newValue);
 		});
 
 		tabPane.getSelectionModel().clearSelection();
@@ -72,6 +75,11 @@ public class MainTabPaneAdminController {
 			}
 		});
 		tabPane.getSelectionModel().selectFirst();
+	}
+
+	private void resizeInvisibleTab(Number newValue) {
+		Double nameLabelWidth = nameLabel.getText().length() * 6.95;
+		invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 6 * 127 - nameLabelWidth));
 	}
 
 }

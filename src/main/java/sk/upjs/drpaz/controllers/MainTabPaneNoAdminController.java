@@ -17,56 +17,67 @@ import sk.upjs.drpaz.LoggedUser;
 public class MainTabPaneNoAdminController {
 
 	@SuppressWarnings("serial")
-	private Map<String, String> tabMap = new HashMap<String, String>() {{
-		put("sellingTab", "SellingTab");
-		put("addingTab", "AddingTab");
-		put("employeeTab", "EmployeeTabNoAdmin");
-		put("purchaseTab", "PurchaseTab");
-		put("categoryTab", "CategoryTab");
-		put("profileTab", "ProfileTab");
-	}};
-	
+	private Map<String, String> tabMap = new HashMap<String, String>() {
+		{
+			put("sellingTab", "SellingTab");
+			put("addingTab", "AddingTab");
+			put("employeeTab", "EmployeeTabNoAdmin");
+			put("purchaseTab", "PurchaseTab");
+			put("categoryTab", "CategoryTab");
+			put("profileTab", "ProfileTab");
+		}
+	};
+
 	@FXML
 	private TabPane tabPane;
 
-	@FXML Tab invisibleTab;
+	@FXML
+	Tab invisibleTab;
 
 	@FXML
 	void onSellingTabClicked() {
 	}
+
 	@FXML
 	void onAddingTabClicked() {
 	}
+
 	@FXML
 	private Label nameLabel;
 
 	@FXML
 	void initialize() {
+		LoggedUser.INSTANCE.setNameLabel(nameLabel);
+
 		nameLabel.setText(
 				LoggedUser.INSTANCE.getLoggedUser().getName() + " " + LoggedUser.INSTANCE.getLoggedUser().getSurname());
 
-		//THIS alsways is 0.0 not even slightest idea why same in Admin
-		Double nameLabelWidth = nameLabel.getText().length() * 6.25;
+		nameLabel.textProperty()
+				.addListener((ChangeListener<String>) (ov, t, t1) -> resizeInvisibleTab(tabPane.getWidth()));
+
 		tabPane.widthProperty().addListener((ChangeListener<Number>) (observable, oldValue, newValue) -> {
-			invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 5 * 127 - nameLabelWidth  - 25));
+			resizeInvisibleTab(newValue);
 		});
+
 		tabPane.getSelectionModel().clearSelection();
-		
 		tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
 			@Override
 			public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
-					try {
-						Parent root = FXMLLoader.load(this.getClass().getResource(tabMap.get(newValue.getId()) + ".fxml"));
-						
-						newValue.setContent(root);
+				try {
+					Parent root = FXMLLoader.load(this.getClass().getResource(tabMap.get(newValue.getId()) + ".fxml"));
 
-					}catch (IOException ex) {
-						ex.printStackTrace();
-					}
+					newValue.setContent(root);
+
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
 		tabPane.getSelectionModel().selectFirst();
 	}
 
+	private void resizeInvisibleTab(Number newValue) {
+		Double nameLabelWidth = nameLabel.getText().length() * 6.95;
+		invisibleTab.setStyle("-fx-pref-width: " + (newValue.intValue() - 5 * 127 - nameLabelWidth - 10));
+	}
 }
-

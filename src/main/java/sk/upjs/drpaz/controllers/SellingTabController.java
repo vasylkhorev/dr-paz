@@ -226,11 +226,7 @@ public class SellingTabController {
 				contextMenu.setY(event.getScreenY());
 				contextMenu.show(allProductsTableView.getScene().getWindow());
 				addItem.setOnAction(e -> {
-					Product selected = productsInPurchaseTableView.getSelectionModel().getSelectedItem();
-					model.getProductsInPurchaseModel()
-							.remove(selected);
-					//TODO when delete we need to update allProductTable
-					setTotal();
+					deleteFromPurchase();
 				});
 
 				quantityItem.setOnAction(event1 -> {
@@ -267,12 +263,20 @@ public class SellingTabController {
 		});
 		productsInPurchaseTableView.setOnKeyPressed(event -> {
 			if (event.getCode().equals(KeyCode.DELETE)) {
-				Product p = productsInPurchaseTableView.getSelectionModel().getSelectedItem();
-				model.getProductsInPurchaseModel().remove(p);
-				setTotal();
+				deleteFromPurchase();
 			}
 		});
 
+	}
+	private void deleteFromPurchase() {
+		Product p = productsInPurchaseTableView.getSelectionModel().getSelectedItem();
+		model.getProductsInPurchaseModel().remove(p);
+		int index = allProductsTableView.getItems().indexOf(p);
+		int quantity = allProductsTableView.getItems().get(index).getQuantity();
+		allProductsTableView.getItems().set(index, null);
+		Product product = new Product(p.getId(), p.getName(), p.getPrice(), p.getQuantity() + quantity, p.getAlertQuantity(), p.getDescription());
+		allProductsTableView.getItems().set(index, product);
+		setTotal();
 	}
 
 	private void allProductsAddListener() {
