@@ -247,8 +247,6 @@ public class SellingTabController {
 						stage.initModality(Modality.APPLICATION_MODAL);
 						stage.setTitle("Edit quantity");
 						stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
-
-						stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
 						stage.showAndWait();
 					} catch (IOException e1) {
 						e1.printStackTrace();
@@ -290,12 +288,31 @@ public class SellingTabController {
 			}
 			if (event.getButton().equals(MouseButton.SECONDARY)) {
 				MenuItem addItem = new MenuItem("Add");
-				ContextMenu contextMenu = new ContextMenu(addItem);
+				MenuItem detailsItem = new MenuItem("Details");
+				ContextMenu contextMenu = new ContextMenu(addItem,detailsItem);
 				contextMenu.setX(event.getScreenX());
 				contextMenu.setY(event.getScreenY());
 				contextMenu.show(allProductsTableView.getScene().getWindow());
 				addItem.setOnAction(e -> {
 					addProductToPurchase();
+				});
+				detailsItem.setOnAction(event1 -> {
+					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../controllers/InfoTab.fxml"));
+					InfoTabController controller = new InfoTabController(allProductsTableView.getSelectionModel().getSelectedItem());
+					fxmlLoader.setController(controller);
+					Parent parent;
+					try {
+						parent = fxmlLoader.load();
+						Scene scene = new Scene(parent);
+						Stage stage = new Stage();
+						stage.setScene(scene);
+						stage.initModality(Modality.APPLICATION_MODAL);
+						stage.setTitle("Details");
+						stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
+						stage.showAndWait();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 				});
 			}
 		});
